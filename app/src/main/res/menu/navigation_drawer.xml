@@ -2,18 +2,34 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-            android:id="@+id/group1"
+            android:id="@+id/drawer_top"
             android:checkableBehavior="single">
         <item
-                android:id="@+id/item1"
-                android:title="Title 1"
-                android:checked="true" />
+                android:id="@+id/drawer_home"
+                android:title="@string/drawer_home"
+                android:icon="@drawable/drawer_home"/>
         <item
-                android:id="@+id/item2"
-                android:title="Title 2" />
+                android:id="@+id/drawer_connect"
+                android:title="@string/drawer_connect"
+                android:icon="@drawable/drawer_connect"/>
         <item
-                android:id="@+id/item3"
-                android:title="Title 3" />
+                android:id="@+id/drawer_mouse"
+                android:title="@string/drawer_mouse"
+                android:icon="@drawable/drawer_mouse"/>
+    </group>
+    <group
+            android:id="@+id/drawer_bottom"
+            android:checkableBehavior="single"
+            android:menuCategory="alternative">
+        <item
+                android:id="@+id/drawer_settings"
+                android:title="@string/drawer_settings"
+                android:icon="@drawable/drawer_settings" />
+        <item
+                android:id="@+id/drawer_about"
+                android:title="@string/drawer_about"
+                android:icon="@drawable/drawer_about" />
+
     </group>
 
 

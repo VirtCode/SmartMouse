@@ -7,31 +7,39 @@
         android:id="@+id/drawer_layout"
         tools:openDrawer="start">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/bar"
+        <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="Hello"
-                app:navigationIcon="@drawable/menu"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+                android:layout_height="wrap_content"
+                android:id="@+id/bar_layout">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:title="@string/bar_title"
+                    app:navigationIcon="@drawable/bar_menu"
+                    style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
-    <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+
 
     <com.google.android.material.navigation.NavigationView
             android:id="@+id/drawer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            app:headerLayout="@layout/navigation_drawer_header"
             app:menu="@menu/navigation_drawer"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
