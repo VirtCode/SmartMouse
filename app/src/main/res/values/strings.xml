@@ -10,4 +10,18 @@
     <string name="bar_title">Smartphone Mouse</string>
     <string name="title_connect">Connect</string>
     <string name="title_home">Home</string>
+    <string name="home_status_init">Initializing</string>
+    <string name="home_button_init">Initializing</string>
+    <string name="home_status_unsupported">Unsupported</string>
+    <string name="home_button_unsupported">Return</string>
+    <string name="home_unsupported_message">Your device does not seem to Support the Bluetooth HID Profile that is required for running this app. <br/> There might be a firmware update for your device you could install.</string>
+    <string name="home_unsupported_playstore">Open in Play Store</string>
+    <string name="home_status_disconnected">Disconnected</string>
+    <string name="home_button_disconnected">To Connect</string>
+    <string name="home_disconnected_recent">Most Recent:</string>
+    <string name="home_connected_disconnect">Disconnect</string>
+    <string name="home_connected_message">Your are connected to:</string>
+    <string name="home_status_connected">Connected</string>
+    <string name="home_button_connected">To Mouse</string>
+    <string name="home_connected_elapsed">%s elapsed</string>
 </resources>

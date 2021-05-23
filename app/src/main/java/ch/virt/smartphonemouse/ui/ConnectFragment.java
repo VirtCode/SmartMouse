@@ -1,4 +1,4 @@
-package ch.virt.smartphonemouse.fragments;
+package ch.virt.smartphonemouse.ui;
 
 import android.os.Bundle;
 

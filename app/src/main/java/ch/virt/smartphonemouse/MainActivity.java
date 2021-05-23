@@ -1,21 +1,20 @@
 package ch.virt.smartphonemouse;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
-import ch.virt.smartphonemouse.fragments.ConnectFragment;
-import ch.virt.smartphonemouse.fragments.HomeFragment;
+import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.ui.ConnectFragment;
+import ch.virt.smartphonemouse.ui.HomeFragment;
+import ch.virt.smartphonemouse.ui.MainContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView drawer;
 
     private Fragment currentFragment;
+    private MainContext mainContext;
+
+    BluetoothHandler bluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,29 @@ public class MainActivity extends AppCompatActivity {
         loadComponents();
         setupNavigation();
 
+        loadContent();
+
         navigate(R.id.drawer_home);
         drawer.setCheckedItem(R.id.drawer_home);
+    }
+
+    /**
+     * Loads the contents of the app
+     */
+    private void loadContent() {
+        mainContext = new MainContext() {
+            @Override
+            public void exitApp() {
+                finish();
+            }
+
+            @Override
+            public void navigate(int element) {
+                MainActivity.this.navigate(element);
+            }
+        };
+
+        bluetooth = new BluetoothHandler();
     }
 
     /**
@@ -69,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         drawer.setNavigationItemSelectedListener(item -> {
             if (navigate(item.getItemId())){
                 drawerLayout.close();
-                item.setChecked(true);
                 return true;
             }
 
@@ -87,10 +109,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.drawer_connect:
                 switchFragment(new ConnectFragment());
                 bar.setTitle(R.string.title_connect);
+                drawer.setCheckedItem(entry);
                 return true;
             case R.id.drawer_home:
-                switchFragment(new HomeFragment());
+                switchFragment(new HomeFragment(bluetooth, mainContext));
                 bar.setTitle(R.string.title_home);
+                drawer.setCheckedItem(entry);
                 return true;
 
             default:
