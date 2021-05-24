@@ -16,12 +16,13 @@ import androidx.fragment.app.Fragment;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.home.HomeConnectedSubfragment;
+import ch.virt.smartphonemouse.ui.home.HomeDisabledSubfragment;
+import ch.virt.smartphonemouse.ui.home.HomeDisconnectedSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeUnsupportedSubfragment;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends CustomFragment {
 
     private BluetoothHandler bluetooth;
-    private MainContext mainContext;
 
     private ImageView status;
     private TextView statusText;
@@ -29,26 +30,21 @@ public class HomeFragment extends Fragment {
     private Button button;
 
     public HomeFragment(BluetoothHandler bluetooth, MainContext mainContext) {
-        super(R.layout.fragment_home);
+        super(R.layout.fragment_home, mainContext);
 
         this.bluetooth = bluetooth;
-        this.mainContext = mainContext;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        loadComponents(view);
-
-        if (!bluetooth.isSupported()) unsupported();
-        else {
-            if (bluetooth.isConnected()) connected();
+    public void render() {
+        if (bluetooth.isInitialized())
+            if (!bluetooth.isEnabled()) disabled();
+            else if (!bluetooth.isSupported()) unsupported();
+            else if (bluetooth.isConnected()) connected();
             else disconnected();
-        }
     }
 
-    private void loadComponents(View view){
+    protected void loadComponents(View view){
         status = view.findViewById(R.id.home_status);
         statusText = view.findViewById(R.id.home_status_text);
         button = view.findViewById(R.id.home_button);
@@ -61,9 +57,9 @@ public class HomeFragment extends Fragment {
         button.setEnabled(true);
         button.setText(R.string.home_button_unsupported);
 
-        button.setOnClickListener(v -> mainContext.exitApp());
+        button.setOnClickListener(v -> main.exitApp());
 
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).add(R.id.home_container, new HomeUnsupportedSubfragment()).commit();
+        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeUnsupportedSubfragment()).commit();
     }
 
     private void disconnected(){
@@ -73,7 +69,9 @@ public class HomeFragment extends Fragment {
         button.setEnabled(true);
         button.setText(R.string.home_button_disconnected);
 
-        button.setOnClickListener(v -> mainContext.navigate(R.id.drawer_connect));
+        button.setOnClickListener(v -> main.navigate(R.id.drawer_connect));
+
+        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeDisconnectedSubfragment()).commit();
     }
 
     private void connected(){
@@ -83,8 +81,20 @@ public class HomeFragment extends Fragment {
         button.setEnabled(true);
         button.setText(R.string.home_button_connected);
 
-        button.setOnClickListener(v -> mainContext.navigate(R.id.drawer_mouse));
+        button.setOnClickListener(v -> main.navigate(R.id.drawer_mouse));
 
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).add(R.id.home_container, new HomeConnectedSubfragment(bluetooth)).commit();
+        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeConnectedSubfragment(bluetooth)).commit();
+    }
+
+    private void disabled(){
+        ((GradientDrawable) status.getBackground()).setColor(getResources().getColor(R.color.home_status_init, null));
+        statusText.setText(R.string.home_status_disabled);
+
+        button.setEnabled(true);
+        button.setText(R.string.home_button_disabled);
+
+        button.setOnClickListener(v -> bluetooth.enableBluetooth());
+
+        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeDisabledSubfragment(bluetooth)).commit();
     }
 }

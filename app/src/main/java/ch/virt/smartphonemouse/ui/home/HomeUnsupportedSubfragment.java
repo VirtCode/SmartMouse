@@ -12,10 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
 
-/**
- * @author VirtCode
- * @version 1.0
- */
 public class HomeUnsupportedSubfragment extends Fragment {
 
     private Button playstoreLink;

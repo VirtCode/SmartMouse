@@ -15,10 +15,6 @@ import org.w3c.dom.Text;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 
-/**
- * @author VirtCode
- * @version 1.0
- */
 public class HomeConnectedSubfragment extends Fragment {
 
     BluetoothHandler handler;
@@ -41,12 +37,12 @@ public class HomeConnectedSubfragment extends Fragment {
         device = view.findViewById(R.id.home_connected_device_name);
         disconnect = view.findViewById(R.id.home_connected_disconnect);
 
-        chronometer.setBase(handler.connectedSince());
+        chronometer.setBase(0);
         chronometer.setFormat(getResources().getString(R.string.home_connected_elapsed));
         chronometer.start();
 
-        device.setText(handler.connectedDevice());
+        device.setText("Not implemented");
 
-        disconnect.setOnClickListener(v -> handler.disconnect());
+        disconnect.setOnClickListener(v -> System.out.println("Not yet implemented"));
     }
 }

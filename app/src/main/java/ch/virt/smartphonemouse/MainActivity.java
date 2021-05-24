@@ -1,20 +1,29 @@
 package ch.virt.smartphonemouse;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.ConnectFragment;
+import ch.virt.smartphonemouse.ui.CustomFragment;
 import ch.virt.smartphonemouse.ui.HomeFragment;
 import ch.virt.smartphonemouse.ui.MainContext;
+import ch.virt.smartphonemouse.ui.ResultListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView drawer;
 
-    private Fragment currentFragment;
+    private CustomFragment currentFragment;
     private MainContext mainContext;
 
     BluetoothHandler bluetooth;
@@ -41,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         drawer.setCheckedItem(R.id.drawer_home);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        bluetooth.reInit();
+    }
+
     /**
      * Loads the contents of the app
      */
@@ -55,22 +71,47 @@ public class MainActivity extends AppCompatActivity {
             public void navigate(int element) {
                 MainActivity.this.navigate(element);
             }
+
+            @Override
+            public ActivityResultLauncher<Intent> registerActivityForResult(ResultListener listener) {
+                return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> listener.result(result.getResultCode()));
+            }
+
+            @Override
+            public void toast(String content, int duration) {
+                Toast.makeText(MainActivity.this, content, duration).show();
+            }
+
+            @Override
+            public void snack(String content, int duration) {
+                Snackbar.make(MainActivity.this, MainActivity.this.findViewById(R.id.container), content, duration).show();
+            }
+
+            @Override
+            public Resources getResources() {
+                return MainActivity.this.getResources();
+            }
+
+            @Override
+            public Context getContext() {
+                return MainActivity.this;
+            }
+
+            @Override
+            public void refresh() {
+                reRender();
+            }
         };
 
-        bluetooth = new BluetoothHandler();
+        bluetooth = new BluetoothHandler(mainContext);
     }
 
     /**
      * Switches the Fragment displayed on the app
      * @param fragment fragment that is displayed
      */
-    private void switchFragment(Fragment fragment){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setReorderingAllowed(true);
-
-        if (currentFragment != null) transaction.remove(currentFragment);
-
-        transaction.add(R.id.container, fragment).commit();
-
+    private void switchFragment(CustomFragment fragment){
+        getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.container, fragment).commit();
         currentFragment = fragment;
     }
 
@@ -100,6 +141,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Rerenders the current fragment
+     */
+    public void reRender(){
+        if (currentFragment != null) this.runOnUiThread(() -> currentFragment.render());
+    }
+
+    /**
      * Navigates to the respective sites
      * @param entry entry to navigate to
      * @return whether that entry is navigated
@@ -107,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigate(int entry){
         switch (entry) {
             case R.id.drawer_connect:
-                switchFragment(new ConnectFragment());
+                switchFragment(new ConnectFragment(mainContext));
                 bar.setTitle(R.string.title_connect);
                 drawer.setCheckedItem(entry);
                 return true;

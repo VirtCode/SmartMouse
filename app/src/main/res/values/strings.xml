@@ -24,4 +24,10 @@
     <string name="home_status_connected">Connected</string>
     <string name="home_button_connected">To Mouse</string>
     <string name="home_connected_elapsed">%s elapsed</string>
+    <string name="snack_bluetooth_enabled">Enabled Bluetooth</string>
+    <string name="snack_bluetooth_closed">Reopening Profile</string>
+    <string name="home_disabled_message">Bluetooth must be turned on in order for this app to function.</string>
+    <string name="home_disabled_recheck">Refresh</string>
+    <string name="home_status_disabled">Disabled</string>
+    <string name="home_button_disabled">Enable Bluetooth</string>
 </resources>
