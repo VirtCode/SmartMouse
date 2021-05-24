@@ -2,11 +2,8 @@ package ch.virt.smartphonemouse;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +19,8 @@ import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.ConnectFragment;
 import ch.virt.smartphonemouse.ui.CustomFragment;
 import ch.virt.smartphonemouse.ui.HomeFragment;
-import ch.virt.smartphonemouse.ui.MainContext;
-import ch.virt.smartphonemouse.ui.ResultListener;
+import ch.virt.smartphonemouse.helper.MainContext;
+import ch.virt.smartphonemouse.helper.ResultListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -155,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigate(int entry){
         switch (entry) {
             case R.id.drawer_connect:
-                switchFragment(new ConnectFragment(mainContext));
+                switchFragment(new ConnectFragment(mainContext, bluetooth));
                 bar.setTitle(R.string.title_connect);
                 drawer.setCheckedItem(entry);
                 return true;

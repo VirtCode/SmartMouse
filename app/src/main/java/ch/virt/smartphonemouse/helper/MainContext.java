@@ -1,4 +1,4 @@
-package ch.virt.smartphonemouse.ui;
+package ch.virt.smartphonemouse.helper;
 
 import android.content.Context;
 import android.content.Intent;

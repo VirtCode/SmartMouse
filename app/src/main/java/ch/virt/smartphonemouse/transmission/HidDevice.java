@@ -3,7 +3,7 @@ package ch.virt.smartphonemouse.transmission;
 import android.bluetooth.BluetoothHidDevice;
 import android.bluetooth.BluetoothHidDeviceAppSdpSettings;
 
-import ch.virt.smartphonemouse.ui.MainContext;
+import ch.virt.smartphonemouse.helper.MainContext;
 
 public class HidDevice extends BluetoothHidDevice.Callback {
     private static final String NAME = "Smartphone Mouse";

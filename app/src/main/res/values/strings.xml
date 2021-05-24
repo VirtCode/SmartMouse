@@ -30,4 +30,8 @@
     <string name="home_disabled_recheck">Refresh</string>
     <string name="home_status_disabled">Disabled</string>
     <string name="home_button_disabled">Enable Bluetooth</string>
+    <string name="connect_status_connected">Connected</string>
+    <string name="connect_status_disconnected">Disconnected</string>
+    <string name="connect_select_prompt">Select a device</string>
+    <string name="connect_select_add">Add a device</string>
 </resources>

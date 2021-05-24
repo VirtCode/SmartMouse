@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import ch.virt.smartphonemouse.helper.MainContext;
+
 public abstract class CustomFragment extends Fragment {
 
     protected MainContext main;

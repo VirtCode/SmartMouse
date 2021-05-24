@@ -7,9 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="home_status_init">#5E5E5E</color>
-    <color name="home_status_unsupported">#2196F3</color>
-    <color name="home_status_connected">#4CAF50</color>
-    <color name="home_status_disconnected">#F44336</color>
+    <color name="status_unsupported">#2196F3</color>
+    <color name="status_connected">#4CAF50</color>
+    <color name="status_disconnected">#F44336</color>
     <color name="link">#303F9F</color>
+    <color name="status_init">#707070</color>
 </resources>

@@ -1,20 +1,16 @@
 package ch.virt.smartphonemouse.ui;
 
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.ui.home.HomeConnectedSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeDisabledSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeDisconnectedSubfragment;
@@ -38,10 +34,18 @@ public class HomeFragment extends CustomFragment {
     @Override
     public void render() {
         if (bluetooth.isInitialized())
-            if (!bluetooth.isEnabled()) disabled();
-            else if (!bluetooth.isSupported()) unsupported();
-            else if (bluetooth.isConnected()) connected();
-            else disconnected();
+
+            if (!bluetooth.isEnabled())
+                setStatus(R.color.status_init, R.string.home_status_disabled, R.string.home_button_disabled, v -> bluetooth.enableBluetooth(), new HomeDisabledSubfragment(bluetooth));
+
+            else if (!bluetooth.isSupported())
+                setStatus(R.color.status_unsupported, R.string.home_status_unsupported, R.string.home_button_unsupported, v -> main.exitApp(), new HomeUnsupportedSubfragment());
+
+            else if (bluetooth.isConnected())
+                setStatus(R.color.status_connected, R.string.home_status_connected, R.string.home_button_connected, v -> main.navigate(R.id.drawer_mouse), new HomeConnectedSubfragment(bluetooth));
+
+            else
+                setStatus(R.color.status_disconnected, R.string.home_status_disconnected, R.string.home_button_disconnected, v -> main.navigate(R.id.drawer_connect), new HomeDisconnectedSubfragment());
     }
 
     protected void loadComponents(View view){
@@ -50,51 +54,15 @@ public class HomeFragment extends CustomFragment {
         button = view.findViewById(R.id.home_button);
     }
 
-    private void unsupported(){
-        ((GradientDrawable) status.getBackground()).setColor(getResources().getColor(R.color.home_status_unsupported, null));
-        statusText.setText(R.string.home_status_unsupported);
+    private void setStatus(int statusColor, int statusText, int buttonText, View.OnClickListener buttonListener, Fragment fragment){
+        ((GradientDrawable) status.getBackground()).setColor(getResources().getColor(statusColor, null));
+        this.statusText.setText(statusText);
 
         button.setEnabled(true);
-        button.setText(R.string.home_button_unsupported);
+        button.setText(buttonText);
 
-        button.setOnClickListener(v -> main.exitApp());
+        button.setOnClickListener(buttonListener);
 
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeUnsupportedSubfragment()).commit();
-    }
-
-    private void disconnected(){
-        ((GradientDrawable) status.getBackground()).setColor(getResources().getColor(R.color.home_status_disconnected, null));
-        statusText.setText(R.string.home_status_disconnected);
-
-        button.setEnabled(true);
-        button.setText(R.string.home_button_disconnected);
-
-        button.setOnClickListener(v -> main.navigate(R.id.drawer_connect));
-
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeDisconnectedSubfragment()).commit();
-    }
-
-    private void connected(){
-        ((GradientDrawable) status.getBackground()).setColor(getResources().getColor(R.color.home_status_connected, null));
-        statusText.setText(R.string.home_status_connected);
-
-        button.setEnabled(true);
-        button.setText(R.string.home_button_connected);
-
-        button.setOnClickListener(v -> main.navigate(R.id.drawer_mouse));
-
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeConnectedSubfragment(bluetooth)).commit();
-    }
-
-    private void disabled(){
-        ((GradientDrawable) status.getBackground()).setColor(getResources().getColor(R.color.home_status_init, null));
-        statusText.setText(R.string.home_status_disabled);
-
-        button.setEnabled(true);
-        button.setText(R.string.home_button_disabled);
-
-        button.setOnClickListener(v -> bluetooth.enableBluetooth());
-
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, new HomeDisabledSubfragment(bluetooth)).commit();
+        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.home_container, fragment).commit();
     }
 }

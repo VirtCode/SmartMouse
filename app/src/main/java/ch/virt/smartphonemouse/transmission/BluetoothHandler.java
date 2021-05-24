@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHidDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -12,8 +11,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.ui.MainContext;
-import ch.virt.smartphonemouse.ui.ResultListener;
+import ch.virt.smartphonemouse.helper.MainContext;
 
 public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     private static final String TAG = "BluetoothHandler";
