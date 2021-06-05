@@ -23,6 +23,7 @@ public abstract class CustomFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         loadComponents(view);
+        initComponents();
 
         render();
     }
@@ -30,4 +31,6 @@ public abstract class CustomFragment extends Fragment {
     public abstract void render();
 
     protected abstract void loadComponents(View view);
+
+    protected void initComponents(){}
 }

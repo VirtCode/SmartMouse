@@ -34,4 +34,13 @@
     <string name="connect_status_disconnected">Disconnected</string>
     <string name="connect_select_prompt">Select a device</string>
     <string name="connect_select_add">Add a device</string>
+    <string name="dialog_add_next">Next</string>
+    <string name="dialog_add_cancel">Cancel</string>
+    <string name="dialog_add_select_manual">Add Manually</string>
+    <string name="dialog_add_select_unknown">Unknown</string>
+    <string name="dialog_add_select_title">Select a device</string>
+    <string name="dialog_add_select_scanning">Scanning...</string>
+    <string name="dialog_add_select_rescan">Rescan</string>
+    <string name="dialog_add_select_initializing">Initializing</string>
+    <string name="dialog_add_select_notice">Make sure your target device is discoverable in order to see it here.</string>
 </resources>

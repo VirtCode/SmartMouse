@@ -12,4 +12,5 @@
     <color name="status_disconnected">#F44336</color>
     <color name="link">#303F9F</color>
     <color name="status_init">#707070</color>
+    <color name="recycler_background">#FFFFFF</color>
 </resources>

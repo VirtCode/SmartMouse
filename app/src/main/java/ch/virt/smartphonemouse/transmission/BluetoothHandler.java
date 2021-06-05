@@ -18,6 +18,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
 
     private BluetoothAdapter adapter;
     private BluetoothHidDevice service;
+    private BluetoothDiscoverer discoverer;
     private final MainContext context;
 
     private HidDevice device;
@@ -32,6 +33,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
 
     public BluetoothHandler(MainContext context) {
         this.context = context;
+        discoverer = new BluetoothDiscoverer(context, adapter);
 
         enableBluetoothLauncher = context.registerActivityForResult(result -> reInit());
     }
@@ -93,7 +95,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
         initialized = true;
         context.refresh();
 
-
+        discoverer = new BluetoothDiscoverer(context, adapter);
     }
 
     @Override
@@ -130,5 +132,9 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     }
     public boolean isInitialized() {
         return initialized;
+    }
+
+    public BluetoothDiscoverer getDiscoverer() {
+        return discoverer;
     }
 }
