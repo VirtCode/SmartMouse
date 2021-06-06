@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -19,5 +20,6 @@ public interface MainContext {
     void refresh();
     void registerReceiver(BroadcastReceiver receiver, IntentFilter filter);
     void unregisterReceiver(BroadcastReceiver receiver);
+    SharedPreferences getPreferences();
 
 }

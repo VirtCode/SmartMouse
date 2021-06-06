@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
+import ch.virt.smartphonemouse.transmission.hid.HidDevice;
 
 public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     private static final String TAG = "BluetoothHandler";
@@ -20,6 +21,9 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     private BluetoothAdapter adapter;
     private BluetoothHidDevice service;
     private BluetoothDiscoverer discoverer;
+
+    private DeviceStorage devices;
+
     private final MainContext context;
 
     private HidDevice device;
@@ -35,6 +39,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     public BluetoothHandler(MainContext context) {
         this.context = context;
         discoverer = new BluetoothDiscoverer(context, adapter);
+        devices = new DeviceStorage(context);
 
         enableBluetoothLauncher = context.registerActivityForResult(result -> reInit());
     }
@@ -137,6 +142,10 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
 
     public BluetoothDiscoverer getDiscoverer() {
         return discoverer;
+    }
+
+    public DeviceStorage getDevices() {
+        return devices;
     }
 
     public boolean isBonded(String address){

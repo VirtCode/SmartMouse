@@ -1,4 +1,4 @@
-package ch.virt.smartphonemouse.transmission;
+package ch.virt.smartphonemouse.transmission.hid;
 
 public class HidDescriptor {
 

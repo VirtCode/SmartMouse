@@ -2,6 +2,7 @@ package ch.virt.smartphonemouse.ui.connect.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothDiscoverer;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.transmission.HostDevice;
 import ch.virt.smartphonemouse.ui.CustomFragment;
 
 public class AddDialog extends DialogFragment {
@@ -113,14 +115,15 @@ public class AddDialog extends DialogFragment {
     }
 
     public void finished(){
+        bluetoothHandler.getDevices().addDevice(new HostDevice(target.getAddress(), target.getName()));
         showSuccess();
     }
 
     public void selected(BluetoothDiscoverer.DiscoveredDevice device){
         target = device;
 
-        if (false) showAlready();
-        if (bluetoothHandler.isBonded(device.getAddress())) showBonded();
+        if (bluetoothHandler.getDevices().hasDevice(device.getAddress())) showAlready();
+        else if (bluetoothHandler.isBonded(device.getAddress())) showBonded();
         else finished();
     }
 
@@ -140,6 +143,13 @@ public class AddDialog extends DialogFragment {
 
     public void onNeutral(){
         if (state == SELECT_STATE) showManual();
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        if (bluetoothHandler.getDiscoverer().isScanning()) bluetoothHandler.getDiscoverer().stopDiscovery();
+
+        super.onDismiss(dialog);
     }
 
     @NonNull

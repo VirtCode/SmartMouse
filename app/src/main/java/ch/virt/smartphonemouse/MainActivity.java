@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
@@ -117,6 +118,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void unregisterReceiver(BroadcastReceiver receiver) {
                 MainActivity.this.unregisterReceiver(receiver);
+            }
+
+            @Override
+            public SharedPreferences getPreferences() {
+                return MainActivity.this.getSharedPreferences("smartphonemouse", Context.MODE_PRIVATE);
             }
         };
 
