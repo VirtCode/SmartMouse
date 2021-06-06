@@ -56,7 +56,6 @@ public class AddSelectSubdialog extends CustomFragment {
     }
 
     public void discoveryUpdated(){
-        System.out.println("updated");
         if (bluetooth.getDiscoverer().isScanning()) {
             scanning.setEnabled(false);
             scanning.setText(R.string.dialog_add_select_scanning);

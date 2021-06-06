@@ -43,4 +43,9 @@
     <string name="dialog_add_select_rescan">Rescan</string>
     <string name="dialog_add_select_initializing">Initializing</string>
     <string name="dialog_add_select_notice">Make sure your target device is discoverable in order to see it here.</string>
+    <string name="dialog_add_manual_name">Device Name</string>
+    <string name="dialog_add_manual_mac">Device Mac Address</string>
+    <string name="dialog_add_manual_name_error">Please enter a Name for your device</string>
+    <string name="dialog_add_manual_mac_error">Please enter a valid MAC address</string>
+    <string name="dialog_add_manual_title">Enter your device details</string>
 </resources>

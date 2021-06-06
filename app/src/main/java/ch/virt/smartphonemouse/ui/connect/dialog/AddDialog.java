@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -15,14 +16,20 @@ import androidx.fragment.app.DialogFragment;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.ui.CustomFragment;
 
 public class AddDialog extends DialogFragment {
+    private static final int SELECT_STATE = 0;
+    private static final int MANUAL_STATE = 1;
 
     BluetoothHandler bluetoothHandler;
     MainContext mainContext;
 
     Button positiveButton, negativeButton, neutralButton;
     AlertDialog dialog;
+
+    CustomFragment currentSub;
+    private int state;
 
 
 
@@ -33,12 +40,19 @@ public class AddDialog extends DialogFragment {
 
     public void created(){
         neutralButton.setVisibility(View.GONE);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM); // Enable keyboard to be working
 
         showSelect();
     }
 
+    private void setFragment(CustomFragment fragment){
+        currentSub = fragment;
+        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.add_container, currentSub).commit();
+    }
+
     public void showSelect(){
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.add_container, new AddSelectSubdialog(mainContext, bluetoothHandler)).commit();
+        state = SELECT_STATE;
+        setFragment(new AddSelectSubdialog(mainContext, bluetoothHandler));
 
         positiveButton.setVisibility(View.GONE);
         neutralButton.setVisibility(View.VISIBLE);
@@ -49,16 +63,34 @@ public class AddDialog extends DialogFragment {
     }
 
     public void showManual(){
+        state = MANUAL_STATE;
+        setFragment(new AddManualSubdialog(mainContext));
 
+        positiveButton.setVisibility(View.VISIBLE);
+        neutralButton.setVisibility(View.GONE);
+
+        dialog.setTitle(getString(R.string.dialog_add_manual_title));
     }
 
     public void onNext(){
+        switch (state){
+            case MANUAL_STATE:
+                if (((AddManualSubdialog) currentSub).check()) {
 
+                }
 
+            case SELECT_STATE:
+
+                break;
+        }
     }
 
     public void onNeutral(){
-
+        switch (state){
+            case SELECT_STATE:
+                showManual();
+                break;
+        }
     }
 
     @NonNull
@@ -70,7 +102,7 @@ public class AddDialog extends DialogFragment {
         builder.setView(inflater.inflate(R.layout.dialog_add, null))
                 .setPositiveButton(R.string.dialog_add_next, null)
                 .setNegativeButton(R.string.dialog_add_cancel, null)
-                .setNeutralButton("Bruh", null);
+                .setNeutralButton("-", null);
 
 
         dialog = builder.create();
