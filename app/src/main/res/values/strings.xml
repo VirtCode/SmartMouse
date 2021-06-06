@@ -39,7 +39,7 @@
     <string name="dialog_add_select_manual">Add Manually</string>
     <string name="dialog_add_select_unknown">Unknown</string>
     <string name="dialog_add_select_title">Select a device</string>
-    <string name="dialog_add_select_scanning">Scanning...</string>
+    <string name="dialog_add_select_scanning">Scanning…</string>
     <string name="dialog_add_select_rescan">Rescan</string>
     <string name="dialog_add_select_initializing">Initializing</string>
     <string name="dialog_add_select_notice">Make sure your target device is discoverable in order to see it here.</string>
@@ -48,4 +48,16 @@
     <string name="dialog_add_manual_name_error">Please enter a Name for your device</string>
     <string name="dialog_add_manual_mac_error">Please enter a valid MAC address</string>
     <string name="dialog_add_manual_title">Enter your device details</string>
+    <string name="dialog_add_bonded_instruction">Please make sure to remove the target device from your phone AND your phone from the target device in the respective bluetooth settings, before proceeding to the next step!</string>
+    <string name="dialog_add_bonded_message">In order for this App to work, the Phone should not be paired with the target device.</string>
+    <string name="dialog_add_bonded_future">Being paired with the target device will lead to connection problems in the future.</string>
+    <string name="dialog_add_bonded_title">Unpair the target device</string>
+    <string name="dialog_add_bonded_error">Your device is still paired to the target device!</string>
+    <string name="dialog_add_success_message">You have successfully added:</string>
+    <string name="dialog_add_success_title">Success</string>
+    <string name="dialog_add_success_positive">Done</string>
+    <string name="dialog_add_already_message">You have already added this device</string>
+    <string name="dialog_add_already_helper">If you do not see your device under the added devices, it may be registered under an old name.</string>
+    <string name="dialog_add_already_positive">DONE</string>
+    <string name="dialog_add_already_title">Already added</string>
 </resources>

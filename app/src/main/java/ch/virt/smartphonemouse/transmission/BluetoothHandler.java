@@ -1,6 +1,7 @@
 package ch.virt.smartphonemouse.transmission;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHidDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
@@ -136,5 +137,15 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
 
     public BluetoothDiscoverer getDiscoverer() {
         return discoverer;
+    }
+
+    public boolean isBonded(String address){
+        boolean result = false;
+
+        for (BluetoothDevice device : adapter.getBondedDevices()){
+            if (device.getAddress().equals(address)) result = true;
+        }
+
+        return result;
     }
 }

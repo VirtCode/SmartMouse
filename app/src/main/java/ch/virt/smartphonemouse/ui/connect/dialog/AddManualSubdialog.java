@@ -1,5 +1,6 @@
 package ch.virt.smartphonemouse.ui.connect.dialog;
 
+import android.bluetooth.BluetoothClass;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -8,6 +9,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
+import ch.virt.smartphonemouse.transmission.BluetoothDiscoverer;
 import ch.virt.smartphonemouse.ui.CustomFragment;
 
 public class AddManualSubdialog extends CustomFragment {
@@ -44,6 +46,10 @@ public class AddManualSubdialog extends CustomFragment {
 
 
         return valid;
+    }
+
+    public BluetoothDiscoverer.DiscoveredDevice createDevice(){
+        return new BluetoothDiscoverer.DiscoveredDevice(nameLayout.getEditText().getText().toString(), macLayout.getEditText().getText().toString(), BluetoothClass.Device.Major.UNCATEGORIZED);
     }
 
     @Override

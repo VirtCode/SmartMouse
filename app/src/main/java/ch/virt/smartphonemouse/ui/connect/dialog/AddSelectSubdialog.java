@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.virt.smartphonemouse.R;
+import ch.virt.smartphonemouse.helper.Listener;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothDiscoverer;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
@@ -29,15 +30,17 @@ public class AddSelectSubdialog extends CustomFragment {
     Button scanning;
 
     ListAdapter adapter;
+    Listener selectListener;
 
-    public AddSelectSubdialog(MainContext context, BluetoothHandler bluetoothAdapter) {
+    public AddSelectSubdialog(MainContext context, BluetoothHandler bluetoothAdapter, Listener selected) {
         super(R.layout.subdialog_add_select, context);
         this.bluetooth = bluetoothAdapter;
+        selectListener = selected;
     }
 
     @Override
     public void render() {
-        adapter = new ListAdapter(bluetooth.getDiscoverer().getDevices());
+        adapter = new ListAdapter(bluetooth.getDiscoverer().getDevices(), selectListener);
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -65,6 +68,10 @@ public class AddSelectSubdialog extends CustomFragment {
         }
     }
 
+    public BluetoothDiscoverer.DiscoveredDevice getSelected(){
+        return adapter.getSelected();
+    }
+
     @Override
     protected void loadComponents(View view) {
         list = view.findViewById(R.id.add_select_list);
@@ -73,10 +80,17 @@ public class AddSelectSubdialog extends CustomFragment {
 
     private static class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-        List<BluetoothDiscoverer.DiscoveredDevice> devices;
+        private List<BluetoothDiscoverer.DiscoveredDevice> devices;
+        private int selectedDevice;
+        private Listener selectListener;
 
-        public ListAdapter(List<BluetoothDiscoverer.DiscoveredDevice> devices) {
+        public ListAdapter(List<BluetoothDiscoverer.DiscoveredDevice> devices, Listener listener) {
+            selectListener = listener;
             this.devices = devices;
+        }
+
+        public BluetoothDiscoverer.DiscoveredDevice getSelected(){
+            return devices.get(selectedDevice);
         }
 
         @NonNull
@@ -110,6 +124,11 @@ public class AddSelectSubdialog extends CustomFragment {
 
             public ViewHolder(View view) {
                 super(view);
+
+                view.setOnClickListener(v -> {
+                    selectedDevice = getLayoutPosition();
+                    selectListener.called();
+                });
 
                 label = view.findViewById(R.id.add_select_list_item_text);
                 icon = view.findViewById(R.id.add_select_list_item_icon);
