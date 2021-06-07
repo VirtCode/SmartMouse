@@ -12,7 +12,7 @@
         android:layout_margin="5dp"
         android:gravity="center">
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
+        <ImageView
             android:id="@+id/add_select_list_item_icon"
             android:src="@drawable/device_add_other"
             android:layout_width="40dp"

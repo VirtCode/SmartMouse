@@ -60,4 +60,17 @@
     <string name="dialog_add_already_helper">If you do not see your device under the added devices, it may be registered under an old name.</string>
     <string name="dialog_add_already_positive">DONE</string>
     <string name="dialog_add_already_title">Already added</string>
+    <string name="connect_select_item_unknown">Unknown</string>
+    <string name="connect_select_item_last">Last Used: %s</string>
+    <string name="dialog_info_name">Name</string>
+    <string name="dialog_info_address">MAC Address</string>
+    <string name="dialog_info_last">Last used at</string>
+    <string name="dialog_add_manual_instruction">Please enter the details of your target device</string>
+    <string name="dialog_info_positive">Done</string>
+    <string name="dialog_info_delete">Delete Device</string>
+    <string name="dialog_info_title">Device Information</string>
+    <string name="connect_select_item_last_format">dd.MM.yy</string>
+    <string name="connect_select_item_never">Never</string>
+    <string name="dialog_info_last_never">Not used yet</string>
+    <string name="dialog_info_last_format">dd.MM.yy</string>
 </resources>

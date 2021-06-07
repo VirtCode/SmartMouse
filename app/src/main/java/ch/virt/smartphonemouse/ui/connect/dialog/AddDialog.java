@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import ch.virt.smartphonemouse.R;
+import ch.virt.smartphonemouse.helper.Listener;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothDiscoverer;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
@@ -28,20 +28,22 @@ public class AddDialog extends DialogFragment {
     private static final int SUCCESS_STATE = 3;
     private static final int ALREADY_STATE = 4;
 
-    BluetoothHandler bluetoothHandler;
-    MainContext mainContext;
+    private final BluetoothHandler bluetoothHandler;
+    private final MainContext mainContext;
+    private final Listener closed;
 
-    Button positiveButton, negativeButton, neutralButton;
-    AlertDialog dialog;
+    private Button positiveButton, negativeButton, neutralButton;
+    private AlertDialog dialog;
 
-    CustomFragment currentSub;
+    private CustomFragment currentSub;
     private int state;
 
     private BluetoothDiscoverer.DiscoveredDevice target;
 
-    public AddDialog(BluetoothHandler bluetoothHandler, MainContext mainContext) {
+    public AddDialog(BluetoothHandler bluetoothHandler, MainContext mainContext, Listener closed) {
         this.bluetoothHandler = bluetoothHandler;
         this.mainContext = mainContext;
+        this.closed = closed;
     }
 
     public void created(){
@@ -147,9 +149,10 @@ public class AddDialog extends DialogFragment {
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
         if (bluetoothHandler.getDiscoverer().isScanning()) bluetoothHandler.getDiscoverer().stopDiscovery();
 
-        super.onDismiss(dialog);
+        closed.called();
     }
 
     @NonNull

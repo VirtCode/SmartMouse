@@ -11,7 +11,6 @@ import ch.virt.smartphonemouse.ui.CustomFragment;
 public class AddSuccessSubdialog extends CustomFragment {
 
     private TextView name;
-    private TextView mac;
 
     private BluetoothDiscoverer.DiscoveredDevice target;
 
@@ -23,13 +22,11 @@ public class AddSuccessSubdialog extends CustomFragment {
 
     @Override
     public void render() {
-        mac.setText(target.getAddress());
         name.setText(target.getName());
     }
 
     @Override
     protected void loadComponents(View view) {
         name = view.findViewById(R.id.add_success_name);
-        mac = view.findViewById(R.id.add_success_mac);
     }
 }
