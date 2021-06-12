@@ -43,7 +43,6 @@ public class InfoDialog extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        System.out.println("Dismissed!");
         closed.called();
     }
 

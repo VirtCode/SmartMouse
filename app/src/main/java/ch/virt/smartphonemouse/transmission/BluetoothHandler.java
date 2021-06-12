@@ -32,7 +32,6 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     private boolean enabled = false;
     private boolean supported = false;
     private boolean opened = false;
-    private boolean connected = false;
 
     private ActivityResultLauncher<Intent> enableBluetoothLauncher;
 
@@ -99,9 +98,14 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     private void start(){
         Log.i(TAG, "Opened HID Profile successfully");
         initialized = true;
-        context.refresh();
 
         discoverer = new BluetoothDiscoverer(context, adapter);
+        device = new HidDevice(service, context);
+
+        Log.d(TAG, "Registering with a HID Device!");
+        device.register();
+
+        context.refresh();
     }
 
     @Override
@@ -118,7 +122,6 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     public void onServiceDisconnected(int profile) {
         if (profile == BluetoothProfile.HID_DEVICE){
             opened = false;
-            connected = false;
 
             Log.i(TAG, "Reconnecting to Service");
             context.snack(context.getResources().getString(R.string.snack_bluetooth_closed), Snackbar.LENGTH_SHORT);
@@ -131,7 +134,12 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
         return supported;
     }
     public boolean isConnected() {
-        return connected;
+        if (!initialized) return false;
+        return getHost().isConnected();
+    }
+    public boolean isConnecting(){
+        if (!initialized) return false;
+        return getHost().isConnecting();
     }
     public boolean isEnabled() {
         return enabled;
@@ -146,6 +154,14 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
 
     public DeviceStorage getDevices() {
         return devices;
+    }
+
+    public HidDevice getHost() {
+        return device;
+    }
+
+    public BluetoothDevice fromHostDevice(HostDevice device){
+        return adapter.getRemoteDevice(device.getAddress());
     }
 
     public boolean isBonded(String address){

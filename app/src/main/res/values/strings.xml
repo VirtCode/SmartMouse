@@ -73,4 +73,6 @@
     <string name="connect_select_item_never">Never</string>
     <string name="dialog_info_last_never">Not used yet</string>
     <string name="dialog_info_last_format">dd.MM.yy</string>
+    <string name="connect_connecting_status">Status:</string>
+    <string name="connect_connecting_status_establishing">Establishing Connection...</string>
 </resources>

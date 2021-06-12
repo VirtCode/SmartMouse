@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,7 +52,7 @@ public class ConnectSelectSubfragment extends CustomFragment {
     }
 
     public void connect(){
-
+        bluetooth.getHost().connect(bluetooth.fromHostDevice(adapter.getSelected()));
     }
 
     @Override
