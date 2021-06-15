@@ -52,7 +52,7 @@ public class ConnectSelectSubfragment extends CustomFragment {
     }
 
     public void connect(){
-        bluetooth.getHost().connect(bluetooth.fromHostDevice(adapter.getSelected()));
+        bluetooth.getHost().connect(adapter.getSelected());
     }
 
     @Override

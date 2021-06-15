@@ -100,7 +100,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
         initialized = true;
 
         discoverer = new BluetoothDiscoverer(context, adapter);
-        device = new HidDevice(service, context);
+        device = new HidDevice(service, this, context);
 
         Log.d(TAG, "Registering with a HID Device!");
         device.register();

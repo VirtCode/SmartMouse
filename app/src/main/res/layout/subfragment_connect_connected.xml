@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="@string/connect_connected_name"/>
+
+    <TextView
+        android:id="@+id/connect_connected_device_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="15dp" />
+
+    <Chronometer
+        android:id="@+id/connect_connected_device_elapsed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Material.Small"/>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/connect_connected_mouse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?attr/materialButtonOutlinedStyle"
+        android:text="@string/connect_connected_mouse"/>
+
+    <Button
+        android:id="@+id/connect_connected_disconnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/connect_connected_disconnect"/>
+
+</LinearLayout>

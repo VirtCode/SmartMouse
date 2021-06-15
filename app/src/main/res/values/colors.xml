@@ -13,4 +13,5 @@
     <color name="link">#303F9F</color>
     <color name="status_init">#707070</color>
     <color name="recycler_background">#FFFFFF</color>
+    <color name="status_connecting">#FF9800</color>
 </resources>

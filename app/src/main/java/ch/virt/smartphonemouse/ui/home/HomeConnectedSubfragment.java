@@ -13,36 +13,39 @@ import androidx.fragment.app.Fragment;
 import org.w3c.dom.Text;
 
 import ch.virt.smartphonemouse.R;
+import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.ui.CustomFragment;
 
-public class HomeConnectedSubfragment extends Fragment {
+public class HomeConnectedSubfragment extends CustomFragment {
 
     BluetoothHandler handler;
 
     Chronometer chronometer;
     TextView device;
 
-    Button disconnect;
+    Button more;
 
-    public HomeConnectedSubfragment(BluetoothHandler handler) {
-        super(R.layout.subfragment_home_connected);
+    public HomeConnectedSubfragment(BluetoothHandler handler, MainContext main) {
+        super(R.layout.subfragment_home_connected, main);
         this.handler = handler;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        chronometer = view.findViewById(R.id.home_connected_device_elapsed);
-        device = view.findViewById(R.id.home_connected_device_name);
-        disconnect = view.findViewById(R.id.home_connected_disconnect);
-
-        chronometer.setBase(0);
+    public void render() {
+        chronometer.setBase(handler.getHost().getConnectedSince());
         chronometer.setFormat(getResources().getString(R.string.home_connected_elapsed));
         chronometer.start();
 
-        device.setText("Not implemented");
+        device.setText(handler.getHost().getDevice().getName());
 
-        disconnect.setOnClickListener(v -> System.out.println("Not yet implemented"));
+        more.setOnClickListener(v -> main.navigate(R.id.drawer_connect));
+    }
+
+    @Override
+    protected void loadComponents(View view) {
+        chronometer = view.findViewById(R.id.home_connected_device_elapsed);
+        device = view.findViewById(R.id.home_connected_device_name);
+        more = view.findViewById(R.id.home_connected_more);
     }
 }

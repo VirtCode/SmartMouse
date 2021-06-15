@@ -30,10 +30,10 @@
             android:layout_weight="1"/>
 
     <Button
-            android:id="@+id/home_connected_disconnect"
+            android:id="@+id/home_connected_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/home_connected_disconnect"
+            android:text="@string/home_connected_more"
             style="?attr/materialButtonOutlinedStyle"/>
 
 </LinearLayout>

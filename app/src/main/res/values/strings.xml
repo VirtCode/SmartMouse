@@ -75,4 +75,11 @@
     <string name="dialog_info_last_format">dd.MM.yy</string>
     <string name="connect_connecting_status">Status:</string>
     <string name="connect_connecting_status_establishing">Establishing Connection...</string>
+    <string name="connect_connected_mouse">To Mouse</string>
+    <string name="connect_connected_disconnect">Disconnect</string>
+    <string name="connect_connecting_elapsed">Time Elapsed:</string>
+    <string name="connect_connected_name">Connected to:</string>
+    <string name="connect_connected_elapsed">%s elapsed</string>
+    <string name="connect_status_connecting">Connecting...</string>
+    <string name="home_connected_more">More Info</string>
 </resources>

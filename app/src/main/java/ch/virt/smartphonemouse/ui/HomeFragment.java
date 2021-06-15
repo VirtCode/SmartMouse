@@ -42,7 +42,7 @@ public class HomeFragment extends CustomFragment {
                 setStatus(R.color.status_unsupported, R.string.home_status_unsupported, R.string.home_button_unsupported, v -> main.exitApp(), new HomeUnsupportedSubfragment());
 
             else if (bluetooth.isConnected())
-                setStatus(R.color.status_connected, R.string.home_status_connected, R.string.home_button_connected, v -> main.navigate(R.id.drawer_mouse), new HomeConnectedSubfragment(bluetooth));
+                setStatus(R.color.status_connected, R.string.home_status_connected, R.string.home_button_connected, v -> main.navigate(R.id.drawer_mouse), new HomeConnectedSubfragment(bluetooth, main));
 
             else
                 setStatus(R.color.status_disconnected, R.string.home_status_disconnected, R.string.home_button_disconnected, v -> main.navigate(R.id.drawer_connect), new HomeDisconnectedSubfragment());

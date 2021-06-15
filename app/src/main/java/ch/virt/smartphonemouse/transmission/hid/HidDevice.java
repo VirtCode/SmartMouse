@@ -3,9 +3,12 @@ package ch.virt.smartphonemouse.transmission.hid;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHidDevice;
 import android.bluetooth.BluetoothHidDeviceAppSdpSettings;
+import android.os.SystemClock;
 import android.util.Log;
 
 import ch.virt.smartphonemouse.helper.MainContext;
+import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.transmission.HostDevice;
 import ch.virt.smartphonemouse.transmission.hid.HidDescriptor;
 
 public class HidDevice extends BluetoothHidDevice.Callback {
@@ -19,14 +22,20 @@ public class HidDevice extends BluetoothHidDevice.Callback {
     MainContext context;
 
     BluetoothDevice device;
+    long connectedSince;
 
     boolean registered;
     boolean connected;
     boolean connecting;
 
-    public HidDevice(BluetoothHidDevice device, MainContext context) {
+    boolean lastFailed;
+
+    BluetoothHandler bluetooth;
+
+    public HidDevice(BluetoothHidDevice device, BluetoothHandler bluetooth, MainContext context) {
         this.service = device;
         this.context = context;
+        this.bluetooth = bluetooth;
     }
 
     private  BluetoothHidDeviceAppSdpSettings createSDP(){
@@ -42,7 +51,7 @@ public class HidDevice extends BluetoothHidDevice.Callback {
     public void onAppStatusChanged(BluetoothDevice pluggedDevice, boolean registered) {
         this.registered = registered;
 
-        Log.d(TAG, "The hid device has been registered " + (registered ? "successfully" : "unsuccessfully"));
+        Log.d(TAG, "The hid device is now " + (registered ? "registered" : "NOT registered"));
     }
 
     @Override
@@ -53,12 +62,18 @@ public class HidDevice extends BluetoothHidDevice.Callback {
                 connecting = false;
                 connected = true;
 
+                connectedSince = SystemClock.elapsedRealtime();
+                bluetooth.getDevices().getDevice(device.getAddress()).setLastConnected(System.currentTimeMillis());
+                bluetooth.getDevices().save();
+
                 context.refresh();
 
                 Log.d(TAG, "HID Host connected!");
                 break;
 
             case BluetoothHidDevice.STATE_DISCONNECTED:
+                if (!connected) lastFailed = true;
+
                 connecting = false;
                 connected = false;
 
@@ -71,14 +86,15 @@ public class HidDevice extends BluetoothHidDevice.Callback {
         }
     }
 
-    public void connect(BluetoothDevice device){
+    public void connect(HostDevice deviceH){
         if (registered && !connected && !connecting){
+            this.device = bluetooth.fromHostDevice(deviceH);
 
-            this.device = device;
             service.connect(device);
             connecting = true;
 
             context.refresh();
+            Log.d(TAG, "connect: Refreshed");
 
         } else Log.d(TAG, "Cannot connect to host whilst connecting or being connected and must be registered");
     }
@@ -121,5 +137,17 @@ public class HidDevice extends BluetoothHidDevice.Callback {
 
     public boolean isConnecting() {
         return connecting;
+    }
+
+    public boolean readFailed(){
+        if (lastFailed) {
+            lastFailed = false;
+            return true;
+        }
+        return false;
+    }
+
+    public long getConnectedSince() {
+        return connectedSince;
     }
 }
