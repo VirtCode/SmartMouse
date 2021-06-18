@@ -5,11 +5,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.connect.ConnectConnectedSubfragment;
 import ch.virt.smartphonemouse.ui.connect.ConnectConnectingSubfragment;
+import ch.virt.smartphonemouse.ui.connect.ConnectFailedSubfragment;
 import ch.virt.smartphonemouse.ui.connect.ConnectSelectSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeConnectedSubfragment;
 
@@ -29,19 +32,18 @@ public class ConnectFragment extends CustomFragment {
     public void render() {
         if (bluetooth.isInitialized()){
 
-            if (bluetooth.isConnected()) setStatus(R.color.status_connected, R.string.connect_status_connected);
-            else setStatus(R.color.status_disconnected, R.string.connect_status_disconnected);
-
             if (bluetooth.isConnecting()) {
-                connecting();
+                loadFragment(new ConnectConnectingSubfragment(main, bluetooth));
                 setStatus(R.color.status_connecting, R.string.connect_status_connecting);
             }
             else if (!bluetooth.isConnected()){
-                select();
+                if (bluetooth.getHost().hasFailed()) loadFragment(new ConnectFailedSubfragment(main, bluetooth));
+                else loadFragment(new ConnectSelectSubfragment(main, bluetooth));
+
                 setStatus(R.color.status_disconnected, R.string.connect_status_disconnected);
             }
             else{
-                connected();
+                loadFragment(new ConnectConnectedSubfragment(main, bluetooth));
                 setStatus(R.color.status_connected, R.string.connect_status_connected);
             }
         }
@@ -58,16 +60,7 @@ public class ConnectFragment extends CustomFragment {
         statusText.setText(text);
     }
 
-    public void select(){
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.connect_container, new ConnectSelectSubfragment(main, bluetooth)).commit();
-    }
-
-    public void connected(){
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.connect_container, new ConnectConnectedSubfragment(main, bluetooth)).commit();
-    }
-
-    public void connecting(){
-        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.connect_container, new ConnectConnectingSubfragment(main, bluetooth)).commit();
-
+    private void loadFragment(Fragment fragment){
+        getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.connect_container, fragment).commit();
     }
 }

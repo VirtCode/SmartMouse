@@ -139,12 +139,12 @@ public class HidDevice extends BluetoothHidDevice.Callback {
         return connecting;
     }
 
-    public boolean readFailed(){
-        if (lastFailed) {
-            lastFailed = false;
-            return true;
-        }
-        return false;
+    public boolean hasFailed(){
+        return lastFailed;
+    }
+
+    public void markFailedAsRead(){
+        lastFailed = false;
     }
 
     public long getConnectedSince() {

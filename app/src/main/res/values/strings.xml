@@ -74,12 +74,22 @@
     <string name="dialog_info_last_never">Not used yet</string>
     <string name="dialog_info_last_format">dd.MM.yy</string>
     <string name="connect_connecting_status">Status:</string>
-    <string name="connect_connecting_status_establishing">Establishing Connection...</string>
+    <string name="connect_connecting_status_establishing">Establishing Connection…</string>
     <string name="connect_connected_mouse">To Mouse</string>
     <string name="connect_connected_disconnect">Disconnect</string>
     <string name="connect_connecting_elapsed">Time Elapsed:</string>
     <string name="connect_connected_name">Connected to:</string>
     <string name="connect_connected_elapsed">%s elapsed</string>
-    <string name="connect_status_connecting">Connecting...</string>
+    <string name="connect_status_connecting">Connecting…</string>
     <string name="home_connected_more">More Info</string>
+    <string name="connect_failed_message">Failed to connect to:</string>
+    <string name="connect_failed_precautions">Make sure that …</string>
+    <string name="connect_failed_precautions_range">… the host device is in range so that a connection can be established.</string>
+    <string name="connect_failed_precautions_bluetooth">… bluetooth is enabled on the host device.</string>
+    <string name="connect_failed_precautions_support">… your host device supports hid devices and connections with the android hid bluetooth profile.</string>
+    <string name="connect_failed_fixes">Possible fixes to other problems may be to …</string>
+    <string name="connect_failed_fixes_repair">… remove this device from your host device and the host from this device in the respective bluetooth settings.</string>
+    <string name="connect_failed_fixes_trust">… trust this device on the host device so that this device can connect to it on its own.</string>
+    <string name="connect_failed_back">Back</string>
+    <string name="connect_failed_remove">Remove this device</string>
 </resources>
