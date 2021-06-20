@@ -14,4 +14,7 @@
     <color name="status_init">#707070</color>
     <color name="recycler_background">#FFFFFF</color>
     <color name="status_connecting">#FF9800</color>
+    <color name="mouse_background">#000000</color>
+    <color name="mouse_stroke">#919191</color>
+    <color name="mouse_pressed">#6A666666</color>
 </resources>

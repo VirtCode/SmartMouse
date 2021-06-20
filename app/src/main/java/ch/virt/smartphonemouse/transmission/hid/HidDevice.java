@@ -115,7 +115,7 @@ public class HidDevice extends BluetoothHidDevice.Callback {
 
         byte[] report = new byte[4];
 
-        report[0] = (byte) ((left ? 1 : 0) | (middle ? 2 : 0) | (right ? 4 : 0)); // First bit left, second middle, third right and the rest padding
+        report[0] = (byte) ((left ? 1 : 0) | (middle ? 4 : 0) | (right ? 2 : 0)); // First bit left, second middle, third right and the rest padding
         report[1] = (byte) x;
         report[2] = (byte) y;
         report[3] = (byte) wheel;

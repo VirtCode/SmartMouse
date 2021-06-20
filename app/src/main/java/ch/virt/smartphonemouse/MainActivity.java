@@ -2,34 +2,31 @@ package ch.virt.smartphonemouse;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.ConnectFragment;
 import ch.virt.smartphonemouse.ui.CustomFragment;
 import ch.virt.smartphonemouse.ui.HomeFragment;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.helper.ResultListener;
+import ch.virt.smartphonemouse.ui.MouseFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private MainContext mainContext;
 
     BluetoothHandler bluetooth;
+
+    private MouseInputs inputs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         bluetooth = new BluetoothHandler(mainContext);
+
+        inputs = new MouseInputs(bluetooth);
     }
 
     /**
@@ -181,13 +182,21 @@ public class MainActivity extends AppCompatActivity {
         switch (entry) {
             case R.id.drawer_connect:
                 switchFragment(new ConnectFragment(mainContext, bluetooth));
+                bar.setVisibility(View.VISIBLE);
                 bar.setTitle(R.string.title_connect);
                 drawer.setCheckedItem(entry);
                 return true;
             case R.id.drawer_home:
                 switchFragment(new HomeFragment(bluetooth, mainContext));
+                bar.setVisibility(View.VISIBLE);
                 bar.setTitle(R.string.title_home);
                 drawer.setCheckedItem(entry);
+                return true;
+
+            case R.id.drawer_mouse:
+                switchFragment(new MouseFragment(mainContext, inputs));
+                drawer.setCheckedItem(entry);
+                bar.setVisibility(View.GONE);
                 return true;
 
             default:
