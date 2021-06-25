@@ -59,13 +59,13 @@ public class MouseInputs {
         }
     }
 
-    public void changeXPosition(int x){
+    public void changeXPosition(float x){
         xPosition += x;
 
         if (Math.abs(xPosition) > minimalPositionChange) sendUpdate(); // Only send change after enough changes
     }
 
-    public void changeYPosition(int y){
+    public void changeYPosition(float y){
         yPosition += y;
 
         if (Math.abs(yPosition) > minimalPositionChange) sendUpdate(); // Only send change after enough changes
