@@ -22,7 +22,22 @@ public class PipelineConfig {
 
     // Scaler
     private int scalerPower;
-    private int scalerSplit;
+    private float scalerSplit;
+
+    public PipelineConfig() {
+        this.lowPassOrder = 1;
+        this.lowPassCutoff = 0.1f;
+        this.freezerFreezingThreshold = 0.1f;
+        this.freezerUnfreezingThreshold = 0.04f;
+        this.freezerUnfreezingSamples = 10;
+        this.noiseCancellingThreshold = 0.04f;
+        this.noiseFinalSamples = 20;
+        this.cacheMinimalDuration = 5;
+        this.cacheMaximalDuration = 10;
+        this.cacheReleasingThreshold = 0.05f;
+        this.scalerPower = 2;
+        this.scalerSplit = 0.1f;
+    }
 
     public int getLowPassOrder() {
         return lowPassOrder;
@@ -68,7 +83,7 @@ public class PipelineConfig {
         return scalerPower;
     }
 
-    public int getScalerSplit() {
+    public float getScalerSplit() {
         return scalerSplit;
     }
 }

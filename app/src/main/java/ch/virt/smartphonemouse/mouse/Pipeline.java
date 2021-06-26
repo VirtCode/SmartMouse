@@ -22,6 +22,7 @@ public class Pipeline {
 
     public Pipeline(PipelineConfig config) {
         this.config = config;
+        create();
     }
 
     public void create(){
@@ -50,12 +51,13 @@ public class Pipeline {
 
         float velocity = velocityIntegration.integrate(delta, acceleration); // Integrate velocity
         velocity = cache.velocity(velocity, acceleration); // Do first caching action
+        velocity = noise.velocity(velocity);
         velocity = scaler.scale(velocity); // Scale velocity
 
         float distance = distanceIntegration.integrate(delta, velocity); // Integrate distance
         distance = cache.distance(distance, delta); // Do second caching action
 
-        return distance;
+        return distance * 100000;
     }
 
     public void reset(){

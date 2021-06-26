@@ -19,7 +19,7 @@ public class Freezer {
     public float next(float lowPassed, float acceleration){
         if (frozen){
 
-            if (Math.abs(acceleration - acceleration) < unfreezingThreshold) unfreezing++; // Count up if it may be unfrozen
+            if (Math.abs(acceleration - lowPassed) < unfreezingThreshold) unfreezing++; // Count up if it may be unfrozen
             else unfreezing = 0;
 
             if (unfreezing == unfreezingSamples){ // Unfreeze if enough samples in a row

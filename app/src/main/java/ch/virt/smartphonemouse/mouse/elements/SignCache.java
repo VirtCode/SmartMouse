@@ -30,11 +30,13 @@ public class SignCache {
             cachedDistance = 0;
         }
 
+        lastValue = value;
+
         if (caching){
 
             if (duration >= minimalDuration) {
 
-                if (acceleration >= releasingThreshold){ // If releasing soon enough, just return to normal
+                if (Math.abs(acceleration) >= releasingThreshold){ // If releasing soon enough, just return to normal
                     caching = false;
                     latelyChanged = true;
                     return value;
@@ -48,9 +50,9 @@ public class SignCache {
             }
 
             duration++;
+            return 0;
         }
 
-        lastValue = value;
         return value;
     }
 

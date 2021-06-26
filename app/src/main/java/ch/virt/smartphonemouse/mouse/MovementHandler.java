@@ -10,7 +10,7 @@ import ch.virt.smartphonemouse.helper.MainContext;
 
 public class MovementHandler implements SensorEventListener {
 
-    private static final float NANO_FULL_FACTOR = 1e-6f;
+    private static final float NANO_FULL_FACTOR = 1e-9f;
 
     private static final int SENSOR_TYPE = Sensor.TYPE_ACCELEROMETER;
     private static final int SAMPLING_RATE = SensorManager.SENSOR_DELAY_FASTEST;
@@ -25,6 +25,19 @@ public class MovementHandler implements SensorEventListener {
 
     private long lastSample = 0;
     private Pipeline xLine, yLine;
+
+    public MovementHandler(MainContext main, MouseInputs inputs) {
+        this.main = main;
+        this.inputs = inputs;
+
+        fetchSensor();
+        create();
+    }
+
+    public void create(){
+        xLine = new Pipeline(new PipelineConfig());
+        yLine = new Pipeline(new PipelineConfig());
+    }
 
     public void fetchSensor(){
         manager = (SensorManager) main.getContext().getSystemService(Context.SENSOR_SERVICE);
@@ -48,6 +61,7 @@ public class MovementHandler implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        System.out.println("Something");
         if (!registered) return; // Ignore Samples when the listener is not registered
         if (lastSample == 0) { // Ignore First sample, because there is no delta
             lastSample = event.timestamp;
@@ -58,7 +72,9 @@ public class MovementHandler implements SensorEventListener {
 
         // Calculate and Submit values
         inputs.changeXPosition(xLine.nextForDistance(delta, event.values[0]));
-        inputs.changeYPosition(yLine.nextForDistance(delta, event.values[1]));
+        inputs.changeYPosition(-yLine.nextForDistance(delta, event.values[1]));
+
+        lastSample = event.timestamp;
     }
 
     @Override

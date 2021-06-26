@@ -2,6 +2,7 @@ package ch.virt.smartphonemouse.transmission.hid;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHidDevice;
+import android.bluetooth.BluetoothHidDeviceAppQosSettings;
 import android.bluetooth.BluetoothHidDeviceAppSdpSettings;
 import android.os.SystemClock;
 import android.util.Log;
@@ -38,12 +39,12 @@ public class HidDevice extends BluetoothHidDevice.Callback {
         this.bluetooth = bluetooth;
     }
 
-    private  BluetoothHidDeviceAppSdpSettings createSDP(){
+    private BluetoothHidDeviceAppSdpSettings createSDP(){
         return new BluetoothHidDeviceAppSdpSettings(NAME, DESCRIPTION, PROVIDER, BluetoothHidDevice.SUBCLASS1_MOUSE, HidDescriptor.DESCRIPTOR);
     }
 
     public void register(){
-        if (!registered) service.registerApp(createSDP(), null, null, context.getContext().getMainExecutor(), this);
+        if (!registered) service.registerApp(createSDP(), null, new BluetoothHidDeviceAppQosSettings(BluetoothHidDeviceAppQosSettings.SERVICE_BEST_EFFORT, 2000, 5, 2000, 2, 10), context.getContext().getMainExecutor(), this);
         else Log.d(TAG, "The Device is already registered!");
     }
 

@@ -20,6 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.mouse.MouseInputs;
+import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.ConnectFragment;
 import ch.virt.smartphonemouse.ui.CustomFragment;
@@ -37,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private CustomFragment currentFragment;
     private MainContext mainContext;
 
-    BluetoothHandler bluetooth;
+    private BluetoothHandler bluetooth;
 
+    private MovementHandler movement;
     private MouseInputs inputs;
 
     @Override
@@ -128,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         bluetooth = new BluetoothHandler(mainContext);
 
         inputs = new MouseInputs(bluetooth);
+
+        movement = new MovementHandler(mainContext, inputs);
     }
 
     /**
@@ -197,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 switchFragment(new MouseFragment(mainContext, inputs));
                 drawer.setCheckedItem(entry);
                 bar.setVisibility(View.GONE);
+                movement.register();
                 return true;
 
             default:
