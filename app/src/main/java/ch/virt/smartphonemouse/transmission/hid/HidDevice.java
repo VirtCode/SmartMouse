@@ -44,7 +44,7 @@ public class HidDevice extends BluetoothHidDevice.Callback {
     }
 
     public void register(){
-        if (!registered) service.registerApp(createSDP(), null, new BluetoothHidDeviceAppQosSettings(BluetoothHidDeviceAppQosSettings.SERVICE_BEST_EFFORT, 2000, 5, 2000, 2, 10), context.getContext().getMainExecutor(), this);
+        if (!registered) service.registerApp(createSDP(), null, null, context.getContext().getMainExecutor(), this);
         else Log.d(TAG, "The Device is already registered!");
     }
 

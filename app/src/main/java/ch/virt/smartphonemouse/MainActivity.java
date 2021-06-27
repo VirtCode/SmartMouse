@@ -202,7 +202,10 @@ public class MainActivity extends AppCompatActivity {
                 drawer.setCheckedItem(entry);
                 bar.setVisibility(View.GONE);
                 movement.register();
+                inputs.start();
                 return true;
+
+            case R.id.drawer_settings:
 
             default:
                 Toast.makeText(this, "Not yet implemented!", Toast.LENGTH_SHORT).show();
