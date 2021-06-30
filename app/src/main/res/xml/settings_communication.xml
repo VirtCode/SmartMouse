@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+        app:key="transmissionRate"
+        app:title="Bluetooth Transmission Rate"
+        app:summary="Set how many times per second data is sent to the host" />
+
+    <Preference
+        app:key="removeAll"
+        app:title="Remove All Known Devices"
+        app:summary="Removes all devices you have previously added to the app"/>
+
+</PreferenceScreen>

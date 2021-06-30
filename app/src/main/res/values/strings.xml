@@ -92,4 +92,5 @@
     <string name="connect_failed_fixes_trust">… trust this device on the host device so that this device can connect to it on its own.</string>
     <string name="connect_failed_back">Back</string>
     <string name="connect_failed_remove">Remove this device</string>
+    <string name="title_settings">Settings</string>
 </resources>

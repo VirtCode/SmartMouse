@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:entries="@array/themes"
+        app:entryValues="@array/themeValues"
+        app:key="theme"
+        app:title="Theme"
+        app:summary="Choose between light and dark theme"/>
+
+    <PreferenceCategory
+        app:initialExpandedChildrenCount="1"
+        app:key="visuals"
+        app:title="Visuals">
+
+        <SwitchPreference
+            app:key="enable"
+            app:title="Enable Visuals" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+            app:key="strokeWeight"
+            app:summary="Controls the weight of the button outline"
+            app:title="Stroke Weight" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
+            app:key="intensity"
+            app:summary="Set the intensity of the visuals"
+            app:title="Intensity" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:initialExpandedChildrenCount="1"
+        app:key="vibrations"
+        app:title="Vibrations">
+
+        <SwitchPreference
+            app:key="enable"
+            app:title="Enable Vibrations" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
+            app:key="buttonIntensity"
+            app:summary="Controls the vibration intensity of the buttons"
+            app:title="Button Intensity" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+            app:key="buttonLength"
+            app:summary="Sets the length of the vibration of the button in milliseconds"
+            app:title="Button Length" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
+            app:key="scrollIntensity"
+            app:summary="Controls the vibration intensity of the scroll wheel"
+            app:title="Scroll Intensity" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+            app:key="scrollLength"
+            app:summary="Sets the length of the vibration of one scroll wheel step in milliseconds"
+            app:title="Scroll Length" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
+            app:key="specialIntensity"
+            app:summary="Controls the vibration intensity of secondary events, like the middle button"
+            app:title="Secondary Intensity" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+            app:key="specialLength"
+            app:summary="Sets the length of the vibration of a secondary event"
+            app:title="Secondary Length" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Layout">
+
+        <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
+            android:key="height"
+            app:min="10"
+            app:seekBarIncrement="1"
+            app:summary="Controls the Height of the Mouse Buttons"
+            app:title="Height" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
+            android:key="middleWidth"
+            app:min="10"
+            app:seekBarIncrement="1"
+            app:summary="Controls how wide the middle mouse button is"
+            app:title="Middle Button Width" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

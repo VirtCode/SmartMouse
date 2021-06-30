@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:title="Interface"
+        app:summary="Control the way the mouse interface looks"
+        app:icon="@drawable/settings_interface"
+        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsInterfaceSubfragment"/>
+
+    <Preference
+        app:title="Communication"
+        app:summary="Control how the mouse communicates with the host"
+        app:icon="@drawable/settings_communication"
+        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsCommunicationSubfragment"/>
+
+    <Preference
+        app:title="Movement"
+        app:summary="Control how the movement of the mouse is calculated"
+        app:icon="@drawable/settings_movement"
+        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsMovementSubfragment"/>
+
+    <Preference
+        app:key="reset"
+        app:title="Reset Settings"
+        app:summary="Resets all settings to their default"/>
+
+</PreferenceScreen>

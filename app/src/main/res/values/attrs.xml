@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="showValueAsSummary" format="boolean"/>
+    <attr name="signed" format="boolean"/>
+    <attr name="valueUnit" format="string"/>
+
+    <declare-styleable name="EditIntegerPreference">
+        <attr name="showValueAsSummary"/>
+        <attr name="signed"/>
+        <attr name="valueUnit"/>
+    </declare-styleable>
+
+    <declare-styleable name="EditFloatPreference">
+        <attr name="showValueAsSummary"/>
+        <attr name="signed"/>
+        <attr name="valueUnit"/>
+    </declare-styleable>
+
+</resources>

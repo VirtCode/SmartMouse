@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,6 +29,7 @@ import ch.virt.smartphonemouse.ui.HomeFragment;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.helper.ResultListener;
 import ch.virt.smartphonemouse.ui.MouseFragment;
+import ch.virt.smartphonemouse.ui.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView drawer;
 
-    private CustomFragment currentFragment;
+    private Fragment currentFragment;
     private MainContext mainContext;
 
     private BluetoothHandler bluetooth;
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param fragment fragment that is displayed
      */
-    private void switchFragment(CustomFragment fragment) {
+    private void switchFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.container, fragment).commit();
         currentFragment = fragment;
     }
@@ -173,7 +175,9 @@ public class MainActivity extends AppCompatActivity {
      * Rerenders the current fragment
      */
     public void reRender() {
-        if (currentFragment != null) this.runOnUiThread(() -> currentFragment.render());
+        if (currentFragment != null) {
+            if (currentFragment instanceof CustomFragment) this.runOnUiThread(() -> ((CustomFragment) currentFragment).render());
+        }
     }
 
     /**
@@ -206,6 +210,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.drawer_settings:
+                switchFragment(new SettingsFragment());
+                drawer.setCheckedItem(entry);
+                bar.setVisibility(View.VISIBLE);
+                bar.setTitle(R.string.title_settings);
+                return true;
 
             default:
                 Toast.makeText(this, "Not yet implemented!", Toast.LENGTH_SHORT).show();
