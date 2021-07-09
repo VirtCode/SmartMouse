@@ -61,7 +61,6 @@ public class MovementHandler implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("Something");
         if (!registered) return; // Ignore Samples when the listener is not registered
         if (lastSample == 0) { // Ignore First sample, because there is no delta
             lastSample = event.timestamp;

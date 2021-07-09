@@ -1,6 +1,7 @@
 package ch.virt.smartphonemouse.ui;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
@@ -15,18 +16,37 @@ import ch.virt.smartphonemouse.mouse.MouseInputs;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
+/**
+ * This fragment represents the mouse interface the user uses to input button strokes 
+ */
 public class MouseFragment extends CustomFragment {
 
-    RelativeLayout root;
+    private RelativeLayout root;
     private int width, height;
+    private boolean theme; // false = light, true = dark
 
-    MouseInputs mouse;
+    private MouseInputs mouse;
 
     // Feedback
+    private boolean visuals;
+    private int buttonsStrokeWeight;
+    private float viewIntensity;
+
+    private boolean vibrations;
+    private int buttonIntensity;
+    private int buttonLength;
+    private int scrollIntensity;
+    private int scrollLength;
+    private int specialIntensity;
+    private int specialLength;
+
     private View leftView, rightView, middleView;
     private Vibrator vibrator;
 
     // Buttons
+    private float buttonsHeight;
+    private float buttonsMiddleWidth;
+
     private int leftX, leftY, leftWidth, leftHeight;
     private int rightX, rightY, rightWidth, rightHeight;
     private int middleX, middleY, middleWidth, middleHeight;
@@ -34,41 +54,57 @@ public class MouseFragment extends CustomFragment {
     boolean left, right, middle;
 
     // Middle Specific
+    private int middleClickWait;
+    private int scrollThreshold;
+
     private int middleStart;
     private long middleStartTime;
 
     private boolean middleDecided;
     private boolean middleScrolling;
 
-    // Configurable
-    private float buttonsHeight = 0.333f;
-    private float buttonsMiddleWidth = 0.2f;
-
-    private boolean visuals = true;
-    private int buttonsStrokeWeight = 4;
-
-    private int scrollThreshold = 50;
-    private int middleClickWait = 300;
-
-    private boolean vibrations = true;
-    private int buttonIntensity = 100;
-    private int buttonLength = 30;
-    private int scrollIntensity = 50;
-    private int scrollLength = 20;
-    private int specialIntensity = 100;
-    private int specialLength = 50;
-
+    /**
+     * Creates a Mouse Fragment
+     * @param context main context
+     * @param mouse mouse to send the inputs to
+     */
     public MouseFragment(MainContext context, MouseInputs mouse) {
         super(R.layout.fragment_mouse, context);
 
         this.mouse = mouse;
     }
 
+    /**
+     * Reads the settings for the fragment from the preferences
+     */
+    private void readSettings(){
+        SharedPreferences prefs = main.getPreferences();
+
+        theme = prefs.getString("interfaceTheme", "dark").equals("dark");
+
+        scrollThreshold = prefs.getInt("interfaceBehaviourScrollStep", 50);
+        middleClickWait = prefs.getInt("interfaceBehaviourSpecialWait", 300);
+
+        visuals = prefs.getBoolean("interfaceVisualsEnable", true);
+        buttonsStrokeWeight = prefs.getInt("interfaceVisualsStrokeWeight", 4);
+        viewIntensity = prefs.getFloat("interfaceVisualsIntensity", 0.5f);
+
+        vibrations = prefs.getBoolean("interfaceVibrationsEnable", true);
+        buttonIntensity = prefs.getInt("interfaceVibrationsButtonIntensity", 100);
+        buttonLength = prefs.getInt("interfaceVibrationsButtonLength", 30);
+        scrollIntensity = prefs.getInt("interfaceVibrationsScrollIntensity", 50);
+        scrollLength = prefs.getInt("interfaceVibrationsScrollLength", 20);
+        specialIntensity = prefs.getInt("interfaceVibrationsSpecialIntensity", 100);
+        specialLength = prefs.getInt("interfaceVibrationsSpecialLength", 50);
+
+        buttonsHeight = prefs.getFloat("interfaceLayoutHeight", 0.3f);
+        buttonsMiddleWidth = prefs.getFloat("interfaceLayoutMiddleWidth", 0.2f);
+    }
+
     @Override
     public void render() {
-
-        root.setBackgroundResource(R.color.mouse_background);
-        getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.mouse_background));
+        root.setBackgroundResource(theme ? R.color.mouse_background_dark : R.color.mouse_background_light);
+        getActivity().getWindow().setStatusBarColor(getResources().getColor(theme ? R.color.mouse_background_dark : R.color.mouse_background_light));
 
         if (!visuals) getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.statusBars());
 
@@ -77,9 +113,22 @@ public class MouseFragment extends CustomFragment {
         getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.navigationBars());
     }
 
+    @Override
+    public void restore() {
+        getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.design_default_color_primary_dark));
+
+        if (!visuals) getActivity().getWindow().getInsetsController().show(WindowInsets.Type.statusBars());
+
+        getActivity().getWindow().getInsetsController().show(WindowInsets.Type.mandatorySystemGestures());
+        getActivity().getWindow().getInsetsController().show(WindowInsets.Type.systemGestures());
+        getActivity().getWindow().getInsetsController().show(WindowInsets.Type.navigationBars());
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initComponents() {
+        readSettings();
+
         root.post(() -> {
 
             calculate();
@@ -98,7 +147,10 @@ public class MouseFragment extends CustomFragment {
         root = view.findViewById(R.id.mouse_root);
     }
 
-    public void calculate(){
+    /**
+     * Calculates the buttons size
+     */
+    private void calculate(){
         width = root.getWidth();
         height = root.getHeight();
 
@@ -121,45 +173,54 @@ public class MouseFragment extends CustomFragment {
         middleWidth = width - buttonWidth * 2;
     }
 
-    public void createVisuals(){
+    /**
+     * Creates the visuals
+     */
+    private void createVisuals(){
 
         View horizontal = new View(getContext());
-        horizontal.setBackgroundResource(R.color.mouse_stroke);
+        horizontal.setBackgroundResource(theme ? R.color.mouse_stroke_dark : R.color.mouse_stroke_light);
+        horizontal.setAlpha(viewIntensity);
         horizontal.setLayoutParams(new FrameLayout.LayoutParams(width, buttonsStrokeWeight));
         horizontal.setY(middleHeight);
         horizontal.setX(0);
         root.addView(horizontal);
 
         View verticalLeft = new View(getContext());
-        verticalLeft.setBackgroundResource(R.color.mouse_stroke);
+        verticalLeft.setBackgroundResource(theme ? R.color.mouse_stroke_dark : R.color.mouse_stroke_light);
+        verticalLeft.setAlpha(viewIntensity);
         verticalLeft.setLayoutParams(new FrameLayout.LayoutParams(buttonsStrokeWeight, leftHeight));
         verticalLeft.setX(leftWidth - buttonsStrokeWeight / 2);
         verticalLeft.setY(leftY);
         root.addView(verticalLeft);
 
         View verticalRight = new View(getContext());
-        verticalRight.setBackgroundResource(R.color.mouse_stroke);
+        verticalRight.setBackgroundResource(theme ? R.color.mouse_stroke_dark : R.color.mouse_stroke_light);
+        verticalRight.setAlpha(viewIntensity);
         verticalRight.setLayoutParams(new FrameLayout.LayoutParams(buttonsStrokeWeight, rightHeight));
         verticalRight.setX(rightX - buttonsStrokeWeight / 2);
         verticalRight.setY(rightY);
         root.addView(verticalRight);
 
         leftView = new View(getContext());
-        leftView.setBackgroundResource(R.color.mouse_pressed);
+        leftView.setBackgroundResource(theme ? R.color.mouse_pressed_dark : R.color.mouse_pressed_light);
+        leftView.setAlpha(viewIntensity);
         leftView.setLayoutParams(new FrameLayout.LayoutParams(leftWidth - buttonsStrokeWeight / 2, leftHeight));
         leftView.setX(leftX);
         leftView.setY(leftY);
         root.addView(leftView);
 
         rightView = new View(getContext());
-        rightView.setBackgroundResource(R.color.mouse_pressed);
+        rightView.setBackgroundResource(theme ? R.color.mouse_pressed_dark : R.color.mouse_pressed_light);
+        rightView.setAlpha(viewIntensity);
         rightView.setLayoutParams(new FrameLayout.LayoutParams(rightWidth - buttonsStrokeWeight / 2, rightHeight));
         rightView.setX(rightX + buttonsStrokeWeight / 2);
         rightView.setY(rightY);
         root.addView(rightView);
 
         middleView = new View(getContext());
-        middleView.setBackgroundResource(R.color.mouse_pressed);
+        middleView.setBackgroundResource(theme ? R.color.mouse_pressed_dark : R.color.mouse_pressed_light);
+        middleView.setAlpha(viewIntensity);
         middleView.setLayoutParams(new FrameLayout.LayoutParams(middleWidth - buttonsStrokeWeight, middleHeight));
         middleView.setX(middleX + buttonsStrokeWeight / 2);
         middleView.setY(middleY);
@@ -171,20 +232,12 @@ public class MouseFragment extends CustomFragment {
 
     }
 
-    public void vibrate(int length, int intensity){
-        if (vibrations) vibrator.vibrate(VibrationEffect.createOneShot(length, intensity));
-    }
-
-    public void setVisibility(View view, boolean visible){
-        if (visible) view.setVisibility(View.VISIBLE);
-        else view.setVisibility(View.INVISIBLE);
-    }
-
-    public static boolean within(float touchX, float touchY, int x, int y, int width, int height){
-        return touchX > x && touchX < x + width && touchY > y && touchY < y + height;
-    }
-
-    public boolean viewTouched(MotionEvent event) {
+    /**
+     * Processes all touch events
+     * @param event touch event
+     * @return whether used
+     */
+    private boolean viewTouched(MotionEvent event) {
 
         // Temporary Variables
         boolean left = false, right = false, middle = false;
@@ -264,5 +317,40 @@ public class MouseFragment extends CustomFragment {
         this.middle = middle;
 
         return true;
+    }
+
+    /**
+     * Vibrates the device if the vibrations are enabled
+     * @param length length of the vibration
+     * @param intensity intensity of the vibration
+     */
+    private void vibrate(int length, int intensity){
+        if (vibrations) vibrator.vibrate(VibrationEffect.createOneShot(length, intensity));
+    }
+
+    /**
+     * Sets the visibility of a view if the visuals are enabled
+     * @param view view to set visibility for
+     * @param visible whether the view is visible
+     */
+    private void setVisibility(View view, boolean visible){
+        if (!visuals) return;
+
+        if (visible) view.setVisibility(View.VISIBLE);
+        else view.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Checks whether certain coordinates are within a boundary
+     * @param touchX x coordinate
+     * @param touchY y coordinate
+     * @param x x coordinate of the boundary
+     * @param y y coordinate of the boundary
+     * @param width width of the boundary
+     * @param height height of the boundary
+     * @return whether it is inside
+     */
+    private static boolean within(float touchX, float touchY, int x, int y, int width, int height){
+        return touchX > x && touchX < x + width && touchY > y && touchY < y + height;
     }
 }

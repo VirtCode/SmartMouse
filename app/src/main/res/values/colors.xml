@@ -17,4 +17,10 @@
     <color name="mouse_background">#000000</color>
     <color name="mouse_stroke">#919191</color>
     <color name="mouse_pressed">#6A666666</color>
+    <color name="mouse_stroke_dark">#868686</color>
+    <color name="mouse_stroke_light">#242424</color>
+    <color name="mouse_pressed_dark">#6A666666</color>
+    <color name="mouse_pressed_light">#6A303030</color>
+    <color name="mouse_background_dark">#000000</color>
+    <color name="mouse_background_light">#B1B1B1</color>
 </resources>

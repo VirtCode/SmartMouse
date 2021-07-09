@@ -77,4 +77,8 @@ public class SeekIntegerPreference extends SeekBarPreference {
         // Have to use persistence methods, because otherwise, the variables are not accessible enough
         return (int) ((super.getPersistedInt(minimum) - minimum) / ((float) (maximum - minimum)) * steps);
     }
+
+    public void update(){
+        onSetInitialValue(null);
+    }
 }

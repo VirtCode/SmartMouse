@@ -18,9 +18,8 @@ public class SeekFloatPreference extends SeekBarPreference {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         setSteps(100);
-        setMaximum(100);
+        setMaximum(1);
         setMinimum(0);
-
 
     }
 
@@ -77,6 +76,10 @@ public class SeekFloatPreference extends SeekBarPreference {
     protected int getPersistedInt(int defaultReturnValue) {
         // Have to use persistence methods, because otherwise, the variables are not accessible enough
         return (int) ((super.getPersistedFloat(minimum) - minimum) / (maximum - minimum) * steps);
+    }
+
+    public void update(){
+        onSetInitialValue(null);
     }
 
 }

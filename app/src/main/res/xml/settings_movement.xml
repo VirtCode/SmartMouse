@@ -72,7 +72,7 @@
             app:showValueAsSummary="true"
             app:valueUnit="m/s²"/>
 
-        <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="freezerUnfreezingSamples"
             app:title="Unfreezing Samples"
             app:showValueAsSummary="true"

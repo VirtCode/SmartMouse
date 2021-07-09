@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DefaultSettings.check(PreferenceManager.getDefaultSharedPreferences(this));
 
         loadComponents();
         setupNavigation();
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public SharedPreferences getPreferences() {
-                return MainActivity.this.getSharedPreferences("smartphonemouse", Context.MODE_PRIVATE);
+                return PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             }
         };
 
@@ -142,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
      * @param fragment fragment that is displayed
      */
     private void switchFragment(Fragment fragment) {
+        if (currentFragment instanceof CustomFragment) ((CustomFragment) currentFragment).restore();
+
         getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.container, fragment).commit();
         currentFragment = fragment;
     }

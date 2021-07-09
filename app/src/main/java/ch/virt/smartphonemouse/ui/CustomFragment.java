@@ -33,4 +33,6 @@ public abstract class CustomFragment extends Fragment {
     protected abstract void loadComponents(View view);
 
     protected void initComponents(){}
+
+    public void restore(){}
 }
