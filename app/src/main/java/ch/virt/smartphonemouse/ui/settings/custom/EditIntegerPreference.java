@@ -127,4 +127,8 @@ public class EditIntegerPreference extends EditTextPreference {
     public void setMaximumValue(int maximumValue) {
         this.maximumValue = maximumValue;
     }
+
+    public void update(){
+        setValue(getPersistedInt(minimumValue));
+    }
 }

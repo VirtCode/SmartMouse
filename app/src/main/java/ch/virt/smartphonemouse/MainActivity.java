@@ -5,6 +5,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import android.content.BroadcastReceiver;
@@ -32,8 +34,9 @@ import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.helper.ResultListener;
 import ch.virt.smartphonemouse.ui.MouseFragment;
 import ch.virt.smartphonemouse.ui.SettingsFragment;
+import ch.virt.smartphonemouse.ui.settings.CustomSettingsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private MaterialToolbar bar;
     private DrawerLayout drawerLayout;
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     private void switchFragment(Fragment fragment) {
         if (currentFragment instanceof CustomFragment) ((CustomFragment) currentFragment).restore();
 
-        getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim, R.anim.nav_default_pop_enter_anim, R.anim.nav_default_pop_exit_anim).setReorderingAllowed(true).replace(R.id.container, fragment).commit();
         currentFragment = fragment;
     }
 
@@ -227,5 +230,21 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Not yet implemented!", Toast.LENGTH_SHORT).show();
                 return false;
         }
+    }
+
+    @Override
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+        final Bundle args = pref.getExtras();
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
+                getClassLoader(),
+                pref.getFragment());
+        fragment.setArguments(args);
+        fragment.setTargetFragment(caller, 0);
+
+        if (fragment instanceof CustomSettingsFragment) ((CustomSettingsFragment) fragment).setMain(mainContext);
+
+        switchFragment(fragment);
+
+        return true;
     }
 }

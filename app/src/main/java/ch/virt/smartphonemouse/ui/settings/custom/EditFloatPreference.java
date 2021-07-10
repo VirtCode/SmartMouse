@@ -114,4 +114,8 @@ public class EditFloatPreference extends EditTextPreference {
     public void setMaximumValue(float maximumValue) {
         this.maximumValue = maximumValue;
     }
+
+    public void update(){
+        setValue(getPersistedFloat(minimumValue));
+    }
 }
