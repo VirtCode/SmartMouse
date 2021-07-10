@@ -6,10 +6,12 @@ import ch.virt.smartphonemouse.mouse.elements.LowPassFilter;
 import ch.virt.smartphonemouse.mouse.elements.NoiseCancelling;
 import ch.virt.smartphonemouse.mouse.elements.PersistentIntegration;
 import ch.virt.smartphonemouse.mouse.elements.Scaler;
+import ch.virt.smartphonemouse.mouse.elements.Sensitivity;
 import ch.virt.smartphonemouse.mouse.elements.SignCache;
 
 public class Pipeline {
 
+    private int sampleRate;
     private PipelineConfig config;
 
     private LowPassFilter lowPass;
@@ -19,9 +21,11 @@ public class Pipeline {
     private Integration distanceIntegration;
     private SignCache cache;
     private Scaler scaler;
+    private Sensitivity sensitivity;
 
-    public Pipeline(PipelineConfig config) {
+    public Pipeline(int sampleRate, PipelineConfig config) {
         this.config = config;
+        this.sampleRate = sampleRate;
         create();
     }
 
@@ -30,7 +34,7 @@ public class Pipeline {
         velocityIntegration = new PersistentIntegration();
         distanceIntegration = new Integration();
 
-        lowPass = new LowPassFilter(config.getLowPassOrder(), 500, config.getLowPassCutoff());
+        lowPass = new LowPassFilter(config.getLowPassOrder(), sampleRate, config.getLowPassCutoff());
 
         freezer = new Freezer(config.getFreezerFreezingThreshold(), config.getFreezerUnfreezingThreshold(), config.getFreezerUnfreezingSamples());
 
@@ -38,7 +42,9 @@ public class Pipeline {
 
         cache = new SignCache(config.getCacheMinimalDuration(), config.getCacheMaximalDuration(), config.getCacheReleasingThreshold(), velocityIntegration, distanceIntegration);
 
-        scaler = new Scaler(config.getScalerPower(), config.getScalerSplit());
+        scaler = new Scaler(config.isScalerEnabled(), config.getScalerPower(), config.getScalerSplit());
+
+        sensitivity = new Sensitivity(config.getSensitivityFactor());
     }
 
     public float nextForDistance(float delta, float unfiltered){
@@ -56,8 +62,9 @@ public class Pipeline {
 
         float distance = distanceIntegration.integrate(delta, velocity); // Integrate distance
         distance = cache.distance(distance, delta); // Do second caching action
+        distance = sensitivity.scale(distance); // Scale distance to its sensitivity
 
-        return distance * 100000;
+        return distance;
     }
 
     public void reset(){

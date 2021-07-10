@@ -1,5 +1,7 @@
 package ch.virt.smartphonemouse.mouse;
 
+import android.content.SharedPreferences;
+
 public class PipelineConfig {
 
     // Acceleration Low Pass
@@ -21,22 +23,55 @@ public class PipelineConfig {
     private float cacheReleasingThreshold;
 
     // Scaler
+    private boolean scalerEnabled;
     private int scalerPower;
     private float scalerSplit;
+    
+    // Sensitivity
+    private float sensitivityFactor;
 
     public PipelineConfig() {
         this.lowPassOrder = 1;
         this.lowPassCutoff = 0.1f;
+
         this.freezerFreezingThreshold = 0.1f;
         this.freezerUnfreezingThreshold = 0.04f;
         this.freezerUnfreezingSamples = 10;
+
         this.noiseCancellingThreshold = 0.04f;
         this.noiseFinalSamples = 20;
+
         this.cacheMinimalDuration = 5;
         this.cacheMaximalDuration = 10;
         this.cacheReleasingThreshold = 0.05f;
+
+        this.scalerEnabled = true;
         this.scalerPower = 2;
         this.scalerSplit = 0.1f;
+
+        this.sensitivityFactor = 13;
+    }
+    
+    public PipelineConfig(SharedPreferences preferences) {
+        lowPassOrder = preferences.getInt("movementLowPassOrder", 1);
+        lowPassCutoff = preferences.getFloat("movementLowPassCutoff", 0.1f);
+
+        freezerFreezingThreshold = preferences.getFloat("movementFreezerFreezingThreshold", 0.1f);
+        freezerUnfreezingThreshold = preferences.getFloat("movementFreezerUnfreezingThreshold", 0.04f);
+        freezerUnfreezingSamples = preferences.getInt("movementFreezerUnfreezingSamples", 10);
+
+        noiseCancellingThreshold = preferences.getFloat("movementNoiseThreshold", 0.04f);
+        noiseFinalSamples = preferences.getInt("movementNoiseResetSamples", 20);
+
+        cacheMinimalDuration = preferences.getInt("movementCacheDurationMinimal", 5);
+        cacheMaximalDuration = preferences.getInt("movementCacheDurationMaximal", 10);
+        cacheReleasingThreshold = preferences.getFloat("movementCacheReleaseThreshold", 0.05f);
+
+        scalerEnabled = preferences.getBoolean("movementScaleEnable", true);
+        scalerPower = preferences.getInt("movementScalePower", 2);
+        scalerSplit = preferences.getFloat("movementScaleSplit", 0.1f);
+
+        sensitivityFactor = preferences.getFloat("movementSensitivity", 13);
     }
 
     public int getLowPassOrder() {
@@ -85,5 +120,13 @@ public class PipelineConfig {
 
     public float getScalerSplit() {
         return scalerSplit;
+    }
+
+    public boolean isScalerEnabled() {
+        return scalerEnabled;
+    }
+
+    public float getSensitivityFactor() {
+        return sensitivityFactor;
     }
 }

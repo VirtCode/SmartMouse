@@ -17,9 +17,9 @@ public class SeekFloatPreference extends SeekBarPreference {
     public SeekFloatPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        setSteps(100);
-        setMaximum(1);
-        setMinimum(0);
+        setSteps(20000);
+        setMaximum(100);
+        setMinimum(-100);
 
     }
 

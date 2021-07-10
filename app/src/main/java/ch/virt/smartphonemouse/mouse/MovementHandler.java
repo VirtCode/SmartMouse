@@ -12,8 +12,8 @@ public class MovementHandler implements SensorEventListener {
 
     private static final float NANO_FULL_FACTOR = 1e-9f;
 
-    private static final int SENSOR_TYPE = Sensor.TYPE_ACCELEROMETER;
-    private static final int SAMPLING_RATE = SensorManager.SENSOR_DELAY_FASTEST;
+    public static final int SENSOR_TYPE = Sensor.TYPE_ACCELEROMETER;
+    public static final int SAMPLING_RATE = SensorManager.SENSOR_DELAY_FASTEST;
 
     private SensorManager manager;
     private Sensor sensor;
@@ -35,8 +35,9 @@ public class MovementHandler implements SensorEventListener {
     }
 
     public void create(){
-        xLine = new Pipeline(new PipelineConfig());
-        yLine = new Pipeline(new PipelineConfig());
+        int sampleRate = 500;
+        xLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
+        yLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
     }
 
     public void fetchSensor(){

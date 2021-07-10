@@ -1,4 +1,4 @@
-package ch.virt.smartphonemouse;
+package ch.virt.smartphonemouse.customization;
 
 import android.content.SharedPreferences;
 
@@ -14,6 +14,7 @@ public class DefaultSettings {
         edit.apply();
 
         defaultInterface(preferences);
+        defaultMovement(preferences);
     }
 
     private static void defaultInterface(SharedPreferences preferences){
@@ -38,6 +39,35 @@ public class DefaultSettings {
 
         edit.putFloat("interfaceLayoutHeight", 0.3f);
         edit.putFloat("interfaceLayoutMiddleWidth", 0.2f);
+
+        edit.apply();
+    }
+
+    private static void defaultMovement(SharedPreferences preferences){
+        SharedPreferences.Editor edit = preferences.edit();
+
+        edit.putFloat("movementSensitivity", 13);
+
+        edit.putBoolean("movementScaleEnable", true);
+
+        edit.putInt("movementSamplingRealRate", 200);
+
+        edit.putInt("movementLowPassOrder", 1);
+        edit.putFloat("movementLowPassCutoff", 0.1f);
+
+        edit.putFloat("movementFreezerFreezingThreshold", 0.1f);
+        edit.putFloat("movementFreezerUnfreezingThreshold", 0.04f);
+        edit.putInt("movementFreezerUnfreezingSamples", 10);
+
+        edit.putFloat("movementNoiseThreshold", 0.04f);
+        edit.putInt("movementNoiseResetSamples", 20);
+
+        edit.putInt("movementCacheDurationMinimal", 5);
+        edit.putInt("movementCacheDurationMaximal", 10);
+        edit.putFloat("movementCacheReleaseThreshold", 0.05f);
+
+        edit.putInt("movementScalePower", 2);
+        edit.putFloat("movementScaleSplit", 0.1f);
 
         edit.apply();
     }

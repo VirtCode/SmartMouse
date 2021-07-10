@@ -96,7 +96,7 @@ public class EditFloatPreference extends EditTextPreference {
 
     @Override
     protected void onSetInitialValue(Object defaultValue) {
-        setValue(getPersistedInt(defaultValue == null ? 0 : (Integer) defaultValue));
+        setValue(getPersistedFloat(defaultValue == null ? 0 : (Float) defaultValue));
     }
 
     public float getMinimumValue() {

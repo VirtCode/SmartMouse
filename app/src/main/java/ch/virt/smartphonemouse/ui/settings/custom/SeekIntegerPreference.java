@@ -17,9 +17,9 @@ public class SeekIntegerPreference extends SeekBarPreference {
     public SeekIntegerPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        setSteps(100);
+        setSteps(20000);
         setMaximum(100);
-        setMinimum(0);
+        setMinimum(-100);
 
     }
 
