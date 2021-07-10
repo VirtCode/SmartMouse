@@ -84,10 +84,11 @@ public class SamplingRateCalibrator implements SensorEventListener {
     public void finishTest(){
         long averageDelay = delays / amount;
         float averageDelaySecond = averageDelay * NANO_FULL_FACTOR;
-        
+
         int samplesPerSecond = Math.round(1f / averageDelaySecond);
 
         SharedPreferences.Editor edit = main.getPreferences().edit();
+        edit.putBoolean("movementSamplingCalibrated", true);
         edit.putInt("movementSamplingRealRate", samplesPerSecond);
         edit.apply();
 

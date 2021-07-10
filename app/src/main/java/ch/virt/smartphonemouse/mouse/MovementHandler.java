@@ -35,7 +35,8 @@ public class MovementHandler implements SensorEventListener {
     }
 
     public void create(){
-        int sampleRate = 500;
+        int sampleRate = main.getPreferences().getInt("communicationTransmissionRate", 200);
+
         xLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
         yLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
     }

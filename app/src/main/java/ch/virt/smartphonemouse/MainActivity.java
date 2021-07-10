@@ -2,9 +2,11 @@ package ch.virt.smartphonemouse;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -34,7 +36,10 @@ import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.helper.ResultListener;
 import ch.virt.smartphonemouse.ui.MouseFragment;
 import ch.virt.smartphonemouse.ui.SettingsFragment;
+import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
 import ch.virt.smartphonemouse.ui.settings.CustomSettingsFragment;
+import ch.virt.smartphonemouse.ui.settings.SettingsMovementSubfragment;
+import ch.virt.smartphonemouse.ui.settings.dialog.CalibrateDialog;
 
 public class MainActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
@@ -42,13 +47,14 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     private DrawerLayout drawerLayout;
     private NavigationView drawer;
 
-    private Fragment currentFragment;
     private MainContext mainContext;
 
     private BluetoothHandler bluetooth;
 
     private MovementHandler movement;
     private MouseInputs inputs;
+
+    private boolean mouseActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
         bluetooth = new BluetoothHandler(mainContext);
 
-        inputs = new MouseInputs(bluetooth);
+        inputs = new MouseInputs(bluetooth, mainContext);
 
         movement = new MovementHandler(mainContext, inputs);
     }
@@ -147,12 +153,20 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
      * Switches the Fragment displayed on the app
      *
      * @param fragment fragment that is displayed
+     * @param stack whether that fragment should be added to the back stack
      */
-    private void switchFragment(Fragment fragment) {
-        if (currentFragment instanceof CustomFragment) ((CustomFragment) currentFragment).restore();
+    private void switchFragment(Fragment fragment, boolean stack) {
+        Fragment current = getCurrentFragment();
+        if (current instanceof CustomFragment) ((CustomFragment) current).restore();
 
-        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim, R.anim.nav_default_pop_enter_anim, R.anim.nav_default_pop_exit_anim).setReorderingAllowed(true).replace(R.id.container, fragment).commit();
-        currentFragment = fragment;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        if (stack) transaction.addToBackStack(null);
+        transaction.setReorderingAllowed(true);
+        transaction.replace(R.id.container, fragment);
+
+        transaction.commit();
+
     }
 
     /**
@@ -173,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         drawer.setNavigationItemSelectedListener(item -> {
             if (navigate(item.getItemId())) {
                 drawerLayout.close();
-                return true;
+                return false;
             }
 
             return false;
@@ -184,8 +198,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
      * Rerenders the current fragment
      */
     public void reRender() {
-        if (currentFragment != null) {
-            if (currentFragment instanceof CustomFragment) this.runOnUiThread(() -> ((CustomFragment) currentFragment).render());
+        if (getCurrentFragment() != null) {
+            if (getCurrentFragment() instanceof CustomFragment) this.runOnUiThread(() -> ((CustomFragment) getCurrentFragment()).render());
         }
     }
 
@@ -196,40 +210,64 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
      * @return whether that entry is navigated
      */
     private boolean navigate(int entry) {
-        switch (entry) {
-            case R.id.drawer_connect:
-                switchFragment(new ConnectFragment(mainContext, bluetooth));
-                bar.setVisibility(View.VISIBLE);
-                bar.setTitle(R.string.title_connect);
-                drawer.setCheckedItem(entry);
-                return true;
-            case R.id.drawer_home:
-                switchFragment(new HomeFragment(bluetooth, mainContext));
-                bar.setVisibility(View.VISIBLE);
-                bar.setTitle(R.string.title_home);
-                drawer.setCheckedItem(entry);
-                return true;
+        if (entry == R.id.drawer_mouse){
 
-            case R.id.drawer_mouse:
-                switchFragment(new MouseFragment(mainContext, inputs));
-                drawer.setCheckedItem(entry);
-                bar.setVisibility(View.GONE);
-                movement.create();
-                movement.register();
-                inputs.start();
-                return true;
+            if (!mainContext.getPreferences().getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
 
-            case R.id.drawer_settings:
-                switchFragment(new SettingsFragment());
-                drawer.setCheckedItem(entry);
-                bar.setVisibility(View.VISIBLE);
-                bar.setTitle(R.string.title_settings);
-                return true;
+                MouseCalibrateDialog dialog = new MouseCalibrateDialog(this.mainContext);
+                dialog.show(getSupportFragmentManager(), null);
 
-            default:
-                Toast.makeText(this, "Not yet implemented!", Toast.LENGTH_SHORT).show();
-                return false;
+                return true;
+            }
+
+            bar.setVisibility(View.GONE);
+            switchFragment(new MouseFragment(mainContext, inputs, movement), false);
+
+            mouseActive = true;
+
+            movement.create();
+            movement.register();
+            inputs.start();
+
+        }else {
+            bar.setVisibility(View.VISIBLE);
+
+            if (mouseActive) {
+                movement.unregister();
+                inputs.stop();
+                mouseActive = false;
+            }
+
+            switch (entry) {
+                case R.id.drawer_connect:
+
+                    switchFragment(new ConnectFragment(mainContext, bluetooth), false);
+                    bar.setTitle(R.string.title_connect);
+
+                    break;
+
+                case R.id.drawer_home:
+
+                    switchFragment(new HomeFragment(bluetooth, mainContext), false);
+                    bar.setTitle(R.string.title_home);
+
+                    break;
+
+                case R.id.drawer_settings:
+
+                    switchFragment(new SettingsFragment(mainContext), false);
+                    bar.setTitle(R.string.title_settings);
+
+                    break;
+
+                default:
+                    Toast.makeText(this, "Not yet implemented!", Toast.LENGTH_SHORT).show();
+                    return false;
+            }
         }
+
+        drawer.setCheckedItem(entry);
+        return true;
     }
 
     @Override
@@ -243,8 +281,26 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
         if (fragment instanceof CustomSettingsFragment) ((CustomSettingsFragment) fragment).setMain(mainContext);
 
-        switchFragment(fragment);
+        switchFragment(fragment, true);
 
         return true;
+    }
+
+    @Nullable
+    private Fragment getCurrentFragment(){
+        return getSupportFragmentManager().findFragmentById(R.id.container);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) super.onBackPressed(); // If something is on the backstack proceed
+        else {
+
+            if (!(getCurrentFragment() instanceof HomeFragment)) { // Navigate to home if not in sub fragment and not in home
+                if (!(getCurrentFragment() instanceof MouseFragment)) navigate(R.id.drawer_home); // Make exception for mouse fragment
+            }
+
+            else super.onBackPressed();
+        }
     }
 }

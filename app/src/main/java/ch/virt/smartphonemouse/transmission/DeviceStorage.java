@@ -12,7 +12,7 @@ import java.util.List;
 import ch.virt.smartphonemouse.helper.MainContext;
 
 public class DeviceStorage {
-    private static final String DEVICES_KEY = "devices";
+    public static final String DEVICES_KEY = "devices";
 
     MainContext context;
 

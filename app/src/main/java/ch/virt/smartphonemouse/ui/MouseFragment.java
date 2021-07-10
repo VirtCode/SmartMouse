@@ -11,8 +11,12 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import ch.virt.smartphonemouse.R;
+import ch.virt.smartphonemouse.helper.Listener;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
+import ch.virt.smartphonemouse.mouse.MovementHandler;
+import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
+import ch.virt.smartphonemouse.ui.mouse.MouseUsageDialog;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -26,6 +30,7 @@ public class MouseFragment extends CustomFragment {
     private boolean theme; // false = light, true = dark
 
     private MouseInputs mouse;
+    private MovementHandler movement;
 
     // Feedback
     private boolean visuals;
@@ -68,10 +73,11 @@ public class MouseFragment extends CustomFragment {
      * @param context main context
      * @param mouse mouse to send the inputs to
      */
-    public MouseFragment(MainContext context, MouseInputs mouse) {
+    public MouseFragment(MainContext context, MouseInputs mouse, MovementHandler movement) {
         super(R.layout.fragment_mouse, context);
 
         this.mouse = mouse;
+        this.movement = movement;
     }
 
     /**
@@ -139,6 +145,19 @@ public class MouseFragment extends CustomFragment {
         root.setOnTouchListener((v, event) -> viewTouched(event));
 
         if (vibrations) vibrator = (Vibrator) getContext().getSystemService(VIBRATOR_SERVICE);
+
+        if (main.getPreferences().getBoolean("showUsage", true)){
+            movement.unregister();
+            mouse.stop();
+
+            MouseUsageDialog dialog = new MouseUsageDialog(this.main, () -> {
+
+                mouse.start();
+                movement.register();
+
+            });
+            dialog.show(getParentFragmentManager(), null);
+        }
 
     }
 

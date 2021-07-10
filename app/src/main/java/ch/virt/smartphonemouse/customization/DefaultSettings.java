@@ -10,11 +10,15 @@ public class DefaultSettings {
 
     public static void set(SharedPreferences preferences){
         SharedPreferences.Editor edit = preferences.edit();
+
         edit.putBoolean("populated", true);
+        edit.putBoolean("showUsage", true);
+
         edit.apply();
 
         defaultInterface(preferences);
         defaultMovement(preferences);
+        defaultCommunication(preferences);
     }
 
     private static void defaultInterface(SharedPreferences preferences){
@@ -50,6 +54,7 @@ public class DefaultSettings {
 
         edit.putBoolean("movementScaleEnable", true);
 
+        edit.putBoolean("movementSamplingCalibrated", false);
         edit.putInt("movementSamplingRealRate", 200);
 
         edit.putInt("movementLowPassOrder", 1);
@@ -68,6 +73,14 @@ public class DefaultSettings {
 
         edit.putInt("movementScalePower", 2);
         edit.putFloat("movementScaleSplit", 0.1f);
+
+        edit.apply();
+    }
+
+    private static void defaultCommunication(SharedPreferences preferences){
+        SharedPreferences.Editor edit = preferences.edit();
+
+        edit.putInt("communicationTransmissionRate", 100);
 
         edit.apply();
     }

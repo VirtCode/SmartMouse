@@ -1,27 +1,35 @@
 package ch.virt.smartphonemouse.mouse;
 
+import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 
 public class MouseInputs {
 
-    private float minimalPositionChange = 0;
+    private final float NANO_TO_FULL = 1e9f;
 
     private float xPosition, yPosition;
     private int wheelPosition;
     private boolean leftButton, middleButton, rightButton;
 
-    BluetoothHandler bluetoothHandler;
+    private int transmissionRate = 0;
+    private BluetoothHandler bluetoothHandler;
+    private MainContext main;
 
     private Thread thread;
     private boolean running;
     private long lastTime;
 
-    public MouseInputs(BluetoothHandler bluetoothHandler) {
+    public MouseInputs(BluetoothHandler bluetoothHandler, MainContext main) {
         this.bluetoothHandler = bluetoothHandler;
+        this.main = main;
     }
 
     public void start(){
+        if (running) return;
+
         thread = new Thread(this::run);
+
+        transmissionRate = main.getPreferences().getInt("communicationTransmissionRate", 100);
 
         running = true;
         thread.start();
@@ -33,7 +41,7 @@ public class MouseInputs {
         while (running) {
             long current = System.nanoTime();
 
-            if (current - lastTime >= 1e9 / 100){
+            if (current - lastTime >= NANO_TO_FULL / transmissionRate){
                 sendUpdate();
                 lastTime = current;
             }

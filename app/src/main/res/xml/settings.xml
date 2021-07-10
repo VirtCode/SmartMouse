@@ -23,6 +23,7 @@
     <Preference
         app:key="reset"
         app:title="Reset Settings"
-        app:summary="Resets all settings to their default"/>
+        app:summary="Resets all settings to their default"
+        android:key="reset"/>
 
 </PreferenceScreen>

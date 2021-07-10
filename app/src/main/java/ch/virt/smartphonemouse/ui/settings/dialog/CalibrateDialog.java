@@ -40,6 +40,7 @@ public class CalibrateDialog extends DialogFragment {
     }
 
     private void finished(){
+        dialog.setTitle(R.string.dialog_calibrate_finished_title);
 
         dialog.setCanceledOnTouchOutside(true);
         positiveButton.setEnabled(true);
