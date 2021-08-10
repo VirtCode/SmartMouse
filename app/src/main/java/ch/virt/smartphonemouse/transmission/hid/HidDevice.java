@@ -88,6 +88,7 @@ public class HidDevice extends BluetoothHidDevice.Callback {
     }
 
     public void connect(HostDevice deviceH){
+        if (bluetooth.reInitRequired()) return;
         if (registered && !connected && !connecting){
             this.device = bluetooth.fromHostDevice(deviceH);
 

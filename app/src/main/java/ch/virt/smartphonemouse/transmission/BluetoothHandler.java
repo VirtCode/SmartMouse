@@ -43,6 +43,15 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
         enableBluetoothLauncher = context.registerActivityForResult(result -> reInit());
     }
 
+    public boolean reInitRequired(){
+        if (!adapter.isEnabled()){
+            reInit();
+            return true;
+        }
+
+        return false;
+    }
+
     public void reInit(){
         initialized = false;
         init();
@@ -58,6 +67,10 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     }
 
     private void init() {
+        supported = false;
+        enabled = false;
+        initialized = false;
+
         adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter == null) {
             Log.i(TAG, "Bluetooth is not supported");
@@ -134,11 +147,11 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
         return supported;
     }
     public boolean isConnected() {
-        if (!initialized) return false;
+        if (!initialized || !supported) return false;
         return getHost().isConnected();
     }
     public boolean isConnecting(){
-        if (!initialized) return false;
+        if (!initialized || !supported) return false;
         return getHost().isConnecting();
     }
     public boolean isEnabled() {

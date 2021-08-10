@@ -2,11 +2,13 @@ package ch.virt.smartphonemouse.ui;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -111,23 +113,37 @@ public class MouseFragment extends CustomFragment {
     public void render() {
         root.setBackgroundResource(theme ? R.color.mouse_background_dark : R.color.mouse_background_light);
         getActivity().getWindow().setStatusBarColor(getResources().getColor(theme ? R.color.mouse_background_dark : R.color.mouse_background_light));
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        if (!visuals) getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.statusBars());
 
-        getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.mandatorySystemGestures());
-        getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.systemGestures());
-        getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.navigationBars());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!visuals) getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.statusBars());
+            getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.mandatorySystemGestures());
+            getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.systemGestures());
+            getActivity().getWindow().getInsetsController().hide(WindowInsets.Type.navigationBars());
+        } else {
+            if (!visuals) getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        }
+
     }
 
     @Override
     public void restore() {
         getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.design_default_color_primary_dark));
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        if (!visuals) getActivity().getWindow().getInsetsController().show(WindowInsets.Type.statusBars());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!visuals) getActivity().getWindow().getInsetsController().show(WindowInsets.Type.statusBars());
 
-        getActivity().getWindow().getInsetsController().show(WindowInsets.Type.mandatorySystemGestures());
-        getActivity().getWindow().getInsetsController().show(WindowInsets.Type.systemGestures());
-        getActivity().getWindow().getInsetsController().show(WindowInsets.Type.navigationBars());
+            getActivity().getWindow().getInsetsController().show(WindowInsets.Type.mandatorySystemGestures());
+            getActivity().getWindow().getInsetsController().show(WindowInsets.Type.systemGestures());
+            getActivity().getWindow().getInsetsController().show(WindowInsets.Type.navigationBars());
+        } else {
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        }
+
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -257,7 +273,6 @@ public class MouseFragment extends CustomFragment {
      * @return whether used
      */
     private boolean viewTouched(MotionEvent event) {
-
         // Temporary Variables
         boolean left = false, right = false, middle = false;
 

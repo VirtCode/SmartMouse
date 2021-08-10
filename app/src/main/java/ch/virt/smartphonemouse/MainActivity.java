@@ -2,6 +2,7 @@ package ch.virt.smartphonemouse;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -18,6 +19,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -56,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
     private boolean mouseActive;
 
+    private boolean instanceSaved = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +83,10 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     @Override
     protected void onStart() {
         super.onStart();
+        instanceSaved = false;
 
         bluetooth.reInit();
+        reRender();
     }
 
     /**
@@ -147,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         inputs = new MouseInputs(bluetooth, mainContext);
 
         movement = new MovementHandler(mainContext, inputs);
+
+        checkNavItems();
     }
 
     /**
@@ -198,9 +208,46 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
      * Rerenders the current fragment
      */
     public void reRender() {
+        if (instanceSaved) return; // Do not re render if not saved
         if (getCurrentFragment() != null) {
             if (getCurrentFragment() instanceof CustomFragment) this.runOnUiThread(() -> ((CustomFragment) getCurrentFragment()).render());
         }
+
+        this.runOnUiThread(() -> {
+            if (!bluetooth.isSupported() && (getCurrentFragment() instanceof MouseFragment || getCurrentFragment() instanceof ConnectFragment)) {
+                navigate(R.id.drawer_home);
+            }
+            else if (!bluetooth.isConnected() && getCurrentFragment() instanceof MouseFragment) navigate(R.id.drawer_connect);
+
+            checkNavItems();
+        });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        instanceSaved = true;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        instanceSaved = false;
+        reRender();
+    }
+
+    private void checkNavItems(){
+        if (bluetooth.isSupported()) {
+            setNavItemEnable(R.id.drawer_connect, true);
+            setNavItemEnable(R.id.drawer_mouse, bluetooth.isConnected());
+        } else {
+            setNavItemEnable(R.id.drawer_connect, false);
+            setNavItemEnable(R.id.drawer_mouse, false);
+        }
+    }
+
+    private void setNavItemEnable(int item, boolean enable){
+        drawer.getMenu().findItem(item).setEnabled(enable);
     }
 
     /**
