@@ -125,4 +125,11 @@
     <string name="dialog_mouse_usage_title">How to use</string>
     <string name="dialog_mouse_usage_notagain">Do not show these instructions again.</string>
     <string name="dialog_mouse_usage_finished">You may now use the mouse.</string>
+    <string name="dialog_add_request_permission_message">In order to see nearby devices, an app is required to have location permissions. If you want to see and add your nearby devices, please go on and grant the location permissons. If you do not want to give location permissoins to this app, you can still add your device manually.</string>
+    <string name="dialog_add_request_permission_error">You need to enable location access, to continue.</string>
+    <string name="add_request_permission_success">Succesfully granted permissions.</string>
+    <string name="dialog_add_request_permission_title">Grant permission</string>
+    <string name="dialog_add_request_setting_error">You need to enable location to continue.</string>
+    <string name="dialog_add_request_setting_message">In order to see nearby devices, you must have location turn on. If you don\'t want to enable location, you can still add a device manually.</string>
+    <string name="dialog_add_request_setting_title">Enable Location</string>
 </resources>

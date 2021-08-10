@@ -1,17 +1,30 @@
 package ch.virt.smartphonemouse.ui.connect.dialog;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.location.LocationManagerCompat;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.Listener;
@@ -27,6 +40,8 @@ public class AddDialog extends DialogFragment {
     private static final int BONDED_STATE = 2;
     private static final int SUCCESS_STATE = 3;
     private static final int ALREADY_STATE = 4;
+    private static final int REQUEST_PERMISSION_STATE = 5;
+    private static final int REQUEST_SETTING_STATE = 6;
 
     private final BluetoothHandler bluetoothHandler;
     private final MainContext mainContext;
@@ -40,22 +55,76 @@ public class AddDialog extends DialogFragment {
 
     private BluetoothDiscoverer.DiscoveredDevice target;
 
+    ActivityResultLauncher<String> requestLocation;
+    ActivityResultLauncher<Intent> enableLocation;
+
+
     public AddDialog(BluetoothHandler bluetoothHandler, MainContext mainContext, Listener closed) {
         this.bluetoothHandler = bluetoothHandler;
         this.mainContext = mainContext;
         this.closed = closed;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Initialize Location requests
+        requestLocation = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+
+            if (isGranted) {
+                mainContext.snack(mainContext.getResources().getString(R.string.add_request_permission_success), Snackbar.LENGTH_SHORT);
+
+                showRequestSetting();
+            } else ((AddRequestPermissionSubdialog) currentSub).showError();
+
+        });
+
+        enableLocation = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> positiveButton.post(this::checkSetting));
+    }
+
     public void created(){
         neutralButton.setVisibility(View.GONE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM); // Enable keyboard to be working
 
-        showSelect();
+        showRequestPermission();
     }
 
     private void setFragment(CustomFragment fragment){
         currentSub = fragment;
         getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.add_container, currentSub).commit();
+    }
+
+    public void showRequestPermission(){
+        state = REQUEST_PERMISSION_STATE;
+        if (ActivityCompat.checkSelfPermission(mainContext.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            showRequestSetting(); // Get on if already granted
+            return;
+        }
+
+        setFragment(new AddRequestPermissionSubdialog(mainContext));
+        dialog.setTitle(R.string.dialog_add_request_permission_title);
+
+        positiveButton.setVisibility(View.VISIBLE);
+
+        neutralButton.setVisibility(View.VISIBLE);
+        neutralButton.setText(R.string.dialog_add_select_manual);
+    }
+
+    public void showRequestSetting(){
+        state = REQUEST_SETTING_STATE;
+        if (LocationManagerCompat.isLocationEnabled((LocationManager) mainContext.getContext().getSystemService(Context.LOCATION_SERVICE))){
+            showSelect(); // Get on if already granted
+            return;
+        }
+
+        setFragment(new AddRequestSettingSubdialog(mainContext));
+        dialog.setTitle(R.string.dialog_add_request_setting_title);
+
+        positiveButton.setVisibility(View.VISIBLE);
+
+        neutralButton.setVisibility(View.VISIBLE);
+        neutralButton.setText(R.string.dialog_add_select_manual);
     }
 
     public void showSelect(){
@@ -131,6 +200,12 @@ public class AddDialog extends DialogFragment {
 
     public void onNext(){
         switch (state){
+            case REQUEST_PERMISSION_STATE:
+                requestPermission();
+                break;
+            case REQUEST_SETTING_STATE:
+                requestSetting();
+                break;
             case MANUAL_STATE:
                 if (((AddManualSubdialog) currentSub).check()) selected(((AddManualSubdialog) currentSub).createDevice());
                 break;
@@ -144,7 +219,7 @@ public class AddDialog extends DialogFragment {
     }
 
     public void onNeutral(){
-        if (state == SELECT_STATE) showManual();
+        if (state == SELECT_STATE || state == REQUEST_PERMISSION_STATE || state == REQUEST_SETTING_STATE) showManual();
     }
 
     @Override
@@ -181,6 +256,26 @@ public class AddDialog extends DialogFragment {
         });
 
         return dialog;
+    }
+
+    public void requestPermission(){
+        requestLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    public void requestSetting(){
+        if (LocationManagerCompat.isLocationEnabled((LocationManager) mainContext.getContext().getSystemService(Context.LOCATION_SERVICE))){
+            showSelect();
+        } else {
+            enableLocation.launch(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
+    }
+
+    public void checkSetting(){
+        if (LocationManagerCompat.isLocationEnabled((LocationManager) mainContext.getContext().getSystemService(Context.LOCATION_SERVICE))){
+            showSelect();
+        } else {
+            ((AddRequestSettingSubdialog) currentSub).showError();
+        }
     }
 
 
