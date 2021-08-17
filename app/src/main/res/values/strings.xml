@@ -127,9 +127,20 @@
     <string name="dialog_mouse_usage_finished">You may now use the mouse.</string>
     <string name="dialog_add_request_permission_message">In order to see nearby devices, an app is required to have location permissions. If you want to see and add your nearby devices, please go on and grant the location permissons. If you do not want to give location permissoins to this app, you can still add your device manually.</string>
     <string name="dialog_add_request_permission_error">You need to enable location access, to continue.</string>
-    <string name="add_request_permission_success">Succesfully granted permissions.</string>
+    <string name="add_request_permission_success">Successfully granted permissions.</string>
     <string name="dialog_add_request_permission_title">Grant permission</string>
     <string name="dialog_add_request_setting_error">You need to enable location to continue.</string>
     <string name="dialog_add_request_setting_message">In order to see nearby devices, you must have location turn on. If you don\'t want to enable location, you can still add a device manually.</string>
     <string name="dialog_add_request_setting_title">Enable Location</string>
+    <string name="title_about">About</string>
+    <string name="app_version">1.0.0</string>
+    <string name="about_title_version">Version:&#160;</string>
+    <string name="about_title_date">Last Updated at:&#160;</string>
+    <string name="app_date">16.08.21</string>
+    <string name="about_feasibility">This app is a feasibility study about whether it is possible to use a smartphone as a normal computer mouse. As a result, the app should not be treated as a finished product.</string>
+    <string name="about_matura">This app is also part of a Matura Paper by Joshua Stalder.</string>
+    <string name="about_author">Developed by Joshua Stalder</string>
+    <string name="about_source">The source code is publicly available on github.</string>
+    <string name="about_copyright">© 2021</string>
+    <string name="about_github">The source code for this app is available on <a href="https://github.com/VirtCode">GitHub</a></string>
 </resources>

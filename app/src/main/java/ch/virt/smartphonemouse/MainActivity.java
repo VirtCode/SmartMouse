@@ -33,6 +33,7 @@ import ch.virt.smartphonemouse.customization.DefaultSettings;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.ui.AboutFragment;
 import ch.virt.smartphonemouse.ui.ConnectFragment;
 import ch.virt.smartphonemouse.ui.CustomFragment;
 import ch.virt.smartphonemouse.ui.HomeFragment;
@@ -304,6 +305,13 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
                     switchFragment(new SettingsFragment(mainContext), false);
                     bar.setTitle(R.string.title_settings);
+
+                    break;
+
+                case R.id.drawer_about:
+
+                    switchFragment(new AboutFragment(mainContext), false);
+                    bar.setTitle(R.string.title_about);
 
                     break;
 
