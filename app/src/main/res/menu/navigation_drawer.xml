@@ -2,33 +2,37 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-            android:id="@+id/drawer_top"
-            android:checkableBehavior="single">
+        android:id="@+id/drawer_top"
+        android:checkableBehavior="single">
         <item
-                android:id="@+id/drawer_home"
-                android:title="@string/drawer_home"
-                android:icon="@drawable/drawer_home"/>
+            android:id="@+id/drawer_home"
+            android:icon="@drawable/drawer_home"
+            android:title="@string/drawer_home" />
         <item
-                android:id="@+id/drawer_connect"
-                android:title="@string/drawer_connect"
-                android:icon="@drawable/drawer_connect"/>
+            android:id="@+id/drawer_connect"
+            android:icon="@drawable/drawer_connect"
+            android:title="@string/drawer_connect" />
         <item
-                android:id="@+id/drawer_mouse"
-                android:title="@string/drawer_mouse"
-                android:icon="@drawable/drawer_mouse"/>
+            android:id="@+id/drawer_mouse"
+            android:icon="@drawable/drawer_mouse"
+            android:title="@string/drawer_mouse" />
     </group>
     <group
-            android:id="@+id/drawer_bottom"
-            android:checkableBehavior="single"
-            android:menuCategory="alternative">
+        android:id="@+id/drawer_bottom"
+        android:checkableBehavior="single"
+        android:menuCategory="alternative">
         <item
-                android:id="@+id/drawer_settings"
-                android:title="@string/drawer_settings"
-                android:icon="@drawable/drawer_settings" />
+            android:id="@+id/drawer_settings"
+            android:icon="@drawable/drawer_settings"
+            android:title="@string/drawer_settings" />
         <item
-                android:id="@+id/drawer_about"
-                android:title="@string/drawer_about"
-                android:icon="@drawable/drawer_about" />
+            android:id="@+id/drawer_debug"
+            android:icon="@drawable/drawer_debug"
+            android:title="@string/drawer_debug" />
+        <item
+            android:id="@+id/drawer_about"
+            android:icon="@drawable/drawer_about"
+            android:title="@string/drawer_about" />
 
     </group>
 

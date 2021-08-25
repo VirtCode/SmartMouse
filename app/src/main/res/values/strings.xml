@@ -143,4 +143,6 @@
     <string name="about_source">The source code is publicly available on github.</string>
     <string name="about_copyright">© 2021</string>
     <string name="about_github">The source code for this app is available on <a href="https://github.com/VirtCode">GitHub</a></string>
+    <string name="drawer_debug">Debugger</string>
+    <string name="title_debug">Debugger</string>
 </resources>
