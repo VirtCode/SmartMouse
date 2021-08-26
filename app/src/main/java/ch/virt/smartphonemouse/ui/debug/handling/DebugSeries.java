@@ -40,7 +40,7 @@ public class DebugSeries {
         currentAverage += sample;
         currentAverageIndex++;
         if (currentAverageIndex == averageAmount) {
-            dataSet.appendData(new DataPoint(entryIndex++, currentAverage / averageAmount), true, 1000);
+            dataSet.appendData(new DataPoint(entryIndex++, currentAverage / averageAmount), true, 10000);
             currentAverageIndex = 0;
             currentAverage = 0;
         }
@@ -76,7 +76,7 @@ public class DebugSeries {
         return name;
     }
 
-    boolean isVisible() {
+    public boolean isVisible() {
         return visible;
     }
 

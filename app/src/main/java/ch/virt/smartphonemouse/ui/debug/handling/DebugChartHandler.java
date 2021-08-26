@@ -16,6 +16,7 @@ public class DebugChartHandler {
 
     private final GraphView chart;
     private List<DebugSeries> series;
+    private SharedPreferences preferences;
 
     private int highestIndex;
     private int colorIndex;
@@ -28,6 +29,7 @@ public class DebugChartHandler {
     public DebugChartHandler(GraphView chart, SharedPreferences preferences){
         timeStamps = new ArrayList<>();
         series = new ArrayList<>();
+        this.preferences = preferences;
 
         this.chart = chart;
 
@@ -90,7 +92,8 @@ public class DebugChartHandler {
         return COLORS[colorIndex++];
     }
 
-    private void setAverageAmount(int amount){
+    public void setAverageAmount(int amount){
+        if (amount == averageAmount) return;
         this.averageAmount = amount;
 
         currentAverageAmount = 0;
@@ -99,6 +102,8 @@ public class DebugChartHandler {
         for (DebugSeries series : this.series){
             series.setAverageAmount(averageAmount);
         }
+
+        preferences.edit().putInt("debugChartAverageAmount", amount).apply();
     }
 
     public void clear(){
@@ -122,5 +127,13 @@ public class DebugChartHandler {
 
             series.setVisible(visibility);
         }
+    }
+
+    public List<DebugSeries> getSeries() {
+        return series;
+    }
+
+    public int getAverageAmount() {
+        return averageAmount;
     }
 }

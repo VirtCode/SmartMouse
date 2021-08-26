@@ -15,6 +15,7 @@ public class DebugDataHandler implements SensorEventListener {
     private static final float NANO_FULL_FACTOR = 1e-9f;
 
     DebugChartHandler chart;
+    SharedPreferences preferences;
 
     private long lastSample = 0;
     private boolean registered;
@@ -28,6 +29,7 @@ public class DebugDataHandler implements SensorEventListener {
     public DebugDataHandler(SensorManager manager, DebugChartHandler chart, SharedPreferences preferences) {
         this.manager = manager;
         this.chart = chart;
+        this.preferences = preferences;
 
         axis = preferences.getInt("debugChartAxis", 0);
 
@@ -84,5 +86,17 @@ public class DebugDataHandler implements SensorEventListener {
         return registered;
     }
 
+    public int getAxis() {
+        return axis;
+    }
 
+    public void setAxis(int axis) {
+        this.axis = axis;
+
+        preferences.edit().putInt("debugChartAxis", axis).apply();
+    }
+
+    public void renew(){
+        pipeline.clear();
+    }
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,10 +16,13 @@ import androidx.preference.PreferenceManager;
 
 import com.jjoe64.graphview.GraphView;
 
+import java.io.IOException;
+
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.ui.debug.DebugChartSheet;
 import ch.virt.smartphonemouse.ui.debug.handling.DebugChartHandler;
+import ch.virt.smartphonemouse.ui.debug.handling.DebugCsvExporter;
 import ch.virt.smartphonemouse.ui.debug.handling.DebugDataHandler;
 
 public class DebugFragment extends CustomFragment{
@@ -71,17 +75,36 @@ public class DebugFragment extends CustomFragment{
         chartHandler.addSeries("Final Distance", 11);
 
         buttonSeries.setOnClickListener(v -> {
-            DebugChartSheet chartSheet = new DebugChartSheet();
+            DebugChartSheet chartSheet = new DebugChartSheet(chartHandler, dataHandler);
             chartSheet.show(getParentFragmentManager(), "debugChartSheet");
         });
 
         buttonPlay.setOnClickListener(v -> {
 
-            if(dataHandler.isRegistered()) dataHandler.unregister();
-            else dataHandler.register();
+            if(dataHandler.isRegistered()) {
+                dataHandler.unregister();
+                buttonPlay.setImageResource(R.drawable.debug_play);
+            }
+            else {
+                dataHandler.register();
+                buttonPlay.setImageResource(R.drawable.debug_pause);
+            }
 
         });
 
+        buttonClear.setOnClickListener(v -> chartHandler.clear());
+
+        buttonRenew.setOnClickListener(v -> dataHandler.renew());
+
+        buttonExport.setOnClickListener(v -> {
+            DebugCsvExporter exporter = new DebugCsvExporter(chartHandler, getContext());
+            try {
+                exporter.exportCsv();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Failed exporting to CSV", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

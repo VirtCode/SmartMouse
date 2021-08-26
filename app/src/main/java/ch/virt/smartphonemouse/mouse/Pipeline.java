@@ -64,7 +64,7 @@ public class Pipeline {
         float acceleration = unfiltered - subtract; // Subtract the Low Passed and frozen
         if (debugging) debuggingValues[i++] = acceleration;
         acceleration = noise.cancel(acceleration); // Cancel the acceleration if too low
-        if (debugging) debuggingValues[i++] = subtract;
+        if (debugging) debuggingValues[i++] = acceleration;
 
         float velocity = velocityIntegration.integrate(delta, acceleration); // Integrate velocity
         if (debugging) debuggingValues[i++] = velocity;

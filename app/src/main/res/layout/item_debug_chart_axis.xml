@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:paddingHorizontal="10dp">
 
     <ImageView
-        android:id="@+id/connect_status"
+        android:id="@+id/debug_chart_series_item_color"
         android:layout_height="14sp"
         android:adjustViewBounds="true"
         android:background="@drawable/connect_status"

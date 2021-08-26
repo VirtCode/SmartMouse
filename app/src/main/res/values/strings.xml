@@ -150,4 +150,7 @@
     <string name="sheet_debug_chart_axis_z">Z Axis</string>
     <string name="sheet_debug_chart_axis_y">Y Axis</string>
     <string name="sheet_debug_chart_axis_title">Current Axis</string>
+    <string name="sheet_debug_chart_series_title">Visible Series</string>
+    <string name="sheet_debug_chart_other_title">Other Settings</string>
+    <string name="sheet_debug_chart_average_subtitle">Amount of samples for one Point</string>
 </resources>
