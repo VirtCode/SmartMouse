@@ -145,4 +145,9 @@
     <string name="about_github">The source code for this app is available on <a href="https://github.com/VirtCode">GitHub</a></string>
     <string name="drawer_debug">Debugger</string>
     <string name="title_debug">Debugger</string>
+    <string name="dialog_debug_sheet_done">Done</string>
+    <string name="sheet_debug_chart_axis_x">X Axis</string>
+    <string name="sheet_debug_chart_axis_z">Z Axis</string>
+    <string name="sheet_debug_chart_axis_y">Y Axis</string>
+    <string name="sheet_debug_chart_axis_title">Current Axis</string>
 </resources>

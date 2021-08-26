@@ -23,6 +23,9 @@ public class Pipeline {
     private Scaler scaler;
     private Sensitivity sensitivity;
 
+    private boolean debugging;
+    private float[] debuggingValues;
+
     public Pipeline(int sampleRate, PipelineConfig config) {
         this.config = config;
         this.sampleRate = sampleRate;
@@ -45,26 +48,49 @@ public class Pipeline {
         scaler = new Scaler(config.isScalerEnabled(), config.getScalerPower(), config.getScalerSplit());
 
         sensitivity = new Sensitivity(config.getSensitivityFactor());
+
+        debuggingValues = new float[12];
     }
 
     public float nextForDistance(float delta, float unfiltered){
+        int i = 0;
+        if (debugging) debuggingValues[i++] = unfiltered;
 
         float subtract = (float) lowPass.filter(unfiltered); // Low pass for subtraction base
+        if (debugging) debuggingValues[i++] = subtract;
         subtract = freezer.next(subtract, unfiltered); // Freeze if necessary
+        if (debugging) debuggingValues[i++] = subtract;
 
         float acceleration = unfiltered - subtract; // Subtract the Low Passed and frozen
+        if (debugging) debuggingValues[i++] = acceleration;
         acceleration = noise.cancel(acceleration); // Cancel the acceleration if too low
+        if (debugging) debuggingValues[i++] = subtract;
 
         float velocity = velocityIntegration.integrate(delta, acceleration); // Integrate velocity
+        if (debugging) debuggingValues[i++] = velocity;
         velocity = cache.velocity(velocity, acceleration); // Do first caching action
+        if (debugging) debuggingValues[i++] = velocity;
         velocity = noise.velocity(velocity);
+        if (debugging) debuggingValues[i++] = velocity;
         velocity = scaler.scale(velocity); // Scale velocity
+        if (debugging) debuggingValues[i++] = velocity;
 
         float distance = distanceIntegration.integrate(delta, velocity); // Integrate distance
+        if (debugging) debuggingValues[i++] = distance;
         distance = cache.distance(distance, delta); // Do second caching action
+        if (debugging) debuggingValues[i++] = distance;
         distance = sensitivity.scale(distance); // Scale distance to its sensitivity
+        if (debugging) debuggingValues[i++] = distance;
 
         return distance;
+    }
+
+    public void enableDebugging(){
+        debugging = true;
+    }
+
+    public float[] getDebuggingValues() {
+        return debuggingValues;
     }
 
     public void reset(){
