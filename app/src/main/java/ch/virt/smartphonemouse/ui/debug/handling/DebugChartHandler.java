@@ -1,19 +1,20 @@
 package ch.virt.smartphonemouse.ui.debug.handling;
 
 import android.content.SharedPreferences;
+import android.view.View;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.LineData;
+import com.jjoe64.graphview.GraphView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.virt.smartphonemouse.ui.debug.OnDoubleClickListener;
 
 public class DebugChartHandler {
 
     private static final int[] COLORS = { 0xf44336, 0x9c27b0, 0x673ab7, 0x3f51b5, 0x2196f3, 0x009688, 0x4caf50, 0x8bc34a, 0xcddc39, 0xffeb3b, 0xffc107, 0xff9800, 0xff5722, 0x795548, 0x9e9e9e, 0x607d8b, 0x03a9f4, 0x00bcd4, 0xe91e63};
 
-    private final LineChart chart;
-    private LineData data;
+    private final GraphView chart;
     private List<DebugSeries> series;
 
     private int highestIndex;
@@ -24,44 +25,49 @@ public class DebugChartHandler {
 
     private List<Long> timeStamps;
 
-    public DebugChartHandler(LineChart chart, SharedPreferences preferences){
+    public DebugChartHandler(GraphView chart, SharedPreferences preferences){
         timeStamps = new ArrayList<>();
         series = new ArrayList<>();
 
         this.chart = chart;
-        this.data = new LineData();
 
-        chart.setData(data);
-
-        averageAmount = preferences.getInt("debugChartAverageAmount", 500);
+        averageAmount = preferences.getInt("debugChartAverageAmount", 20);
 
         styleChart();
     }
 
     private void styleChart(){
-        chart.getLegend().setEnabled(false);
-        chart.getDescription().setEnabled(false);
-        chart.getXAxis().setEnabled(false);
-        chart.getAxisLeft().setTextColor(chart.getAxisLeft().getAxisLineColor());
-        chart.getAxisRight().setEnabled(false);
-        chart.setBorderColor(chart.getAxisLeft().getAxisLineColor());
+        chart.getViewport().setYAxisBoundsManual(true);
+        chart.getViewport().setMinY(-10);
+        chart.getViewport().setMaxY(10);
 
-        chart.setHighlightPerTapEnabled(false);
-        chart.setHighlightPerDragEnabled(false);
+        chart.getViewport().setXAxisBoundsManual(true);
+        chart.getViewport().setMinX(0);
+        chart.getViewport().setMaxX(100);
 
-        chart.setVisibleXRangeMinimum(0);
-        chart.setVisibleXRangeMaximum(100);
+        chart.getViewport().setScalable(true);
+        chart.getViewport().setScalableY(true);
+
+        chart.setOnClickListener(new OnDoubleClickListener() {
+            @Override
+            public void onDoubleClick(View v) {
+                chart.getViewport().setYAxisBoundsManual(true);
+                chart.getViewport().setMinY(-10);
+                chart.getViewport().setMaxY(10);
+
+                chart.getViewport().setXAxisBoundsManual(true);
+                chart.getViewport().setMinX(0);
+                chart.getViewport().setMaxX(100);
+            }
+        });
     }
 
     public void addSeries(String name, int index){
         if (index > highestIndex) highestIndex = index;
 
         DebugSeries series = new DebugSeries(selectColor(), name, averageAmount);
-        data.addDataSet(series.getDataSet());
+        chart.addSeries(series.getDataSet());
         this.series.add(index, series);
-
-        chart.notifyDataSetChanged();
-        chart.invalidate();
     }
 
     public void newData(long timestamp, float[] data){
@@ -75,8 +81,6 @@ public class DebugChartHandler {
 
         currentAverageAmount++;
         if (currentAverageAmount == averageAmount) {
-            chart.notifyDataSetChanged();
-            chart.invalidate();
             currentAverageAmount = 0;
         }
     }
@@ -113,8 +117,8 @@ public class DebugChartHandler {
 
     public void setSeriesVisibility(DebugSeries series, boolean visibility) {
         if (series.isVisible() != visibility){
-            if (visibility) data.addDataSet(series.getDataSet());
-            else data.removeDataSet(series.getDataSet());
+            if (visibility) chart.addSeries(series.getDataSet());
+            else chart.removeSeries(series.getDataSet());
 
             series.setVisible(visibility);
         }

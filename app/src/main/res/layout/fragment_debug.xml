@@ -5,7 +5,7 @@
 
 
 
-    <com.github.mikephil.charting.charts.LineChart
+    <com.jjoe64.graphview.GraphView
         android:id="@+id/debug_chart"
         android:layout_width="0dp"
         android:layout_height="match_parent"

@@ -1,7 +1,7 @@
 package ch.virt.smartphonemouse.ui.debug.handling;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class DebugSeries {
     private float currentAverage;
 
     private List<Float> samples;
-    private LineDataSet dataSet;
+    private LineGraphSeries<DataPoint> dataSet;
     private int entryIndex;
 
 
@@ -29,11 +29,9 @@ public class DebugSeries {
         this.visible = true;
 
         samples = new ArrayList<>();
-        dataSet = new LineDataSet(new ArrayList<Entry>(), name);
+        dataSet = new LineGraphSeries<>();
 
-        dataSet.setDrawCircles(false);
-        dataSet.setDrawValues(false);
-        dataSet.setColor(color, 255);
+        dataSet.setColor(color | 0xff000000);
     }
 
     void newData(float sample){
@@ -42,14 +40,15 @@ public class DebugSeries {
         currentAverage += sample;
         currentAverageIndex++;
         if (currentAverageIndex == averageAmount) {
-            dataSet.addEntry(new Entry(entryIndex++, currentAverage / averageAmount));
+            dataSet.appendData(new DataPoint(entryIndex++, currentAverage / averageAmount), true, 1000);
             currentAverageIndex = 0;
+            currentAverage = 0;
         }
     }
 
     void clear(){
         samples.clear();
-        dataSet.clear();
+        dataSet.resetData(new DataPoint[0]);
 
         entryIndex = 0;
         currentAverageIndex = 0;
@@ -61,7 +60,7 @@ public class DebugSeries {
         clear();
     }
 
-    public LineDataSet getDataSet() {
+    public LineGraphSeries<DataPoint> getDataSet() {
         return dataSet;
     }
 

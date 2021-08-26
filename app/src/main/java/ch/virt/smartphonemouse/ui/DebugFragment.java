@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
-import com.github.mikephil.charting.charts.LineChart;
+import com.jjoe64.graphview.GraphView;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
@@ -23,7 +23,7 @@ import ch.virt.smartphonemouse.ui.debug.handling.DebugDataHandler;
 
 public class DebugFragment extends CustomFragment{
 
-    LineChart chart;
+    GraphView chart;
 
     ImageView buttonPlay, buttonClear, buttonRenew, buttonSeries, buttonExport;
 
@@ -58,17 +58,17 @@ public class DebugFragment extends CustomFragment{
         dataHandler = new DebugDataHandler((SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE), chartHandler, PreferenceManager.getDefaultSharedPreferences(getContext()));
 
         chartHandler.addSeries("Unfiltered Acceleration", 0);
-        //chartHandler.addSeries("Filtered Gravitation", 1);
-        //chartHandler.addSeries("Frozen Gravitation", 2);
-        //chartHandler.addSeries("Subtracted Acceleration", 3);
-        //chartHandler.addSeries("Noise Cancelled Acceleration", 4);
-        //chartHandler.addSeries("Unfiltered Velocity", 5);
-        //chartHandler.addSeries("Cached Velocity", 6);
-        //chartHandler.addSeries("Noise Cancelled Velocity", 7);
-        //chartHandler.addSeries("Scaled Velocity", 8);
-        //chartHandler.addSeries("Unfiltered Distance", 9);
-        //chartHandler.addSeries("Cached Distance", 10);
-        //chartHandler.addSeries("Final Distance", 11);
+        chartHandler.addSeries("Filtered Gravitation", 1);
+        chartHandler.addSeries("Frozen Gravitation", 2);
+        chartHandler.addSeries("Subtracted Acceleration", 3);
+        chartHandler.addSeries("Noise Cancelled Acceleration", 4);
+        chartHandler.addSeries("Unfiltered Velocity", 5);
+        chartHandler.addSeries("Cached Velocity", 6);
+        chartHandler.addSeries("Noise Cancelled Velocity", 7);
+        chartHandler.addSeries("Scaled Velocity", 8);
+        chartHandler.addSeries("Unfiltered Distance", 9);
+        chartHandler.addSeries("Cached Distance", 10);
+        chartHandler.addSeries("Final Distance", 11);
 
         buttonSeries.setOnClickListener(v -> {
             DebugChartSheet chartSheet = new DebugChartSheet();
