@@ -20,6 +20,11 @@
         app:icon="@drawable/settings_movement"
         app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsMovementSubfragment"/>
 
+    <SwitchPreference
+        app:key="debugEnabled"
+        app:title="Enable Debugger"
+        android:summary="Enables the debugger page for advanced usage"/>
+
     <Preference
         app:key="reset"
         app:title="Reset Settings"

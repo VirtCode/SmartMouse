@@ -199,6 +199,28 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             return false;
         });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                checkNavItems();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     /**
@@ -241,6 +263,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             setNavItemEnable(R.id.drawer_connect, false);
             setNavItemEnable(R.id.drawer_mouse, false);
         }
+
+        drawer.getMenu().findItem(R.id.drawer_debug).setVisible(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("debugEnabled", false));
     }
 
     private void setNavItemEnable(int item, boolean enable){
