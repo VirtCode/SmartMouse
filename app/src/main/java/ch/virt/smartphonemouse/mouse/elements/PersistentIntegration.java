@@ -1,5 +1,8 @@
 package ch.virt.smartphonemouse.mouse.elements;
 
+/**
+ * This class handles integration that is persistent (just like normal integration)
+ */
 public class PersistentIntegration extends Integration {
 
     private float whole;

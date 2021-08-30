@@ -52,7 +52,7 @@ public class MouseCalibrateDialog extends DialogFragment {
 
             introduction = false;
 
-            setFragment(new SamplingRateSubdialog(main, () -> positiveButton.post(this::finished)));
+            setFragment(new SamplingRateSubdialog(main, (r) -> positiveButton.post(this::finished)));
         }else dismiss();
 
     }

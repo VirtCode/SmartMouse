@@ -2,13 +2,27 @@ package ch.virt.smartphonemouse.customization;
 
 import android.content.SharedPreferences;
 
+/**
+ * This class is used for restoring the settings to their factory defaults.
+ */
 public class DefaultSettings {
 
-    public static void check(SharedPreferences preferences){
+    /**
+     * Checks whether the preferences have once been populated.
+     * If not, they get initialized to the default settings.
+     *
+     * @param preferences preferences to check in
+     */
+    public static void check(SharedPreferences preferences) {
         if (!preferences.getBoolean("populated", false)) set(preferences);
     }
 
-    public static void set(SharedPreferences preferences){
+    /**
+     * Overwrites the settings to the defaults
+     *
+     * @param preferences preferences to write in
+     */
+    public static void set(SharedPreferences preferences) {
         SharedPreferences.Editor edit = preferences.edit();
 
         edit.putBoolean("populated", true);
@@ -22,7 +36,12 @@ public class DefaultSettings {
         defaultCommunication(preferences);
     }
 
-    private static void defaultInterface(SharedPreferences preferences){
+    /**
+     * Writes the default interface settings
+     *
+     * @param preferences preferences to write in
+     */
+    private static void defaultInterface(SharedPreferences preferences) {
         SharedPreferences.Editor edit = preferences.edit();
 
         edit.putString("interfaceTheme", "dark");
@@ -48,7 +67,12 @@ public class DefaultSettings {
         edit.apply();
     }
 
-    private static void defaultMovement(SharedPreferences preferences){
+    /**
+     * Writes the default movement settings
+     *
+     * @param preferences preferences to write in
+     */
+    private static void defaultMovement(SharedPreferences preferences) {
         SharedPreferences.Editor edit = preferences.edit();
 
         edit.putFloat("movementSensitivity", 13);
@@ -59,7 +83,7 @@ public class DefaultSettings {
         edit.putInt("movementSamplingRealRate", 200);
 
         edit.putInt("movementLowPassOrder", 1);
-        edit.putFloat("movementLowPassCutoff", 0.1f);
+        edit.putFloat("movementLowPassCutoff", 0.05f);
 
         edit.putFloat("movementFreezerFreezingThreshold", 0.1f);
         edit.putFloat("movementFreezerUnfreezingThreshold", 0.04f);
@@ -78,12 +102,16 @@ public class DefaultSettings {
         edit.apply();
     }
 
-    private static void defaultCommunication(SharedPreferences preferences){
+    /**
+     * Writes the default communication settings
+     *
+     * @param preferences preferences to write in
+     */
+    private static void defaultCommunication(SharedPreferences preferences) {
         SharedPreferences.Editor edit = preferences.edit();
 
         edit.putInt("communicationTransmissionRate", 100);
 
         edit.apply();
     }
-
 }

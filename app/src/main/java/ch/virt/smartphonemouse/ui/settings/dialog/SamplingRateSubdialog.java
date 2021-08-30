@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.customization.SamplingRateCalibrator;
-import ch.virt.smartphonemouse.helper.Listener;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.ui.CustomFragment;
 
@@ -15,9 +14,9 @@ public class SamplingRateSubdialog extends CustomFragment {
 
     private SamplingRateCalibrator calibrator;
 
-    private final Listener doneListener;
+    private final SamplingRateCalibrator.DoneListener doneListener;
 
-    public SamplingRateSubdialog(MainContext context, Listener doneListener) {
+    public SamplingRateSubdialog(MainContext context, SamplingRateCalibrator.DoneListener doneListener) {
         super(R.layout.subdialog_calibrate_samplingrate, context);
         this.doneListener = doneListener;
 

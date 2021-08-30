@@ -36,7 +36,7 @@ public class CalibrateDialog extends DialogFragment {
         positiveButton.setEnabled(false);
         dialog.setCanceledOnTouchOutside(false);
 
-        setFragment(new SamplingRateSubdialog(main, () -> positiveButton.post(this::finished)));
+        setFragment(new SamplingRateSubdialog(main, (r) -> positiveButton.post(this::finished)));
     }
 
     private void finished(){
