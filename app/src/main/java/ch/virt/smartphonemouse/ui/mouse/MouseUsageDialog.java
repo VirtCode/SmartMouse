@@ -56,7 +56,7 @@ public class MouseUsageDialog extends DialogFragment {
     }
 
     private void showFragment(){
-        setFragment(new MouseMessageSubdialog(main.getResources().getString(getCurrentMessage(index)), main));
+        setFragment(new MouseMessageSubdialog(getResources().getString(getCurrentMessage(index)), main));
     }
 
     public int getCurrentMessage(int index){

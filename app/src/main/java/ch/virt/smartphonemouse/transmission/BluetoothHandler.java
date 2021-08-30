@@ -6,13 +6,13 @@ import android.bluetooth.BluetoothHidDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.activity.ComponentActivity;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
+import ch.virt.smartphonemouse.MainActivity;
 import ch.virt.smartphonemouse.transmission.hid.HidDevice;
 
 public class BluetoothHandler implements BluetoothProfile.ServiceListener {
@@ -24,7 +24,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
 
     private DeviceStorage devices;
 
-    private final MainContext context;
+    private final ComponentActivity main;
 
     private HidDevice device;
 
@@ -35,12 +35,12 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
 
     private ActivityResultLauncher<Intent> enableBluetoothLauncher;
 
-    public BluetoothHandler(MainContext context) {
-        this.context = context;
-        discoverer = new BluetoothDiscoverer(context, adapter);
-        devices = new DeviceStorage(context);
+    public BluetoothHandler(ComponentActivity context) {
+        this.main = context;
+        discoverer = new BluetoothDiscoverer(main, adapter);
+        devices = new DeviceStorage(main);
 
-        enableBluetoothLauncher = context.registerActivityForResult(result -> reInit());
+        enableBluetoothLauncher = main.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> reInit());
     }
 
     public boolean reInitRequired(){
@@ -77,7 +77,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
             initialized = true;
             supported = false;
 
-            context.refresh();
+            ((MainActivity)main).updateBluetoothStatus();
             return;
         }
 
@@ -87,7 +87,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
             enabled = false;
             initialized = true;
 
-            context.refresh();
+            ((MainActivity)main).updateBluetoothStatus();
             return;
 
         }else enabled = true;
@@ -96,12 +96,12 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
     }
 
     private void open(){
-        if(!adapter.getProfileProxy(context.getContext(), this, BluetoothProfile.HID_DEVICE)){
+        if(!adapter.getProfileProxy(main, this, BluetoothProfile.HID_DEVICE)){
             Log.i(TAG, "Bluetooth HID profile is not supported");
             initialized = true;
             supported = false;
 
-            context.refresh();
+            ((MainActivity)main).updateBluetoothStatus();
             return;
         }
 
@@ -112,13 +112,13 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
         Log.i(TAG, "Opened HID Profile successfully");
         initialized = true;
 
-        discoverer = new BluetoothDiscoverer(context, adapter);
-        device = new HidDevice(service, this, context);
+        discoverer = new BluetoothDiscoverer(main, adapter);
+        device = new HidDevice(service, this, main);
 
         Log.d(TAG, "Registering with a HID Device!");
         device.register();
 
-        context.refresh();
+        ((MainActivity)main).updateBluetoothStatus();
     }
 
     @Override
@@ -137,7 +137,7 @@ public class BluetoothHandler implements BluetoothProfile.ServiceListener {
             opened = false;
 
             Log.i(TAG, "Reconnecting to Service");
-            context.snack(context.getResources().getString(R.string.snack_bluetooth_closed), Snackbar.LENGTH_SHORT);
+            Toast.makeText(main, "Reloading Bluetooth", Toast.LENGTH_SHORT).show();
 
             open();
         }

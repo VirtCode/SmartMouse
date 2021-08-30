@@ -1,5 +1,7 @@
 package ch.virt.smartphonemouse.ui;
 
+import static android.content.Context.VIBRATOR_SERVICE;
+
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -12,15 +14,13 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import androidx.preference.PreferenceManager;
+
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.Listener;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
-import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
 import ch.virt.smartphonemouse.ui.mouse.MouseUsageDialog;
-
-import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  * This fragment represents the mouse interface the user uses to input button strokes 
@@ -86,7 +86,7 @@ public class MouseFragment extends CustomFragment {
      * Reads the settings for the fragment from the preferences
      */
     private void readSettings(){
-        SharedPreferences prefs = main.getPreferences();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         theme = prefs.getString("interfaceTheme", "dark").equals("dark");
 
@@ -162,7 +162,7 @@ public class MouseFragment extends CustomFragment {
 
         if (vibrations) vibrator = (Vibrator) getContext().getSystemService(VIBRATOR_SERVICE);
 
-        if (main.getPreferences().getBoolean("showUsage", true)){
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("showUsage", true)){
             movement.unregister();
             mouse.stop();
 

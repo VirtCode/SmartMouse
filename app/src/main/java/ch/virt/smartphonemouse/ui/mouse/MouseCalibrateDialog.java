@@ -36,7 +36,7 @@ public class MouseCalibrateDialog extends DialogFragment {
         positiveButton.setEnabled(true);
         negativeButton.setVisibility(View.VISIBLE);
 
-        setFragment(new MouseMessageSubdialog(main.getResources().getString(R.string.mouse_message_calibrate), main));
+        setFragment(new MouseMessageSubdialog(getResources().getString(R.string.mouse_message_calibrate), main));
     }
 
     private void next(){
@@ -63,7 +63,7 @@ public class MouseCalibrateDialog extends DialogFragment {
         dialog.setCanceledOnTouchOutside(true);
         positiveButton.setEnabled(true);
 
-        setFragment(new MouseMessageSubdialog(main.getResources().getString(R.string.dialog_mouse_calibrate_finished), main));
+        setFragment(new MouseMessageSubdialog(getResources().getString(R.string.dialog_mouse_calibrate_finished), main));
     }
 
     private void setFragment(CustomFragment fragment){

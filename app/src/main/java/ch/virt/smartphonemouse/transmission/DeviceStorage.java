@@ -1,37 +1,36 @@
 package ch.virt.smartphonemouse.transmission;
 
-import android.bluetooth.BluetoothClass;
+import android.content.Context;
+
+import androidx.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-
-import ch.virt.smartphonemouse.helper.MainContext;
 
 public class DeviceStorage {
     public static final String DEVICES_KEY = "devices";
 
-    MainContext context;
+    Context context;
 
     List<HostDevice> devices;
 
-    public DeviceStorage(MainContext context) {
+    public DeviceStorage(Context context) {
         this.context = context;
         load();
     }
 
     public void load(){
-        String src = context.getPreferences().getString(DEVICES_KEY, "[]");
+        String src = PreferenceManager.getDefaultSharedPreferences(context).getString(DEVICES_KEY, "[]");
         devices = new Gson().fromJson(src, new TypeToken<ArrayList<HostDevice>>(){}.getType());
     }
 
     public void save(){
-        devices.sort((o1, o2) -> Long.compare(o1.getLastConnected(), o2.getLastConnected()));
+        devices.sort((o1, o2) -> -Long.compare(o1.getLastConnected(), o2.getLastConnected()));
         String src = new Gson().toJson(devices);
-        context.getPreferences().edit().putString(DEVICES_KEY, src).apply();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(DEVICES_KEY, src).apply();
     }
 
     public List<HostDevice> getDevices() {

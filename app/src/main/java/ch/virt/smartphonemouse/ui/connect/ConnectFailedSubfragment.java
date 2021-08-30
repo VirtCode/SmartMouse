@@ -17,9 +17,12 @@ public class ConnectFailedSubfragment extends CustomFragment {
     Button back;
     Button remove;
 
-    public ConnectFailedSubfragment(MainContext context, BluetoothHandler bluetooth) {
+    ReturnListener listener;
+
+    public ConnectFailedSubfragment(MainContext context, BluetoothHandler bluetooth, ReturnListener listener) {
         super(R.layout.subfragment_connect_failed, context);
         this.bluetooth = bluetooth;
+        this.listener = listener;
     }
 
     @Override
@@ -29,11 +32,11 @@ public class ConnectFailedSubfragment extends CustomFragment {
         remove.setOnClickListener(v -> {
             bluetooth.getDevices().removeDevice(bluetooth.getHost().getDevice().getAddress());
             bluetooth.getHost().markFailedAsRead();
-            main.refresh();
+            listener.called();
         });
         back.setOnClickListener(v -> {
             bluetooth.getHost().markFailedAsRead();
-            main.refresh();
+            listener.called();
         });
     }
 
@@ -43,5 +46,9 @@ public class ConnectFailedSubfragment extends CustomFragment {
 
         back = view.findViewById(R.id.connect_failed_back);
         remove = view.findViewById(R.id.connect_failed_remove);
+    }
+
+    public interface ReturnListener {
+        void called();
     }
 }

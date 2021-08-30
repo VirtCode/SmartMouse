@@ -1,17 +1,9 @@
 package ch.virt.smartphonemouse;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,11 +16,9 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.customization.DefaultSettings;
 import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.helper.ResultListener;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
@@ -91,69 +81,24 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
      */
     private void loadContent() {
         mainContext = new MainContext() {
-            @Override
-            public void exitApp() {
-                finish();
-            }
 
-            @Override
-            public void navigate(int element) {
-                MainActivity.this.navigate(element);
-            }
-
-            @Override
-            public ActivityResultLauncher<Intent> registerActivityForResult(ResultListener listener) {
-                return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> listener.result(result.getResultCode()));
-            }
-
-            @Override
-            public void toast(String content, int duration) {
-                Toast.makeText(MainActivity.this, content, duration).show();
-            }
-
-            @Override
-            public void snack(String content, int duration) {
-                Snackbar.make(MainActivity.this, MainActivity.this.findViewById(R.id.container), content, duration).show();
-            }
-
-            @Override
-            public Resources getResources() {
-                return MainActivity.this.getResources();
-            }
-
-            @Override
-            public Context getContext() {
-                return MainActivity.this;
-            }
-
-            @Override
-            public void refresh() {
-                reRender();
-            }
-
-            @Override
-            public void registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-                MainActivity.this.registerReceiver(receiver, filter);
-            }
-
-            @Override
-            public void unregisterReceiver(BroadcastReceiver receiver) {
-                MainActivity.this.unregisterReceiver(receiver);
-            }
-
-            @Override
-            public SharedPreferences getPreferences() {
-                return PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            }
         };
 
-        bluetooth = new BluetoothHandler(mainContext);
+        bluetooth = new BluetoothHandler(this);
 
-        inputs = new MouseInputs(bluetooth, mainContext);
+        inputs = new MouseInputs(bluetooth, this);
 
-        movement = new MovementHandler(mainContext, inputs);
+        movement = new MovementHandler(this, inputs);
 
         checkNavItems();
+    }
+
+    public void updateBluetoothStatus(){
+        reRender();
+    }
+
+    public MainContext getMainContext() {
+        return mainContext;
     }
 
     /**
@@ -202,9 +147,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-            }
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) { }
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
@@ -212,14 +155,9 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             }
 
             @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-
-            }
-
+            public void onDrawerClosed(@NonNull View drawerView) { }
             @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
+            public void onDrawerStateChanged(int newState) { }
         });
     }
 
@@ -277,10 +215,10 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
      * @param entry entry to navigate to
      * @return whether that entry is navigated
      */
-    private boolean navigate(int entry) {
+    public boolean navigate(int entry) {
         if (entry == R.id.drawer_mouse){
 
-            if (!mainContext.getPreferences().getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
+            if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
 
                 MouseCalibrateDialog dialog = new MouseCalibrateDialog(this.mainContext);
                 dialog.show(getSupportFragmentManager(), null);

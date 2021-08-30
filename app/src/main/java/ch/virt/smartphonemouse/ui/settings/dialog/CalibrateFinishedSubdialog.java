@@ -3,6 +3,8 @@ package ch.virt.smartphonemouse.ui.settings.dialog;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.preference.PreferenceManager;
+
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.ui.CustomFragment;
@@ -22,7 +24,7 @@ public class CalibrateFinishedSubdialog extends CustomFragment {
 
     @Override
     protected void initComponents() {
-        rate.setText(main.getResources().getString(R.string.dialog_calibrate_finished_rate, main.getPreferences().getInt("movementSamplingRealRate", 0)));
+        rate.setText(getResources().getString(R.string.dialog_calibrate_finished_rate, PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("movementSamplingRealRate", 0)));
     }
 
     @Override

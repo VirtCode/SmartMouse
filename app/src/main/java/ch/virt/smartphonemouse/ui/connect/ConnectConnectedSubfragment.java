@@ -5,6 +5,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
+import ch.virt.smartphonemouse.MainActivity;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
@@ -38,7 +39,7 @@ public class ConnectConnectedSubfragment extends CustomFragment {
             disconnect.setOnClickListener(v -> bluetooth.getHost().disconnect());
             mouse.setOnClickListener(v -> {
                 bluetooth.getHost().sendReport(false, false, false, 0, 20, 0);
-                main.navigate(R.id.drawer_mouse);
+                ((MainActivity) getActivity()).navigate(R.id.drawer_mouse);
             });
         }
     }

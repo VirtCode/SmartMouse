@@ -21,7 +21,7 @@ public class SamplingRateSubdialog extends CustomFragment {
         super(R.layout.subdialog_calibrate_samplingrate, context);
         this.doneListener = doneListener;
 
-        calibrator = new SamplingRateCalibrator(main);
+        calibrator = new SamplingRateCalibrator(getContext()); //TODO: Will probably produce nullpointer
     }
 
     @Override
@@ -32,7 +32,7 @@ public class SamplingRateSubdialog extends CustomFragment {
     @Override
     protected void initComponents() {
 
-        time.setText(main.getResources().getString(R.string.dialog_calibrate_samplingrate_time, calibrator.getTestLength() / 1000 * 2)); // Double the time, so it is always shorter
+        time.setText(getResources().getString(R.string.dialog_calibrate_samplingrate_time, calibrator.getTestLength() / 1000 * 2)); // Double the time, so it is always shorter
 
         calibrator.calibrate(doneListener);
 

@@ -6,13 +6,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Handler;
+
+import androidx.preference.PreferenceManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ch.virt.smartphonemouse.helper.Listener;
-import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 
 public class SamplingRateCalibrator implements SensorEventListener {
@@ -29,16 +29,16 @@ public class SamplingRateCalibrator implements SensorEventListener {
     private long delays;
     private int amount;
 
-    private final MainContext main;
+    private final Context context;
 
-    public SamplingRateCalibrator(MainContext main) {
-        this.main = main;
+    public SamplingRateCalibrator(Context context) {
+        this.context = context;
 
         fetchSensor();
     }
 
     public void fetchSensor(){
-        manager = (SensorManager) main.getContext().getSystemService(Context.SENSOR_SERVICE);
+        manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = manager.getDefaultSensor(MovementHandler.SENSOR_TYPE);
     }
 
@@ -87,7 +87,7 @@ public class SamplingRateCalibrator implements SensorEventListener {
 
         int samplesPerSecond = Math.round(1f / averageDelaySecond);
 
-        SharedPreferences.Editor edit = main.getPreferences().edit();
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
         edit.putBoolean("movementSamplingCalibrated", true);
         edit.putInt("movementSamplingRealRate", samplesPerSecond);
         edit.apply();

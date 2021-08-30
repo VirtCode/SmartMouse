@@ -2,11 +2,11 @@ package ch.virt.smartphonemouse.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -33,9 +33,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             builder.setMessage(R.string.settings_reset_dialog_message)
                     .setPositiveButton(R.string.settings_reset_dialog_reset, (dialog, id) -> {
 
-                        DefaultSettings.set(main.getPreferences());
+                        DefaultSettings.set(PreferenceManager.getDefaultSharedPreferences(getContext()));
 
-                        main.snack(main.getResources().getString(R.string.settings_reset_confirmation), Snackbar.LENGTH_SHORT);
+                        Snackbar.make(getView(), getResources().getString(R.string.settings_reset_confirmation), Snackbar.LENGTH_SHORT);
 
                     })
                     .setNegativeButton(R.string.settings_reset_dialog_cancel, (dialog, id) -> {});

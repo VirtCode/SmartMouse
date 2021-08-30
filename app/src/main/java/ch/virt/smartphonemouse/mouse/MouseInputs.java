@@ -1,6 +1,9 @@
 package ch.virt.smartphonemouse.mouse;
 
-import ch.virt.smartphonemouse.helper.MainContext;
+import android.content.Context;
+
+import androidx.preference.PreferenceManager;
+
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 
 public class MouseInputs {
@@ -13,15 +16,15 @@ public class MouseInputs {
 
     private int transmissionRate = 0;
     private BluetoothHandler bluetoothHandler;
-    private MainContext main;
+    private Context context;
 
     private Thread thread;
     private boolean running;
     private long lastTime;
 
-    public MouseInputs(BluetoothHandler bluetoothHandler, MainContext main) {
+    public MouseInputs(BluetoothHandler bluetoothHandler, Context context) {
         this.bluetoothHandler = bluetoothHandler;
-        this.main = main;
+        this.context = context;
     }
 
     public void start(){
@@ -29,7 +32,7 @@ public class MouseInputs {
 
         thread = new Thread(this::run);
 
-        transmissionRate = main.getPreferences().getInt("communicationTransmissionRate", 100);
+        transmissionRate = PreferenceManager.getDefaultSharedPreferences(context).getInt("communicationTransmissionRate", 100);
 
         running = true;
         thread.start();

@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import ch.virt.smartphonemouse.helper.MainContext;
+import androidx.preference.PreferenceManager;
 
 public class MovementHandler implements SensorEventListener {
 
@@ -18,7 +18,7 @@ public class MovementHandler implements SensorEventListener {
     private SensorManager manager;
     private Sensor sensor;
 
-    private MainContext main;
+    private Context context;
     private MouseInputs inputs;
 
     private boolean registered;
@@ -26,8 +26,8 @@ public class MovementHandler implements SensorEventListener {
     private long lastSample = 0;
     private Pipeline xLine, yLine;
 
-    public MovementHandler(MainContext main, MouseInputs inputs) {
-        this.main = main;
+    public MovementHandler(Context context, MouseInputs inputs) {
+        this.context = context;
         this.inputs = inputs;
 
         fetchSensor();
@@ -35,14 +35,14 @@ public class MovementHandler implements SensorEventListener {
     }
 
     public void create(){
-        int sampleRate = main.getPreferences().getInt("communicationTransmissionRate", 200);
+        int sampleRate = PreferenceManager.getDefaultSharedPreferences(context).getInt("communicationTransmissionRate", 200);
 
-        xLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
-        yLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
+        xLine = new Pipeline(sampleRate, new PipelineConfig(PreferenceManager.getDefaultSharedPreferences(context)));
+        yLine = new Pipeline(sampleRate, new PipelineConfig(PreferenceManager.getDefaultSharedPreferences(context)));
     }
 
     public void fetchSensor(){
-        manager = (SensorManager) main.getContext().getSystemService(Context.SENSOR_SERVICE);
+        manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = manager.getDefaultSensor(SENSOR_TYPE);
     }
 

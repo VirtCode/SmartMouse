@@ -3,6 +3,8 @@ package ch.virt.smartphonemouse.ui.mouse;
 import android.view.View;
 import android.widget.CheckBox;
 
+import androidx.preference.PreferenceManager;
+
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.ui.CustomFragment;
@@ -23,10 +25,10 @@ public class MouseUsageFinishedSubdialog extends CustomFragment {
     @Override
     protected void initComponents() {
 
-        notAgain.setChecked(!main.getPreferences().getBoolean("showUsage", true));
+        notAgain.setChecked(!PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("showUsage", true));
 
         notAgain.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            main.getPreferences().edit().putBoolean("showUsage", !isChecked).apply();
+            PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("showUsage", !isChecked).apply();
         });
 
     }

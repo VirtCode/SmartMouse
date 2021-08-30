@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -23,8 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.location.LocationManagerCompat;
 import androidx.fragment.app.DialogFragment;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.helper.Listener;
@@ -73,8 +70,6 @@ public class AddDialog extends DialogFragment {
         requestLocation = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
 
             if (isGranted) {
-                mainContext.snack(mainContext.getResources().getString(R.string.add_request_permission_success), Snackbar.LENGTH_SHORT);
-
                 showRequestSetting();
             } else ((AddRequestPermissionSubdialog) currentSub).showError();
 
@@ -97,7 +92,7 @@ public class AddDialog extends DialogFragment {
 
     public void showRequestPermission(){
         state = REQUEST_PERMISSION_STATE;
-        if (ActivityCompat.checkSelfPermission(mainContext.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             showRequestSetting(); // Get on if already granted
             return;
         }
@@ -113,7 +108,7 @@ public class AddDialog extends DialogFragment {
 
     public void showRequestSetting(){
         state = REQUEST_SETTING_STATE;
-        if (LocationManagerCompat.isLocationEnabled((LocationManager) mainContext.getContext().getSystemService(Context.LOCATION_SERVICE))){
+        if (LocationManagerCompat.isLocationEnabled((LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE))){
             showSelect(); // Get on if already granted
             return;
         }
@@ -263,7 +258,7 @@ public class AddDialog extends DialogFragment {
     }
 
     public void requestSetting(){
-        if (LocationManagerCompat.isLocationEnabled((LocationManager) mainContext.getContext().getSystemService(Context.LOCATION_SERVICE))){
+        if (LocationManagerCompat.isLocationEnabled((LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE))){
             showSelect();
         } else {
             enableLocation.launch(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
@@ -271,7 +266,7 @@ public class AddDialog extends DialogFragment {
     }
 
     public void checkSetting(){
-        if (LocationManagerCompat.isLocationEnabled((LocationManager) mainContext.getContext().getSystemService(Context.LOCATION_SERVICE))){
+        if (LocationManagerCompat.isLocationEnabled((LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE))){
             showSelect();
         } else {
             ((AddRequestSettingSubdialog) currentSub).showError();

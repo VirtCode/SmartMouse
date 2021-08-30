@@ -8,9 +8,10 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import ch.virt.smartphonemouse.MainActivity;
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.helper.MainContext;
+import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.home.HomeConnectedSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeDisabledSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeDisconnectedSubfragment;
@@ -39,13 +40,13 @@ public class HomeFragment extends CustomFragment {
                 setStatus(R.color.status_init, R.string.home_status_disabled, R.string.home_button_disabled, v -> bluetooth.enableBluetooth(), new HomeDisabledSubfragment(bluetooth));
 
             else if (!bluetooth.isSupported())
-                setStatus(R.color.status_unsupported, R.string.home_status_unsupported, R.string.home_button_unsupported, v -> main.exitApp(), new HomeUnsupportedSubfragment());
+                setStatus(R.color.status_unsupported, R.string.home_status_unsupported, R.string.home_button_unsupported, v -> getActivity().finish(), new HomeUnsupportedSubfragment());
 
             else if (bluetooth.isConnected())
-                setStatus(R.color.status_connected, R.string.home_status_connected, R.string.home_button_connected, v -> main.navigate(R.id.drawer_mouse), new HomeConnectedSubfragment(bluetooth, main));
+                setStatus(R.color.status_connected, R.string.home_status_connected, R.string.home_button_connected, v -> ((MainActivity) getActivity()).navigate(R.id.drawer_mouse), new HomeConnectedSubfragment(bluetooth, main));
 
             else
-                setStatus(R.color.status_disconnected, R.string.home_status_disconnected, R.string.home_button_disconnected, v -> main.navigate(R.id.drawer_connect), new HomeDisconnectedSubfragment());
+                setStatus(R.color.status_disconnected, R.string.home_status_disconnected, R.string.home_button_disconnected, v -> ((MainActivity) getActivity()).navigate(R.id.drawer_connect), new HomeDisconnectedSubfragment());
     }
 
     protected void loadComponents(View view){

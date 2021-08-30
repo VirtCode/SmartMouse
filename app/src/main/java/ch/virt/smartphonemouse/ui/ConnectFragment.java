@@ -14,7 +14,6 @@ import ch.virt.smartphonemouse.ui.connect.ConnectConnectedSubfragment;
 import ch.virt.smartphonemouse.ui.connect.ConnectConnectingSubfragment;
 import ch.virt.smartphonemouse.ui.connect.ConnectFailedSubfragment;
 import ch.virt.smartphonemouse.ui.connect.ConnectSelectSubfragment;
-import ch.virt.smartphonemouse.ui.home.HomeConnectedSubfragment;
 
 public class ConnectFragment extends CustomFragment {
 
@@ -37,7 +36,7 @@ public class ConnectFragment extends CustomFragment {
                 setStatus(R.color.status_connecting, R.string.connect_status_connecting);
             }
             else if (!bluetooth.isConnected()){
-                if (bluetooth.getHost().hasFailed()) loadFragment(new ConnectFailedSubfragment(main, bluetooth));
+                if (bluetooth.getHost().hasFailed()) loadFragment(new ConnectFailedSubfragment(main, bluetooth, this::render));
                 else loadFragment(new ConnectSelectSubfragment(main, bluetooth));
 
                 setStatus(R.color.status_disconnected, R.string.connect_status_disconnected);
