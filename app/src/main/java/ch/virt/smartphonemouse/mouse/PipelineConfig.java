@@ -2,6 +2,9 @@ package ch.virt.smartphonemouse.mouse;
 
 import android.content.SharedPreferences;
 
+/**
+ * This class loads and contains all configuration data needed to configure a single pipeline.
+ */
 public class PipelineConfig {
 
     // Acceleration Low Pass
@@ -26,32 +29,15 @@ public class PipelineConfig {
     private boolean scalerEnabled;
     private int scalerPower;
     private float scalerSplit;
-    
+
     // Sensitivity
     private float sensitivityFactor;
 
-    public PipelineConfig() {
-        this.lowPassOrder = 1;
-        this.lowPassCutoff = 0.1f;
-
-        this.freezerFreezingThreshold = 0.1f;
-        this.freezerUnfreezingThreshold = 0.04f;
-        this.freezerUnfreezingSamples = 10;
-
-        this.noiseCancellingThreshold = 0.04f;
-        this.noiseFinalSamples = 20;
-
-        this.cacheMinimalDuration = 5;
-        this.cacheMaximalDuration = 10;
-        this.cacheReleasingThreshold = 0.05f;
-
-        this.scalerEnabled = true;
-        this.scalerPower = 2;
-        this.scalerSplit = 0.1f;
-
-        this.sensitivityFactor = 13;
-    }
-    
+    /**
+     * Loads all config entries into this class.
+     *
+     * @param preferences preferences to load from.
+     */
     public PipelineConfig(SharedPreferences preferences) {
         lowPassOrder = preferences.getInt("movementLowPassOrder", 1);
         lowPassCutoff = preferences.getFloat("movementLowPassCutoff", 0.1f);

@@ -97,6 +97,6 @@ public class DebugDataHandler implements SensorEventListener {
     }
 
     public void renew(){
-        pipeline.clear();
+        pipeline.reset();
     }
 }

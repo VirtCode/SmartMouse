@@ -1,6 +1,5 @@
 package ch.virt.smartphonemouse.ui.connect.dialog;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.virt.smartphonemouse.R;
@@ -46,7 +44,7 @@ public class AddSelectSubdialog extends CustomFragment {
 
         scanning.setOnClickListener(v -> startDiscovery());
 
-        bluetooth.getDiscoverer().setUpdateListener(adapter::notifyDataSetChanged);
+        bluetooth.getDiscoverer().setUpdateListener(devices -> adapter.notifyDataSetChanged());
         bluetooth.getDiscoverer().setScanListener(this::discoveryUpdated);
 
         bluetooth.getDiscoverer().startDiscovery();
@@ -58,8 +56,8 @@ public class AddSelectSubdialog extends CustomFragment {
         bluetooth.getDiscoverer().startDiscovery();
     }
 
-    public void discoveryUpdated(){
-        if (bluetooth.getDiscoverer().isScanning()) {
+    public void discoveryUpdated(boolean status){
+        if (status) {
             scanning.setEnabled(false);
             scanning.setText(R.string.dialog_add_select_scanning);
         }else {
