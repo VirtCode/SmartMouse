@@ -10,22 +10,32 @@ import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.mouse.Pipeline;
 import ch.virt.smartphonemouse.mouse.PipelineConfig;
 
+/**
+ * This class does handle the data from the accelerometer and does provide it to the chart.
+ */
 public class DebugDataHandler implements SensorEventListener {
 
     private static final float NANO_FULL_FACTOR = 1e-9f;
 
-    DebugChartHandler chart;
-    SharedPreferences preferences;
+    private final DebugChartHandler chart;
+    private final SharedPreferences preferences;
 
     private long lastSample = 0;
     private boolean registered;
     private Pipeline pipeline;
 
-    private SensorManager manager;
+    private final SensorManager manager;
     private Sensor sensor;
 
     private int axis;
 
+    /**
+     * Create a debug data handler.
+     *
+     * @param manager     sensor manager to get the sensor from
+     * @param chart       chart to provide data to
+     * @param preferences preferences to fetch specific config
+     */
     public DebugDataHandler(SensorManager manager, DebugChartHandler chart, SharedPreferences preferences) {
         this.manager = manager;
         this.chart = chart;
@@ -37,16 +47,27 @@ public class DebugDataHandler implements SensorEventListener {
         fetchSensor();
     }
 
-    public void create(SharedPreferences preferences){
+    /**
+     * Creates the pipeline used for processing.
+     *
+     * @param preferences preferences to get pipeline config from
+     */
+    public void create(SharedPreferences preferences) {
         pipeline = new Pipeline(preferences.getInt("communicationTransmissionRate", 200), new PipelineConfig(preferences));
         pipeline.enableDebugging();
     }
 
-    public void fetchSensor(){
+    /**
+     * Fetches the sensor from the sensor manager.
+     */
+    private void fetchSensor() {
         sensor = manager.getDefaultSensor(MovementHandler.SENSOR_TYPE);
     }
 
-    public void register(){
+    /**
+     * Registers this handler as a handler for the accelerometer.
+     */
+    public void register() {
         if (registered) return;
         manager.registerListener(this, sensor, MovementHandler.SAMPLING_RATE);
 
@@ -54,7 +75,10 @@ public class DebugDataHandler implements SensorEventListener {
         registered = true;
     }
 
-    public void unregister(){
+    /**
+     * Unregisters this handler as a handler for the accelerometer.
+     */
+    public void unregister() {
         if (!registered) return;
         manager.unregisterListener(this, sensor);
 
@@ -82,21 +106,39 @@ public class DebugDataHandler implements SensorEventListener {
 
     }
 
+    /**
+     * Returns whether the handler is currently registered.
+     *
+     * @return is currently registered
+     */
     public boolean isRegistered() {
         return registered;
     }
 
+    /**
+     * Returns the current axis data is used from.
+     *
+     * @return current axis, 0 = x, 1 = y, 2 = z
+     */
     public int getAxis() {
         return axis;
     }
 
+    /**
+     * Sets the axis data is used form.
+     *
+     * @param axis current axis, 0 = x, 1 = y, 2 = z
+     */
     public void setAxis(int axis) {
         this.axis = axis;
 
         preferences.edit().putInt("debugChartAxis", axis).apply();
     }
 
-    public void renew(){
+    /**
+     * Resets the algorithm to its initial state.
+     */
+    public void renew() {
         pipeline.reset();
     }
 }

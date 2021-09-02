@@ -32,17 +32,21 @@ public class ConnectFragment extends CustomFragment {
         if (bluetooth.isInitialized()){
 
             if (bluetooth.isConnecting()) {
-                loadFragment(new ConnectConnectingSubfragment(main, bluetooth));
+                loadFragment(new ConnectConnectingSubfragment());
                 setStatus(R.color.status_connecting, R.string.connect_status_connecting);
             }
             else if (!bluetooth.isConnected()){
-                if (bluetooth.getHost().hasFailed()) loadFragment(new ConnectFailedSubfragment(main, bluetooth, this::render));
-                else loadFragment(new ConnectSelectSubfragment(main, bluetooth));
+                if (bluetooth.getHost().hasFailed()){
+                    ConnectFailedSubfragment fragment = new ConnectFailedSubfragment(bluetooth);
+                    fragment.setReturnListener(this::render);
+                    loadFragment(fragment);
+                }
+                else loadFragment(new ConnectSelectSubfragment(bluetooth));
 
                 setStatus(R.color.status_disconnected, R.string.connect_status_disconnected);
             }
             else{
-                loadFragment(new ConnectConnectedSubfragment(main, bluetooth));
+                loadFragment(new ConnectConnectedSubfragment(bluetooth));
                 setStatus(R.color.status_connected, R.string.connect_status_connected);
             }
         }

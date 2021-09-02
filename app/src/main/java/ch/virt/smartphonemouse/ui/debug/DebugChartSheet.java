@@ -25,24 +25,28 @@ import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.ui.debug.handling.DebugChartHandler;
 import ch.virt.smartphonemouse.ui.debug.handling.DebugDataHandler;
 
+/**
+ * This class is the pseudo side sheet that is used to configure the chart in the debugging page.
+ */
 public class DebugChartSheet extends SideDialogFragment {
 
-    Dialog dialog;
-    RecyclerView seriesView;
-    RadioGroup axis;
+    private Dialog dialog;
+    private RecyclerView seriesView;
+    private RadioGroup axis;
+    private EditText averageEdit;
 
-    DebugChartHandler chartHandler;
-    DebugDataHandler dataHandler;
-    EditText averageEdit;
+    private final DebugChartHandler chartHandler;
+    private final DebugDataHandler dataHandler;
 
+    /**
+     * Creates the chart sheet.
+     *
+     * @param chartHandler chart to manipulate
+     * @param dataHandler  data handler to manipulate
+     */
     public DebugChartSheet(DebugChartHandler chartHandler, DebugDataHandler dataHandler) {
         this.chartHandler = chartHandler;
         this.dataHandler = dataHandler;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @NonNull
@@ -68,22 +72,29 @@ public class DebugChartSheet extends SideDialogFragment {
 
         averageEdit.setText("" + chartHandler.getAverageAmount());
         averageEdit.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == IME_ACTION_DONE || actionId == IME_ACTION_NEXT || actionId == IME_ACTION_PREVIOUS) chartHandler.setAverageAmount(Integer.parseInt(v.getText().toString()));
+            if (actionId == IME_ACTION_DONE || actionId == IME_ACTION_NEXT || actionId == IME_ACTION_PREVIOUS)
+                chartHandler.setAverageAmount(Integer.parseInt(v.getText().toString()));
             return false;
         });
 
         return dialog;
     }
 
+    /**
+     * This list adapter is for the recycler view that is used to show the different series.
+     */
     private static class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         DebugChartHandler handler;
 
+        /**
+         * Creates the list adapter.
+         *
+         * @param series handler to get series from that are displayed.
+         */
         public ListAdapter(DebugChartHandler series) {
-
             this.handler = series;
         }
-
 
         @NonNull
         @Override
@@ -91,7 +102,7 @@ public class DebugChartSheet extends SideDialogFragment {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_debug_chart_axis, parent, false);
 
-            return new ListAdapter.ViewHolder(view);
+            return new ViewHolder(view);
         }
 
         @Override
@@ -104,12 +115,19 @@ public class DebugChartSheet extends SideDialogFragment {
             return handler.getSeries().size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        /**
+         * This view holder does hold one entry for one series in the recycler view.
+         */
+        public static class ViewHolder extends RecyclerView.ViewHolder {
 
             private final ImageView color;
             private final CheckBox checkbox;
 
-
+            /**
+             * Creates the view holder.
+             *
+             * @param view view to hold
+             */
             public ViewHolder(View view) {
                 super(view);
 
@@ -117,8 +135,15 @@ public class DebugChartSheet extends SideDialogFragment {
                 color = view.findViewById(R.id.debug_chart_series_item_color);
             }
 
+            /**
+             * Binds the view holder to a particular series.
+             *
+             * @param handler chart to get series from
+             * @param index   index of the series
+             */
             public void bind(DebugChartHandler handler, int index) {
-                ((GradientDrawable) color.getBackground()).setColor(handler.getSeries().get(index).getColor() | 0xFF000000);
+                ((GradientDrawable) color.getBackground()).setColor(handler.getSeries().get(index).getColor() | 0xFF000000); // Add alpha values
+
                 checkbox.setText(handler.getSeries().get(index).getName());
                 checkbox.setChecked(handler.getSeries().get(index).isVisible());
                 checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> handler.setSeriesVisibility(handler.getSeries().get(index), isChecked));

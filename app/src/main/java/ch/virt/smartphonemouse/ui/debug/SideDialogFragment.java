@@ -8,6 +8,10 @@ import android.view.WindowManager;
 
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * This class configures a dialog fragment as a dialog that appears on the side of the screen.
+ * This dialog is similar to a side sheet from material design, but since it is not implemented by their library, this is used.
+ */
 public class SideDialogFragment extends DialogFragment {
 
     @Override

@@ -6,6 +6,9 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class holds a single series in the debugging chart.
+ */
 public class DebugSeries {
 
     private final int color;
@@ -21,7 +24,13 @@ public class DebugSeries {
     private LineGraphSeries<DataPoint> dataSet;
     private int entryIndex;
 
-
+    /**
+     * Creates a series.
+     *
+     * @param color         color of that series
+     * @param name          name of that series
+     * @param averageAmount amount of samples required for one point on the diagram
+     */
     public DebugSeries(int color, String name, int averageAmount) {
         this.color = color;
         this.name = name;
@@ -31,10 +40,15 @@ public class DebugSeries {
         samples = new ArrayList<>();
         dataSet = new LineGraphSeries<>();
 
-        dataSet.setColor(color | 0xff000000);
+        dataSet.setColor(color | 0xff000000); // Add alpha values
     }
 
-    void newData(float sample){
+    /**
+     * Adds a new sample to the series.
+     *
+     * @param sample new sample
+     */
+    void newData(float sample) {
         samples.add(sample);
 
         currentAverage += sample;
@@ -46,7 +60,10 @@ public class DebugSeries {
         }
     }
 
-    void clear(){
+    /**
+     * Clears the series.
+     */
+    void clear() {
         samples.clear();
         dataSet.resetData(new DataPoint[0]);
 
@@ -55,31 +72,66 @@ public class DebugSeries {
         currentAverage = 0;
     }
 
-    void setAverageAmount(int amount){
+    /**
+     * Sets how many samples are required for one datapoint on the chart.
+     *
+     * @param amount amount of samples
+     */
+    void setAverageAmount(int amount) {
         averageAmount = amount;
         clear();
     }
 
+    /**
+     * Returns the data set, one can add to a chart.
+     *
+     * @return dataset to be added
+     */
     public LineGraphSeries<DataPoint> getDataSet() {
         return dataSet;
     }
 
+    /**
+     * Returns all samples shown for this series.
+     *
+     * @return list of samples
+     */
     public List<Float> getSamples() {
         return samples;
     }
 
+    /**
+     * Returns the color of this series.
+     *
+     * @return color as an integer
+     */
     public int getColor() {
         return color;
     }
 
+    /**
+     * Returns the name of this series.
+     *
+     * @return name of the series
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns whether the series is currently visible on the chart.
+     *
+     * @return is visible
+     */
     public boolean isVisible() {
         return visible;
     }
 
+    /**
+     * Sets whether the series should be visible.
+     *
+     * @param visible should be visible
+     */
     void setVisible(boolean visible) {
         this.visible = visible;
     }
