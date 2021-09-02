@@ -1,23 +1,17 @@
 package ch.virt.smartphonemouse.ui.connect.dialog;
 
-import android.view.View;
+import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
-public class AddAlreadySubdialog extends CustomFragment {
-    public AddAlreadySubdialog(MainContext context) {
-        super(R.layout.subdialog_add_already, context);
-    }
-
-    @Override
-    public void render() {
-
-    }
-
-    @Override
-    protected void loadComponents(View view) {
-
+/**
+ * This class displays the sub page of the add dialog when a device has already been added.
+ */
+public class AddAlreadySubdialog extends Fragment {
+    /**
+     * Initializes the sub dialog.
+     */
+    public AddAlreadySubdialog() {
+        super(R.layout.subdialog_add_already);
     }
 }

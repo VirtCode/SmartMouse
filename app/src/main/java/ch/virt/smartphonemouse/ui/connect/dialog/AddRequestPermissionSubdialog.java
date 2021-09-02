@@ -1,35 +1,40 @@
 package ch.virt.smartphonemouse.ui.connect.dialog;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
-public class AddRequestPermissionSubdialog extends CustomFragment {
+/**
+ * This class holds a sub page for the add dialog when the user must grant the app permissions to discover new devices.
+ */
+public class AddRequestPermissionSubdialog extends Fragment {
 
-    TextView error;
+    private TextView error;
 
-    public AddRequestPermissionSubdialog(MainContext context) {
-        super(R.layout.subdialog_add_requestpermission, context);
+    /**
+     * Creates the sub dialog.
+     */
+    public AddRequestPermissionSubdialog() {
+        super(R.layout.subdialog_add_requestpermission);
     }
 
-    public void showError(){
+    /**
+     * Displays the error on the screen.
+     */
+    public void showError() {
         error.post(() -> error.setVisibility(View.VISIBLE));
     }
 
     @Override
-    public void render() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    }
-
-    @Override
-    protected void loadComponents(View view) {
         error = view.findViewById(R.id.add_request_permission_error);
     }
 }

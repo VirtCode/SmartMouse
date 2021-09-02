@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,7 +46,8 @@ public class ConnectSelectSubfragment extends CustomFragment {
     }
 
     public void info(){
-        InfoDialog dialog = new InfoDialog(bluetooth, adapter.getSelected(), () -> adapter.notifyDataSetChanged());
+        InfoDialog dialog = new InfoDialog(bluetooth, adapter.getSelected());
+        dialog.setOnDismissListener((d) -> adapter.notifyDataSetChanged());
         dialog.show(this.getParentFragmentManager(), null);
     }
 
@@ -67,7 +67,8 @@ public class ConnectSelectSubfragment extends CustomFragment {
     }
 
     private void add(){
-        AddDialog dialog = new AddDialog(bluetooth, main, () -> adapter.notifyDataSetChanged());
+        AddDialog dialog = new AddDialog(bluetooth);
+        dialog.setOnDismissListener((d) -> adapter.notifyDataSetChanged());
         dialog.show(this.getParentFragmentManager(), null);
     }
 
