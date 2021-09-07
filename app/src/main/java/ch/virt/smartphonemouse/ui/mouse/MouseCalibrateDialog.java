@@ -7,14 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 import ch.virt.smartphonemouse.ui.settings.dialog.SamplingRateSubdialog;
 
+/**
+ * This class is the dialog that is shown upon mouse calibration
+ */
 public class MouseCalibrateDialog extends DialogFragment {
 
     private AlertDialog dialog;
@@ -22,13 +25,10 @@ public class MouseCalibrateDialog extends DialogFragment {
 
     private boolean introduction;
 
-    private MainContext main;
-
-    public MouseCalibrateDialog(MainContext main) {
-        this.main = main;
-    }
-
-    private void created(){
+    /**
+     * Is called when the dialog is created.
+     */
+    private void created() {
         dialog.setTitle(R.string.dialog_mouse_calibrate_title_intro);
 
         introduction = true;
@@ -36,10 +36,13 @@ public class MouseCalibrateDialog extends DialogFragment {
         positiveButton.setEnabled(true);
         negativeButton.setVisibility(View.VISIBLE);
 
-        setFragment(new MouseMessageSubdialog(getResources().getString(R.string.mouse_message_calibrate), main));
+        setFragment(new MouseMessageSubdialog(getResources().getString(R.string.mouse_message_calibrate)));
     }
 
-    private void next(){
+    /**
+     * Is called when the user wants to go to the next page.
+     */
+    private void next() {
         dialog.setTitle(R.string.dialog_mouse_calibrate_title_calibrate);
 
         if (introduction) {
@@ -52,24 +55,33 @@ public class MouseCalibrateDialog extends DialogFragment {
 
             introduction = false;
 
-            setFragment(new SamplingRateSubdialog(main, (r) -> positiveButton.post(this::finished)));
-        }else dismiss();
+            setFragment(new SamplingRateSubdialog((r) -> positiveButton.post(this::finished)));
+        } else dismiss();
 
     }
 
-    private void finished(){
+    /**
+     * Is called when the calibration procedure is finished.
+     */
+    private void finished() {
         dialog.setTitle(R.string.dialog_mouse_calibrate_title_finished);
 
         dialog.setCanceledOnTouchOutside(true);
         positiveButton.setEnabled(true);
 
-        setFragment(new MouseMessageSubdialog(getResources().getString(R.string.dialog_mouse_calibrate_finished), main));
+        setFragment(new MouseMessageSubdialog(getResources().getString(R.string.dialog_mouse_calibrate_finished)));
     }
 
-    private void setFragment(CustomFragment fragment){
+    /**
+     * Sets the current dialog fragment that should be displayed.
+     *
+     * @param fragment fragment to display
+     */
+    private void setFragment(Fragment fragment) {
         getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.mouse_container, fragment).commit();
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -93,5 +105,4 @@ public class MouseCalibrateDialog extends DialogFragment {
 
         return dialog;
     }
-
 }

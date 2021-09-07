@@ -1,40 +1,39 @@
 package ch.virt.smartphonemouse.ui.mouse;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
-public class MouseUsageFinishedSubdialog extends CustomFragment {
+/**
+ * This sub dialog is the last page of the usage dialog. It gives the user the option to disable every further usage dialog.
+ */
+public class MouseUsageFinishedSubdialog extends Fragment {
 
     private CheckBox notAgain;
 
-    public MouseUsageFinishedSubdialog(MainContext context) {
-        super(R.layout.subdialog_mouse_usage_finished, context);
+    /**
+     * Creates the sub dialog.
+     */
+    public MouseUsageFinishedSubdialog() {
+        super(R.layout.subdialog_mouse_usage_finished);
     }
 
     @Override
-    public void render() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    }
+        notAgain = view.findViewById(R.id.mouse_usage_finished_notagain);
 
-    @Override
-    protected void initComponents() {
 
         notAgain.setChecked(!PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("showUsage", true));
 
-        notAgain.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("showUsage", !isChecked).apply();
-        });
-
-    }
-
-    @Override
-    protected void loadComponents(View view) {
-        notAgain = view.findViewById(R.id.mouse_usage_finished_notagain);
+        notAgain.setOnCheckedChangeListener((buttonView, isChecked) -> PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("showUsage", !isChecked).apply());
     }
 }

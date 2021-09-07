@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
 
-                MouseCalibrateDialog dialog = new MouseCalibrateDialog(this.mainContext);
+                MouseCalibrateDialog dialog = new MouseCalibrateDialog();
                 dialog.show(getSupportFragmentManager(), null);
 
                 return true;

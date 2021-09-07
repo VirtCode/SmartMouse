@@ -1,46 +1,40 @@
 package ch.virt.smartphonemouse.ui.mouse;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.ui.CustomFragment;
-import ch.virt.smartphonemouse.ui.settings.dialog.CalibrateFinishedSubdialog;
-import ch.virt.smartphonemouse.ui.settings.dialog.SamplingRateSubdialog;
 
-public class MouseMessageSubdialog extends CustomFragment {
+/**
+ * This sub dialog shows some basic information as text to the user.
+ */
+public class MouseMessageSubdialog extends Fragment {
 
     private String message;
     private TextView messageView;
 
-    public MouseMessageSubdialog(String message, MainContext context) {
-        super(R.layout.subdialog_mouse_message, context);
+    /**
+     * Creates the message sub dialog.
+     *
+     * @param message message that gets shown
+     */
+    public MouseMessageSubdialog(String message) {
+        super(R.layout.subdialog_mouse_message);
 
         this.message = message;
     }
 
     @Override
-    public void render() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    }
-
-    @Override
-    protected void initComponents() {
-        messageView.setText(message);
-    }
-
-    @Override
-    protected void loadComponents(View view) {
         messageView = view.findViewById(R.id.mouse_message_message);
+
+        messageView.setText(message);
     }
 }

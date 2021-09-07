@@ -166,7 +166,7 @@ public class MouseFragment extends CustomFragment {
             movement.unregister();
             mouse.stop();
 
-            MouseUsageDialog dialog = new MouseUsageDialog(this.main, () -> {
+            MouseUsageDialog dialog = new MouseUsageDialog(() -> {
 
                 mouse.start();
                 movement.register();

@@ -96,7 +96,7 @@
     <string name="dialog_calibrate_samplingrate_message">Please wait while the app is analyzing the sampling rate of your sensor.</string>
     <string name="dialog_calibrate_samplingrate_title">Analyzing Sampling Rate</string>
     <string name="dialog_calibrate_done">Done</string>
-    <string name="dialog_calibrate_samplingrate_time">This process can take up to %d seconds.</string>
+    <string name="dialog_calibrate_samplingrate_time">This process will take about %d seconds.</string>
     <string name="dialog_calibrate_finished_message">The sampling rate for this app was calibrated successfully. Your sensor sampling rate for this device is:</string>
     <string name="dialog_calibrate_finished_rate">%d Samples per Second</string>
     <string name="dialog_calibrate_finished_title">Finished</string>

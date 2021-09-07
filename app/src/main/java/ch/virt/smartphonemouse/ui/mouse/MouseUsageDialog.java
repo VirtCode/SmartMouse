@@ -10,72 +10,106 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.Listener;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
+/**
+ * This dialog is shown when the user opens the mouse fragment. It tells the user how to use the mouse.
+ */
 public class MouseUsageDialog extends DialogFragment {
 
     private AlertDialog dialog;
     private Button positiveButton;
 
     private int index;
-    private int maxIndex = 4;
 
-    private MainContext main;
-    private Listener finishedListener;
+    private UsageFinishedListener finishedListener;
 
-    public MouseUsageDialog(MainContext main, Listener finishedListener) {
-        this.main = main;
+
+    public MouseUsageDialog(UsageFinishedListener finishedListener) {
         this.finishedListener = finishedListener;
     }
 
-    private void create(){
+    /**
+     * Returns a message to show the user at the given index.
+     *
+     * @param index index of the message
+     * @return resource string id of the message
+     */
+    private int getCurrentMessage(int index) {
+
+        switch (index) {
+            case 0:
+                return R.string.dialog_mouse_usage_even;
+            case 1:
+                return R.string.dialog_mouse_usage_move;
+            case 2:
+                return R.string.dialog_mouse_usage_buttons;
+            case 3:
+                return R.string.dialog_mouse_usage_return;
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * Returns how many messages can be displayed.
+     *
+     * @return amount of messages
+     */
+    private int getMessageAmount() {
+        return 4;
+    }
+
+
+    /**
+     * Is called when the dialog is created.
+     */
+    private void create() {
         showFragment();
 
         dialog.setCanceledOnTouchOutside(false);
     }
 
 
-    private void next(){
-        if (index == maxIndex) {
+    /**
+     * Is called when the user skips to the next page.
+     */
+    private void next() {
+        if (index == getMessageAmount()) {
             dismiss();
             return;
         }
 
         index++;
-        if (index == maxIndex) {
+        if (index == getMessageAmount()) {
 
             dialog.setCanceledOnTouchOutside(true);
-            setFragment(new MouseUsageFinishedSubdialog(main));
+            setFragment(new MouseUsageFinishedSubdialog());
 
-        }else showFragment();
-
-    }
-
-    private void showFragment(){
-        setFragment(new MouseMessageSubdialog(getResources().getString(getCurrentMessage(index)), main));
-    }
-
-    public int getCurrentMessage(int index){
-
-        switch (index) {
-            case 0: return R.string.dialog_mouse_usage_even;
-            case 1: return R.string.dialog_mouse_usage_move;
-            case 2: return R.string.dialog_mouse_usage_buttons;
-            case 3: return R.string.dialog_mouse_usage_return;
-        }
-
-        return 0;
+        } else showFragment();
 
     }
 
-    private void setFragment(CustomFragment fragment){
+    /**
+     * Shows a message fragment with the current index.
+     */
+    private void showFragment() {
+        setFragment(new MouseMessageSubdialog(getResources().getString(getCurrentMessage(index))));
+    }
+
+    /**
+     * Displays a fragment in the respective fragment container.
+     *
+     * @param fragment fragment to display
+     */
+    private void setFragment(Fragment fragment) {
         getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.mouse_container, fragment).commit();
     }
 
+
+    @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -85,7 +119,7 @@ public class MouseUsageDialog extends DialogFragment {
                 .setPositiveButton(R.string.dialog_mouse_usage_next, null);
 
         dialog = builder.create();
-        dialog.setTitle(R.string.dialog_mouse_usage_title); // Add default title so it is shown
+        dialog.setTitle(R.string.dialog_mouse_usage_title);
         dialog.setOnShowListener(dialogInterface -> {
             positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(view -> next());
@@ -98,8 +132,20 @@ public class MouseUsageDialog extends DialogFragment {
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
-        finishedListener.called();
+        finishedListener.finished();
 
         super.onDismiss(dialog);
+    }
+
+
+    /**
+     * This interface is a basic listener for when the user has finished reading the instructions.
+     */
+    public interface UsageFinishedListener {
+
+        /**
+         * Called when the user is finished.
+         */
+        void finished();
     }
 }
