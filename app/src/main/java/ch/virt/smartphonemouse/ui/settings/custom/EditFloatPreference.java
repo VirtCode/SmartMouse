@@ -9,6 +9,9 @@ import androidx.preference.EditTextPreference;
 
 import ch.virt.smartphonemouse.R;
 
+/**
+ * This preference is a preference that opens a dialog and allows you to edit a float.
+ */
 public class EditFloatPreference extends EditTextPreference {
 
     private boolean showValueAsDescription;
@@ -18,6 +21,14 @@ public class EditFloatPreference extends EditTextPreference {
 
     private float value;
 
+    /**
+     * Creates a preference.
+     *
+     * @param context      context for the preference to be in
+     * @param attrs        attributes
+     * @param defStyleAttr style attributes
+     * @param defStyleRes  style resources
+     */
     public EditFloatPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
@@ -30,40 +41,75 @@ public class EditFloatPreference extends EditTextPreference {
         if (valueUnit == null) valueUnit = "";
         if (signed) minimumValue = -maximumValue;
 
-        if (showValueAsDescription) setSummaryProvider(preference -> EditFloatPreference.this.getSummary());
+        if (showValueAsDescription)
+            setSummaryProvider(preference -> EditFloatPreference.this.getSummary());
 
         setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | (signed ? InputType.TYPE_NUMBER_FLAG_SIGNED : 0x00)));
     }
 
+    /**
+     * Creates a preference.
+     *
+     * @param context      context for the preference to be in
+     * @param attrs        attributes
+     * @param defStyleAttr style attributes
+     */
     public EditFloatPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
+    /**
+     * Creates a preference.
+     *
+     * @param context context for the preference to be in
+     * @param attrs   attributes
+     */
     public EditFloatPreference(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.editTextPreferenceStyle);
     }
 
+    /**
+     * Creates a preference.
+     *
+     * @param context context for the preference to be in
+     */
     public EditFloatPreference(Context context) {
         this(context, null);
     }
 
-    @Override
-    public CharSequence getSummary() {
-        return showValueAsDescription ? value + " " + valueUnit : super.getSummary();
-    }
 
+    /**
+     * Returns the unit that is displayed to the user.
+     *
+     * @return unit of the value
+     */
     public String getValueUnit() {
         return valueUnit;
     }
 
+    /**
+     * Sets the unit that is displayed to the user.
+     *
+     * @param valueUnit unit of the entered value
+     */
     public void setValueUnit(String valueUnit) {
         this.valueUnit = valueUnit;
     }
 
+    /**
+     * Returns the value of the preference.
+     *
+     * @return value
+     */
     public float getValue() {
         return value;
     }
 
+    /**
+     * Sets the value of the preference.
+     *
+     * @param value value
+     */
     public void setValue(float value) {
         final boolean wasBlocking = shouldDisableDependents();
 
@@ -77,6 +123,55 @@ public class EditFloatPreference extends EditTextPreference {
         }
 
         notifyChanged();
+    }
+
+    /**
+     * Returns the minimum value that may be entered.
+     *
+     * @return minimum value
+     */
+    public float getMinimumValue() {
+        return minimumValue;
+    }
+
+    /**
+     * Sets the minimum value that may be entered.
+     *
+     * @param minimumValue minimum value
+     */
+    public void setMinimumValue(float minimumValue) {
+        this.minimumValue = minimumValue;
+    }
+
+    /**
+     * Returns the maximum value may be entered.
+     *
+     * @return maximum value
+     */
+    public float getMaximumValue() {
+        return maximumValue;
+    }
+
+    /**
+     * Sets the maximum value that may be entered.
+     *
+     * @param maximumValue of the preference to be set
+     */
+    public void setMaximumValue(float maximumValue) {
+        this.maximumValue = maximumValue;
+    }
+
+    /**
+     * Updates the contained value from the preference storage.
+     */
+    public void update() {
+        setValue(getPersistedFloat(minimumValue));
+    }
+
+
+    @Override
+    public CharSequence getSummary() {
+        return showValueAsDescription ? value + " " + valueUnit : super.getSummary();
     }
 
     @Override
@@ -97,25 +192,5 @@ public class EditFloatPreference extends EditTextPreference {
     @Override
     protected void onSetInitialValue(Object defaultValue) {
         setValue(getPersistedFloat(defaultValue == null ? 0 : (Float) defaultValue));
-    }
-
-    public float getMinimumValue() {
-        return minimumValue;
-    }
-
-    public void setMinimumValue(float minimumValue) {
-        this.minimumValue = minimumValue;
-    }
-
-    public float getMaximumValue() {
-        return maximumValue;
-    }
-
-    public void setMaximumValue(float maximumValue) {
-        this.maximumValue = maximumValue;
-    }
-
-    public void update(){
-        setValue(getPersistedFloat(minimumValue));
     }
 }
