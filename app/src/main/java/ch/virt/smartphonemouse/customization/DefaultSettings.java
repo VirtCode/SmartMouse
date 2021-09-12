@@ -13,6 +13,7 @@ public class DefaultSettings {
 
         edit.putBoolean("populated", true);
         edit.putBoolean("showUsage", true);
+        edit.putBoolean("debugEnabled", false);
 
         edit.apply();
 

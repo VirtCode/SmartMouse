@@ -23,4 +23,5 @@
     <color name="mouse_pressed_light">#6A303030</color>
     <color name="mouse_background_dark">#000000</color>
     <color name="mouse_background_light">#B1B1B1</color>
+    <color name="debug_disabled">#808080</color>
 </resources>

@@ -1,5 +1,15 @@
 package ch.virt.smartphonemouse;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -12,39 +22,25 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.customization.DefaultSettings;
+import ch.virt.smartphonemouse.helper.MainContext;
+import ch.virt.smartphonemouse.helper.ResultListener;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.AboutFragment;
 import ch.virt.smartphonemouse.ui.ConnectFragment;
 import ch.virt.smartphonemouse.ui.CustomFragment;
+import ch.virt.smartphonemouse.ui.DebugFragment;
 import ch.virt.smartphonemouse.ui.HomeFragment;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.helper.ResultListener;
 import ch.virt.smartphonemouse.ui.MouseFragment;
 import ch.virt.smartphonemouse.ui.SettingsFragment;
 import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
 import ch.virt.smartphonemouse.ui.settings.CustomSettingsFragment;
-import ch.virt.smartphonemouse.ui.settings.SettingsMovementSubfragment;
-import ch.virt.smartphonemouse.ui.settings.dialog.CalibrateDialog;
 
 public class MainActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
@@ -203,6 +199,28 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             return false;
         });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                checkNavItems();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     /**
@@ -245,6 +263,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             setNavItemEnable(R.id.drawer_connect, false);
             setNavItemEnable(R.id.drawer_mouse, false);
         }
+
+        drawer.getMenu().findItem(R.id.drawer_debug).setVisible(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("debugEnabled", false));
     }
 
     private void setNavItemEnable(int item, boolean enable){
@@ -313,6 +333,12 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
                     switchFragment(new AboutFragment(mainContext), false);
                     bar.setTitle(R.string.title_about);
 
+                    break;
+
+                case R.id.drawer_debug:
+                    switchFragment(new DebugFragment(mainContext), false);
+                    bar.setTitle(R.string.title_debug);
+                    bar.setVisibility(View.GONE);
                     break;
 
                 default:
