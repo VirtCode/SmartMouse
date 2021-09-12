@@ -2,14 +2,17 @@ package ch.virt.smartphonemouse.ui.settings;
 
 import android.os.Bundle;
 
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference;
 import ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference;
 
+/**
+ * This fragment is the settings page, where the user can configure things regarding the interface.
+ */
 public class SettingsInterfaceSubfragment extends PreferenceFragmentCompat {
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings_interface, null);

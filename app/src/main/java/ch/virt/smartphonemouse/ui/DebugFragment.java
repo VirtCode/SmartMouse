@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.jjoe64.graphview.GraphView;
@@ -19,28 +20,35 @@ import com.jjoe64.graphview.GraphView;
 import java.io.IOException;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.ui.debug.DebugChartSheet;
 import ch.virt.smartphonemouse.ui.debug.handling.DebugChartHandler;
 import ch.virt.smartphonemouse.ui.debug.handling.DebugCsvExporter;
 import ch.virt.smartphonemouse.ui.debug.handling.DebugDataHandler;
 
-public class DebugFragment extends CustomFragment{
+/**
+ * This fragment represents the debug page, which can be used to analyse the algorithms behaviour more closely.
+ */
+public class DebugFragment extends Fragment {
 
-    GraphView chart;
+    private GraphView chart;
 
-    ImageView buttonPlay, buttonClear, buttonRenew, buttonSeries, buttonExport;
+    private ImageView buttonPlay, buttonClear, buttonRenew, buttonSeries, buttonExport;
 
-    DebugChartHandler chartHandler;
-    DebugDataHandler dataHandler;
+    private DebugChartHandler chartHandler;
+    private DebugDataHandler dataHandler;
 
-    public DebugFragment(MainContext context) {
-        super(R.layout.fragment_debug, context);
+    /**
+     * Creates the fragment.
+     */
+    public DebugFragment() {
+        super(R.layout.fragment_debug);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        // Sets the app in landscape mode
         if(getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if(getActivity().getWindow().getDecorView().getSystemUiVisibility() != View.SYSTEM_UI_FLAG_FULLSCREEN) getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
@@ -49,6 +57,8 @@ public class DebugFragment extends CustomFragment{
 
     @Override
     public void onDestroyView() {
+
+        // Reverts the app back to portrait mode
         if(getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         if(getActivity().getWindow().getDecorView().getSystemUiVisibility() != View.SYSTEM_UI_FLAG_VISIBLE) getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
 
@@ -56,13 +66,26 @@ public class DebugFragment extends CustomFragment{
     }
 
     @Override
-    public void render() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        chart = view.findViewById(R.id.debug_chart);
+
+        buttonPlay = view.findViewById(R.id.debug_button_play);
+        buttonClear = view.findViewById(R.id.debug_button_clear);
+        buttonRenew = view.findViewById(R.id.debug_button_renew);
+        buttonSeries = view.findViewById(R.id.debug_button_series);
+        buttonExport = view.findViewById(R.id.debug_button_export);
+
+        initialize();
     }
 
-    @Override
-    protected void initComponents() {
+    /**
+     * Initializes everything.
+     */
+    private void initialize(){
 
+        // Initializes chart
         chartHandler = new DebugChartHandler(chart, PreferenceManager.getDefaultSharedPreferences(getContext()));
         dataHandler = new DebugDataHandler((SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE), chartHandler, PreferenceManager.getDefaultSharedPreferences(getContext()));
 
@@ -79,6 +102,7 @@ public class DebugFragment extends CustomFragment{
         chartHandler.addSeries("Cached Distance", 10);
         chartHandler.addSeries("Final Distance", 11);
 
+        // Initializes buttons
         buttonSeries.setOnClickListener(v -> {
             DebugChartSheet chartSheet = new DebugChartSheet(chartHandler, dataHandler);
             chartSheet.show(getParentFragmentManager(), "debugChartSheet");
@@ -110,16 +134,5 @@ public class DebugFragment extends CustomFragment{
                 Toast.makeText(getContext(), "Failed exporting to CSV", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    protected void loadComponents(View view) {
-        chart = view.findViewById(R.id.debug_chart);
-
-        buttonPlay = view.findViewById(R.id.debug_button_play);
-        buttonClear = view.findViewById(R.id.debug_button_clear);
-        buttonRenew = view.findViewById(R.id.debug_button_renew);
-        buttonSeries = view.findViewById(R.id.debug_button_series);
-        buttonExport = view.findViewById(R.id.debug_button_export);
     }
 }

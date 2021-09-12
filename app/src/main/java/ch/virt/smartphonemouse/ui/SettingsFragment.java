@@ -12,15 +12,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.customization.DefaultSettings;
-import ch.virt.smartphonemouse.helper.MainContext;
 
+/**
+ * This fragment contains the settings for the app.
+ */
 public class SettingsFragment extends PreferenceFragmentCompat {
-
-    private final MainContext main;
-
-    public SettingsFragment(MainContext main) {
-        this.main = main;
-    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -28,23 +24,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         Preference reset = findPreference("reset");
         reset.setOnPreferenceClickListener(preference -> {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.settings_reset_dialog_message)
-                    .setPositiveButton(R.string.settings_reset_dialog_reset, (dialog, id) -> {
-
-                        DefaultSettings.set(PreferenceManager.getDefaultSharedPreferences(getContext()));
-
-                        Snackbar.make(getView(), getResources().getString(R.string.settings_reset_confirmation), Snackbar.LENGTH_SHORT);
-
-                    })
-                    .setNegativeButton(R.string.settings_reset_dialog_cancel, (dialog, id) -> {});
-
-            Dialog dialog = builder.create();
-            dialog.show();
-
+            resetSettings();
             return true;
-
         });
+    }
+
+    /**
+     * Shows the settings reset dialog, where the user can choose to restore their settings.
+     */
+    private void resetSettings() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.settings_reset_dialog_message)
+                .setPositiveButton(R.string.settings_reset_dialog_reset, (dialog, id) -> {
+
+                    DefaultSettings.set(PreferenceManager.getDefaultSharedPreferences(getContext()));
+
+                    Snackbar.make(getView(), getResources().getString(R.string.settings_reset_confirmation), Snackbar.LENGTH_SHORT).show();
+
+                })
+                .setNegativeButton(R.string.settings_reset_dialog_cancel, (dialog, id) -> { });
+
+        Dialog dialog = builder.create();
+        dialog.show();
     }
 }
