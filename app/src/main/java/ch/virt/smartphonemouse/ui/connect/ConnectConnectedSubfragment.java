@@ -1,33 +1,53 @@
 package ch.virt.smartphonemouse.ui.connect;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import ch.virt.smartphonemouse.MainActivity;
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
-public class ConnectConnectedSubfragment extends CustomFragment {
+/**
+ * This class is a sub fragment for the connect page.
+ * This fragment is displayed when the app has a successful connection.
+ */
+public class ConnectConnectedSubfragment extends Fragment {
 
-    Chronometer elapsed;
-    TextView name;
+    private Chronometer elapsed;
+    private TextView name;
 
-    Button disconnect;
-    Button mouse;
+    private Button disconnect;
+    private Button mouse;
 
-    BluetoothHandler bluetooth;
+    private final BluetoothHandler bluetooth;
 
-    public ConnectConnectedSubfragment(MainContext context, BluetoothHandler bluetooth) {
-        super(R.layout.subfragment_connect_connected, context);
+    /**
+     * Creates this sub fragment.
+     *
+     * @param bluetooth bluetooth handler to read status from
+     */
+    public ConnectConnectedSubfragment(BluetoothHandler bluetooth) {
+        super(R.layout.subfragment_connect_connected);
         this.bluetooth = bluetooth;
     }
 
     @Override
-    public void render() {
-        if (bluetooth.isConnected()){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        elapsed = view.findViewById(R.id.connect_connected_device_elapsed);
+        name = view.findViewById(R.id.connect_connected_device_name);
+        disconnect = view.findViewById(R.id.connect_connected_disconnect);
+        mouse = view.findViewById(R.id.connect_connected_mouse);
+
+        if (bluetooth.isConnected()) {
 
             name.setText(bluetooth.getHost().getDevice().getName());
 
@@ -36,18 +56,7 @@ public class ConnectConnectedSubfragment extends CustomFragment {
             elapsed.start();
 
             disconnect.setOnClickListener(v -> bluetooth.getHost().disconnect());
-            mouse.setOnClickListener(v -> {
-                bluetooth.getHost().sendReport(false, false, false, 0, 20, 0);
-                main.navigate(R.id.drawer_mouse);
-            });
+            mouse.setOnClickListener(v -> ((MainActivity) getActivity()).navigate(R.id.drawer_mouse));
         }
-    }
-
-    @Override
-    protected void loadComponents(View view) {
-        elapsed = view.findViewById(R.id.connect_connected_device_elapsed);
-        name = view.findViewById(R.id.connect_connected_device_name);
-        disconnect = view.findViewById(R.id.connect_connected_disconnect);
-        mouse = view.findViewById(R.id.connect_connected_mouse);
     }
 }

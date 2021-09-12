@@ -1,5 +1,8 @@
 package ch.virt.smartphonemouse.transmission.hid;
 
+/**
+ * This class holds the Hid Descriptor used for this app.
+ */
 public class HidDescriptor {
 
     // Tag IDs
@@ -73,6 +76,4 @@ public class HidDescriptor {
 
             TAG_END_COLLECTION
     };
-
-
 }

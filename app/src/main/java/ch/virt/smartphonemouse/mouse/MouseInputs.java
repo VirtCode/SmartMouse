@@ -1,8 +1,14 @@
 package ch.virt.smartphonemouse.mouse;
 
-import ch.virt.smartphonemouse.helper.MainContext;
+import android.content.Context;
+
+import androidx.preference.PreferenceManager;
+
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 
+/**
+ * This class collects the calculated inputs and transmits them to the computer when needed.
+ */
 public class MouseInputs {
 
     private final float NANO_TO_FULL = 1e9f;
@@ -13,50 +19,70 @@ public class MouseInputs {
 
     private int transmissionRate = 0;
     private BluetoothHandler bluetoothHandler;
-    private MainContext main;
+    private Context context;
 
     private Thread thread;
     private boolean running;
     private long lastTime;
 
-    public MouseInputs(BluetoothHandler bluetoothHandler, MainContext main) {
+    /**
+     * Creates this class.
+     *
+     * @param bluetoothHandler bluetooth handler to send the signals to
+     * @param context          context to fetch settings from
+     */
+    public MouseInputs(BluetoothHandler bluetoothHandler, Context context) {
         this.bluetoothHandler = bluetoothHandler;
-        this.main = main;
+        this.context = context;
     }
 
-    public void start(){
+    /**
+     * Starts the transmission to the pc.
+     */
+    public void start() {
         if (running) return;
 
         thread = new Thread(this::run);
 
-        transmissionRate = main.getPreferences().getInt("communicationTransmissionRate", 100);
+        transmissionRate = PreferenceManager.getDefaultSharedPreferences(context).getInt("communicationTransmissionRate", 100);
 
         running = true;
         thread.start();
     }
 
-    public void run(){
+    /**
+     * Starts the sending loop.
+     * Should be executed on a separate thread.
+     */
+    private void run() {
         lastTime = System.nanoTime();
 
         while (running) {
             long current = System.nanoTime();
 
-            if (current - lastTime >= NANO_TO_FULL / transmissionRate){
+            if (current - lastTime >= NANO_TO_FULL / transmissionRate) {
                 sendUpdate();
                 lastTime = current;
             }
         }
     }
 
-    public void stop(){
+    /**
+     * Stops the transmission to the pc.
+     */
+    public void stop() {
         running = false;
     }
 
-    private void sendUpdate(){
+    /**
+     * Sends an update to the pc.
+     */
+    private void sendUpdate() {
         int x = (int) xPosition;
         int y = (int) yPosition;
 
-        if (bluetoothHandler.getHost().isConnected()) bluetoothHandler.getHost().sendReport(leftButton, middleButton, rightButton, wheelPosition, x, y);
+        if (bluetoothHandler.getHost().isConnected())
+            bluetoothHandler.getHost().sendReport(leftButton, middleButton, rightButton, wheelPosition, x, y);
 
         // Reset Deltas
         xPosition -= x;
@@ -65,28 +91,57 @@ public class MouseInputs {
     }
 
 
-    public void changeWheelPosition(int delta){
+    /**
+     * Changes the current wheel position.
+     *
+     * @param delta change in wheel steps
+     */
+    public void changeWheelPosition(int delta) {
         wheelPosition += delta;
     }
 
+    /**
+     * Sets the current state of the left button.
+     *
+     * @param leftButton whether the left button is pressed
+     */
     public void setLeftButton(boolean leftButton) {
         this.leftButton = leftButton;
     }
 
+    /**
+     * Sets the current state of the middle button.
+     *
+     * @param middleButton whether the middle button is pressed
+     */
     public void setMiddleButton(boolean middleButton) {
         this.middleButton = middleButton;
     }
 
+    /**
+     * Sets the current state of the right button.
+     *
+     * @param rightButton whether the right button is pressed
+     */
     public void setRightButton(boolean rightButton) {
         this.rightButton = rightButton;
     }
 
-    public void changeXPosition(float x){
+    /**
+     * Changes the x position of the mouse
+     *
+     * @param x change of the position
+     */
+    public void changeXPosition(float x) {
         xPosition += x;
     }
 
-    public void changeYPosition(float y){
+    /**
+     * Changes the y position of the mouse
+     *
+     * @param y change of the position
+     */
+    public void changeYPosition(float y) {
         yPosition += y;
     }
-
 }

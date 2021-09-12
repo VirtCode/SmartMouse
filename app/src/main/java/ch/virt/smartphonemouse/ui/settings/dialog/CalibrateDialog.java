@@ -7,56 +7,63 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.Listener;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
+/**
+ * This dialog is used in the settings menu when the user requests to calibrate the sampling rate.
+ */
 public class CalibrateDialog extends DialogFragment {
 
     AlertDialog dialog;
 
     Button positiveButton;
 
-    private final MainContext main;
-    private final Listener updateListener;
+    private DialogInterface.OnDismissListener finishedListener;
 
-    public CalibrateDialog(MainContext main, Listener updateListener) {
-        this.main = main;
-        this.updateListener = updateListener;
+    /**
+     * Sets the listener that should be used to update the setting once the dialog is done.
+     *
+     * @param finishedListener dialog dismiss listener that is executed
+     */
+    public void setFinishedListener(DialogInterface.OnDismissListener finishedListener) {
+        this.finishedListener = finishedListener;
     }
 
-    private void created(){
+    /**
+     * Is called when the dialog is created.
+     */
+    private void created() {
         dialog.setTitle(R.string.dialog_calibrate_samplingrate_title);
 
         positiveButton.setEnabled(false);
         dialog.setCanceledOnTouchOutside(false);
 
-        setFragment(new SamplingRateSubdialog(main, () -> positiveButton.post(this::finished)));
+        setFragment(new SamplingRateSubdialog((r) -> positiveButton.post(this::finished)));
     }
 
-    private void finished(){
+    /**
+     * Is called when the calibration process has finished.
+     */
+    private void finished() {
         dialog.setTitle(R.string.dialog_calibrate_finished_title);
 
         dialog.setCanceledOnTouchOutside(true);
         positiveButton.setEnabled(true);
 
-        setFragment(new CalibrateFinishedSubdialog(main));
+        setFragment(new CalibrateFinishedSubdialog());
     }
 
-    private void setFragment(CustomFragment fragment){
+    /**
+     * Sets the fragment of the dialog.
+     *
+     * @param fragment fragment to set
+     */
+    private void setFragment(Fragment fragment) {
         getChildFragmentManager().beginTransaction().setReorderingAllowed(true).replace(R.id.calibrate_container, fragment).commit();
-    }
-
-    @Override
-    public void onDismiss(@NonNull DialogInterface dialog) {
-        super.onDismiss(dialog);
-
-        updateListener.called();
     }
 
     @Override
@@ -76,9 +83,8 @@ public class CalibrateDialog extends DialogFragment {
             created();
         });
 
+        dialog.setOnDismissListener(finishedListener);
+
         return dialog;
     }
-
-
-
 }

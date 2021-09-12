@@ -9,6 +9,10 @@ import ch.virt.smartphonemouse.mouse.elements.Scaler;
 import ch.virt.smartphonemouse.mouse.elements.Sensitivity;
 import ch.virt.smartphonemouse.mouse.elements.SignCache;
 
+/**
+ * This class handles all calculation to get from the raw sensor data to the distance output.
+ * In order to do the calculation it uses various different components.
+ */
 public class Pipeline {
 
     private int sampleRate;
@@ -26,13 +30,22 @@ public class Pipeline {
     private boolean debugging;
     private float[] debuggingValues;
 
+    /**
+     * Creates a signal processing pipeline.
+     *
+     * @param sampleRate sample rate at which the new samples will be provided
+     * @param config     configuration for all different components of this pipeline
+     */
     public Pipeline(int sampleRate, PipelineConfig config) {
         this.config = config;
         this.sampleRate = sampleRate;
         create();
     }
 
-    public void create(){
+    /**
+     * Initializes all components.
+     */
+    private void create() {
 
         velocityIntegration = new PersistentIntegration();
         distanceIntegration = new Integration();
@@ -52,7 +65,14 @@ public class Pipeline {
         debuggingValues = new float[12];
     }
 
-    public float nextForDistance(float delta, float unfiltered){
+    /**
+     * Calculates the current distance delta from a new acceleration sample
+     *
+     * @param delta      time passed since the last sample (in seconds)
+     * @param unfiltered new acceleration sample from the accelerometer
+     * @return new distance delta
+     */
+    public float nextForDistance(float delta, float unfiltered) {
         int i = 0;
         if (debugging) debuggingValues[i++] = unfiltered;
 
@@ -85,22 +105,30 @@ public class Pipeline {
         return distance;
     }
 
-    public void enableDebugging(){
+    /**
+     * Enables debugging for this pipeline.
+     * This will place the values in between the acceleration and distance into an array for every sample.
+     */
+    public void enableDebugging() {
         debugging = true;
     }
 
+    /**
+     * Returns all values in between the acceleration and distance in an array.
+     * Make sure to enable debugging to get content in this array.
+     *
+     * @return values in between
+     */
     public float[] getDebuggingValues() {
         return debuggingValues;
     }
 
-    public void reset(){
+    /**
+     * Resets the pipeline to its initial state
+     */
+    public void reset() {
         velocityIntegration.reset();
         distanceIntegration.reset();
         lowPass.reset();
     }
-
-    public void clear(){
-
-    }
-
 }

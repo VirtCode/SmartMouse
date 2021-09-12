@@ -1,32 +1,41 @@
 package ch.virt.smartphonemouse.ui.connect.dialog;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.transmission.BluetoothDiscoverer;
-import ch.virt.smartphonemouse.ui.CustomFragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-public class AddSuccessSubdialog extends CustomFragment {
+import ch.virt.smartphonemouse.R;
+import ch.virt.smartphonemouse.transmission.BluetoothDiscoverer;
+
+/**
+ * This class holds the sub page for the add dialog that informs the user that they have successfully added a device.
+ */
+public class AddSuccessSubdialog extends Fragment {
 
     private TextView name;
 
-    private BluetoothDiscoverer.DiscoveredDevice target;
+    private final BluetoothDiscoverer.DiscoveredDevice target;
 
-    public AddSuccessSubdialog(MainContext context, BluetoothDiscoverer.DiscoveredDevice target) {
-        super(R.layout.subdialog_add_success, context);
+    /**
+     * Creates the sub dialog.
+     *
+     * @param target device which was added, used to display its name
+     */
+    public AddSuccessSubdialog(BluetoothDiscoverer.DiscoveredDevice target) {
+        super(R.layout.subdialog_add_success);
 
         this.target = target;
     }
 
     @Override
-    public void render() {
-        name.setText(target.getName());
-    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    @Override
-    protected void loadComponents(View view) {
         name = view.findViewById(R.id.add_success_name);
+        name.setText(target.getName());
     }
 }

@@ -3,8 +3,6 @@ package ch.virt.smartphonemouse.ui.home;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +11,20 @@ import androidx.fragment.app.Fragment;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 
+/**
+ * This sub fragment on the home page gets shown when bluetooth happens to be disabled.
+ */
 public class HomeDisabledSubfragment extends Fragment {
 
-    BluetoothHandler handler;
+    private final BluetoothHandler handler;
 
-    Button refresh;
+    private Button refresh;
 
+    /**
+     * Creates the sub fragment.
+     *
+     * @param handler bluetooth handler to use to refresh
+     */
     public HomeDisabledSubfragment(BluetoothHandler handler) {
         super(R.layout.subfragment_home_disabled);
         this.handler = handler;

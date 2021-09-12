@@ -96,7 +96,7 @@
     <string name="dialog_calibrate_samplingrate_message">Please wait while the app is analyzing the sampling rate of your sensor.</string>
     <string name="dialog_calibrate_samplingrate_title">Analyzing Sampling Rate</string>
     <string name="dialog_calibrate_done">Done</string>
-    <string name="dialog_calibrate_samplingrate_time">This process can take up to %d seconds.</string>
+    <string name="dialog_calibrate_samplingrate_time">This process will take about %d seconds.</string>
     <string name="dialog_calibrate_finished_message">The sampling rate for this app was calibrated successfully. Your sensor sampling rate for this device is:</string>
     <string name="dialog_calibrate_finished_rate">%d Samples per Second</string>
     <string name="dialog_calibrate_finished_title">Finished</string>
@@ -133,10 +133,10 @@
     <string name="dialog_add_request_setting_message">In order to see nearby devices, you must have location turn on. If you don\'t want to enable location, you can still add a device manually.</string>
     <string name="dialog_add_request_setting_title">Enable Location</string>
     <string name="title_about">About</string>
-    <string name="app_version">1.0.0</string>
+    <string name="app_version">1.1.0</string>
     <string name="about_title_version">Version:&#160;</string>
     <string name="about_title_date">Last Updated at:&#160;</string>
-    <string name="app_date">16.08.21</string>
+    <string name="app_date">30.08.21</string>
     <string name="about_feasibility">This app is a feasibility study about whether it is possible to use a smartphone as a normal computer mouse. As a result, the app should not be treated as a finished product.</string>
     <string name="about_matura">This app is also part of a Matura Paper by Joshua Stalder.</string>
     <string name="about_author">Developed by Joshua Stalder</string>

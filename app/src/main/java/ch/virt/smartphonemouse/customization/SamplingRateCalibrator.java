@@ -6,15 +6,17 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Handler;
+
+import androidx.preference.PreferenceManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ch.virt.smartphonemouse.helper.Listener;
-import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 
+/**
+ * This class is used to measure and save the sampling rate of the inbuilt accelerometer.
+ */
 public class SamplingRateCalibrator implements SensorEventListener {
 
     private static final int TEST_LENGTH = 5000;
@@ -29,34 +31,53 @@ public class SamplingRateCalibrator implements SensorEventListener {
     private long delays;
     private int amount;
 
-    private final MainContext main;
+    private final Context context;
 
-    public SamplingRateCalibrator(MainContext main) {
-        this.main = main;
+    /**
+     * Creates the calibrator.
+     *
+     * @param context context to use
+     */
+    public SamplingRateCalibrator(Context context) {
+        this.context = context;
 
         fetchSensor();
     }
 
-    public void fetchSensor(){
-        manager = (SensorManager) main.getContext().getSystemService(Context.SENSOR_SERVICE);
+    /**
+     * Fetches the sensor from the system.
+     */
+    private void fetchSensor() {
+        manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = manager.getDefaultSensor(MovementHandler.SENSOR_TYPE);
     }
 
-    public void register(){
+    /**
+     * Registers itself as a listener.
+     */
+    private void register() {
         if (registered) return;
         manager.registerListener(this, sensor, MovementHandler.SAMPLING_RATE);
 
         registered = true;
     }
 
-    public void unregister(){
+    /**
+     * Unregisters itself as a listener.
+     */
+    private void unregister() {
         if (!registered) return;
         manager.unregisterListener(this, sensor);
 
         registered = false;
     }
 
-    public void calibrate(Listener doneListener){
+    /**
+     * Starts the measuring process.
+     *
+     * @param doneListener listener that is executed once the process has finished
+     */
+    public void calibrate(DoneListener doneListener) {
         register();
         prepareTest();
         running = true;
@@ -67,34 +88,46 @@ public class SamplingRateCalibrator implements SensorEventListener {
                 running = false;
                 unregister();
 
-                finishTest();
+                int rate = finishTest();
 
-                doneListener.called();
+                doneListener.done(rate);
             }
         }, TEST_LENGTH);
 
     }
 
-    public void prepareTest(){
+    /**
+     * Initializes the variables for the process.
+     */
+    private void prepareTest() {
         lastTime = 0;
         delays = 0;
         amount = 0;
     }
 
-    public void finishTest(){
+    /**
+     * Finishes the measuring process by processing the results and saving it into the preferences.
+     */
+    private int finishTest() {
         long averageDelay = delays / amount;
         float averageDelaySecond = averageDelay * NANO_FULL_FACTOR;
 
         int samplesPerSecond = Math.round(1f / averageDelaySecond);
 
-        SharedPreferences.Editor edit = main.getPreferences().edit();
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
         edit.putBoolean("movementSamplingCalibrated", true);
         edit.putInt("movementSamplingRealRate", samplesPerSecond);
         edit.apply();
 
+        return samplesPerSecond;
     }
 
-    public int getTestLength(){
+    /**
+     * Returns how long the measuring process approximately will go.
+     *
+     * @return length of the process in milliseconds
+     */
+    public int getTestLength() {
         return TEST_LENGTH;
     }
 
@@ -116,6 +149,18 @@ public class SamplingRateCalibrator implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 
+    /**
+     * This interface is a listener used for when the measuring process is done.
+     */
+    public interface DoneListener {
+
+        /**
+         * Called when the process is done.
+         *
+         * @param samplingRate sampling rate that was measured
+         */
+        void done(int samplingRate);
     }
 }

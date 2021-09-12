@@ -10,42 +10,46 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import org.w3c.dom.Text;
-
+import ch.virt.smartphonemouse.MainActivity;
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
-public class HomeConnectedSubfragment extends CustomFragment {
+/**
+ * This sub fragment gets shown on the home screen when a device is currently connected.
+ */
+public class HomeConnectedSubfragment extends Fragment {
 
-    BluetoothHandler handler;
+    private final BluetoothHandler handler;
 
-    Chronometer chronometer;
-    TextView device;
+    private Chronometer chronometer;
+    private TextView device;
+    private Button more;
 
-    Button more;
-
-    public HomeConnectedSubfragment(BluetoothHandler handler, MainContext main) {
-        super(R.layout.subfragment_home_connected, main);
+    /**
+     * Creates the sub fragment.
+     *
+     * @param handler bluetooth handler to get connected information from
+     */
+    public HomeConnectedSubfragment(BluetoothHandler handler) {
+        super(R.layout.subfragment_home_connected);
         this.handler = handler;
     }
 
     @Override
-    public void render() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        chronometer = view.findViewById(R.id.home_connected_device_elapsed);
+        device = view.findViewById(R.id.home_connected_device_name);
+        more = view.findViewById(R.id.home_connected_more);
+
+
         chronometer.setBase(handler.getHost().getConnectedSince());
         chronometer.setFormat(getResources().getString(R.string.home_connected_elapsed));
         chronometer.start();
 
         device.setText(handler.getHost().getDevice().getName());
 
-        more.setOnClickListener(v -> main.navigate(R.id.drawer_connect));
-    }
-
-    @Override
-    protected void loadComponents(View view) {
-        chronometer = view.findViewById(R.id.home_connected_device_elapsed);
-        device = view.findViewById(R.id.home_connected_device_name);
-        more = view.findViewById(R.id.home_connected_more);
+        more.setOnClickListener(v -> ((MainActivity) getActivity()).navigate(R.id.drawer_connect));
     }
 }

@@ -6,8 +6,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import ch.virt.smartphonemouse.helper.MainContext;
+import androidx.preference.PreferenceManager;
 
+/**
+ * This class handles and calculates the movement of the mouse
+ */
 public class MovementHandler implements SensorEventListener {
 
     private static final float NANO_FULL_FACTOR = 1e-9f;
@@ -18,7 +21,7 @@ public class MovementHandler implements SensorEventListener {
     private SensorManager manager;
     private Sensor sensor;
 
-    private MainContext main;
+    private Context context;
     private MouseInputs inputs;
 
     private boolean registered;
@@ -26,27 +29,42 @@ public class MovementHandler implements SensorEventListener {
     private long lastSample = 0;
     private Pipeline xLine, yLine;
 
-    public MovementHandler(MainContext main, MouseInputs inputs) {
-        this.main = main;
+    /**
+     * Creates a movement handler.
+     *
+     * @param context context to get the sensor from
+     * @param inputs  inputs to send the movement to
+     */
+    public MovementHandler(Context context, MouseInputs inputs) {
+        this.context = context;
         this.inputs = inputs;
 
         fetchSensor();
         create();
     }
 
-    public void create(){
-        int sampleRate = main.getPreferences().getInt("communicationTransmissionRate", 200);
+    /**
+     * Creates the signal processing pipelines.
+     */
+    public void create() {
+        int sampleRate = PreferenceManager.getDefaultSharedPreferences(context).getInt("communicationTransmissionRate", 200);
 
-        xLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
-        yLine = new Pipeline(sampleRate, new PipelineConfig(main.getPreferences()));
+        xLine = new Pipeline(sampleRate, new PipelineConfig(PreferenceManager.getDefaultSharedPreferences(context)));
+        yLine = new Pipeline(sampleRate, new PipelineConfig(PreferenceManager.getDefaultSharedPreferences(context)));
     }
 
-    public void fetchSensor(){
-        manager = (SensorManager) main.getContext().getSystemService(Context.SENSOR_SERVICE);
+    /**
+     * Fetches the sensor from the context.
+     */
+    private void fetchSensor() {
+        manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = manager.getDefaultSensor(SENSOR_TYPE);
     }
 
-    public void register(){
+    /**
+     * Registers the sensor for this handler.
+     */
+    public void register() {
         if (registered) return;
         manager.registerListener(this, sensor, SAMPLING_RATE);
 
@@ -54,7 +72,10 @@ public class MovementHandler implements SensorEventListener {
         registered = true;
     }
 
-    public void unregister(){
+    /**
+     * Unregisters the sensor for this handler.
+     */
+    public void unregister() {
         if (!registered) return;
         manager.unregisterListener(this, sensor);
 
@@ -79,5 +100,6 @@ public class MovementHandler implements SensorEventListener {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) { }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 }

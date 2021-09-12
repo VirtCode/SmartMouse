@@ -1,28 +1,19 @@
 package ch.virt.smartphonemouse.ui.connect;
 
-import android.view.View;
-import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.transmission.BluetoothHandler;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 
-public class ConnectConnectingSubfragment extends CustomFragment {
+/**
+ * This is a sub fragment for the connect page.
+ * This fragment gets displayed when the app is currently connecting to a device.
+ */
+public class ConnectConnectingSubfragment extends Fragment {
 
-    BluetoothHandler bluetooth;
-
-    public ConnectConnectingSubfragment(MainContext context, BluetoothHandler bluetooth) {
-        super(R.layout.subfragment_connect_connecting, context);
-
-        this.bluetooth = bluetooth;
-    }
-
-    @Override
-    public void render() {
-    }
-
-    @Override
-    protected void loadComponents(View view) {
+    /**
+     * Creates this sub fragment.
+     */
+    public ConnectConnectingSubfragment() {
+        super(R.layout.subfragment_connect_connecting);
     }
 }

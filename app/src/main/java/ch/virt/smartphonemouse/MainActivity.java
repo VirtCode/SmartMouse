@@ -1,17 +1,9 @@
 package ch.virt.smartphonemouse;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,31 +16,27 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.customization.DefaultSettings;
-import ch.virt.smartphonemouse.helper.MainContext;
-import ch.virt.smartphonemouse.helper.ResultListener;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.ui.AboutFragment;
 import ch.virt.smartphonemouse.ui.ConnectFragment;
-import ch.virt.smartphonemouse.ui.CustomFragment;
 import ch.virt.smartphonemouse.ui.DebugFragment;
 import ch.virt.smartphonemouse.ui.HomeFragment;
 import ch.virt.smartphonemouse.ui.MouseFragment;
 import ch.virt.smartphonemouse.ui.SettingsFragment;
 import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
-import ch.virt.smartphonemouse.ui.settings.CustomSettingsFragment;
 
+/**
+ * This class is the main activity of this app.
+ */
 public class MainActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private MaterialToolbar bar;
     private DrawerLayout drawerLayout;
     private NavigationView drawer;
-
-    private MainContext mainContext;
 
     private BluetoothHandler bluetooth;
 
@@ -57,14 +45,14 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
     private boolean mouseActive;
 
-    private boolean instanceSaved = false;
+    private boolean instanceSaved = false; // Used to avoid ui changes if the activity is not rendered.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DefaultSettings.check(PreferenceManager.getDefaultSharedPreferences(this));
+        DefaultSettings.check(PreferenceManager.getDefaultSharedPreferences(this)); // Check whether new settings must be restored
 
         loadComponents();
         setupNavigation();
@@ -73,111 +61,11 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
         navigate(R.id.drawer_home);
         drawer.setCheckedItem(R.id.drawer_home);
-
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        instanceSaved = false;
-
-        bluetooth.reInit();
-        reRender();
-    }
 
     /**
-     * Loads the contents of the app
-     */
-    private void loadContent() {
-        mainContext = new MainContext() {
-            @Override
-            public void exitApp() {
-                finish();
-            }
-
-            @Override
-            public void navigate(int element) {
-                MainActivity.this.navigate(element);
-            }
-
-            @Override
-            public ActivityResultLauncher<Intent> registerActivityForResult(ResultListener listener) {
-                return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> listener.result(result.getResultCode()));
-            }
-
-            @Override
-            public void toast(String content, int duration) {
-                Toast.makeText(MainActivity.this, content, duration).show();
-            }
-
-            @Override
-            public void snack(String content, int duration) {
-                Snackbar.make(MainActivity.this, MainActivity.this.findViewById(R.id.container), content, duration).show();
-            }
-
-            @Override
-            public Resources getResources() {
-                return MainActivity.this.getResources();
-            }
-
-            @Override
-            public Context getContext() {
-                return MainActivity.this;
-            }
-
-            @Override
-            public void refresh() {
-                reRender();
-            }
-
-            @Override
-            public void registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-                MainActivity.this.registerReceiver(receiver, filter);
-            }
-
-            @Override
-            public void unregisterReceiver(BroadcastReceiver receiver) {
-                MainActivity.this.unregisterReceiver(receiver);
-            }
-
-            @Override
-            public SharedPreferences getPreferences() {
-                return PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            }
-        };
-
-        bluetooth = new BluetoothHandler(mainContext);
-
-        inputs = new MouseInputs(bluetooth, mainContext);
-
-        movement = new MovementHandler(mainContext, inputs);
-
-        checkNavItems();
-    }
-
-    /**
-     * Switches the Fragment displayed on the app
-     *
-     * @param fragment fragment that is displayed
-     * @param stack whether that fragment should be added to the back stack
-     */
-    private void switchFragment(Fragment fragment, boolean stack) {
-        Fragment current = getCurrentFragment();
-        if (current instanceof CustomFragment) ((CustomFragment) current).restore();
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-        if (stack) transaction.addToBackStack(null);
-        transaction.setReorderingAllowed(true);
-        transaction.replace(R.id.container, fragment);
-
-        transaction.commit();
-
-    }
-
-    /**
-     * Loads the UI Components into their variables
+     * Loads the components into their variables.
      */
     private void loadComponents() {
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -186,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     }
 
     /**
-     * Sets the navigation up so it is ready to be used
+     * Sets the navigation up so it is ready to be used.
      */
     private void setupNavigation() {
         bar.setNavigationOnClickListener(v -> drawerLayout.open());
@@ -203,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
             }
 
             @Override
@@ -213,33 +100,81 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
     }
 
     /**
-     * Rerenders the current fragment
+     * Sets the correct state of the nav items in the nav drawer.
      */
-    public void reRender() {
-        if (instanceSaved) return; // Do not re render if not saved
-        if (getCurrentFragment() != null) {
-            if (getCurrentFragment() instanceof CustomFragment) this.runOnUiThread(() -> ((CustomFragment) getCurrentFragment()).render());
+    private void checkNavItems() {
+        if (bluetooth.isSupported()) {
+            setNavItemEnable(R.id.drawer_connect, true);
+            setNavItemEnable(R.id.drawer_mouse, bluetooth.isConnected());
+        } else {
+            setNavItemEnable(R.id.drawer_connect, false);
+            setNavItemEnable(R.id.drawer_mouse, false);
+        }
+
+        drawer.getMenu().findItem(R.id.drawer_debug).setVisible(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("debugEnabled", false));
+    }
+
+    /**
+     * Enables / disables a certain nav item.
+     *
+     * @param item   item to change
+     * @param enable enabled state
+     */
+    private void setNavItemEnable(int item, boolean enable) {
+        drawer.getMenu().findItem(item).setEnabled(enable);
+    }
+
+
+    /**
+     * Loads the contents of the app
+     */
+    private void loadContent() {
+
+        bluetooth = new BluetoothHandler(this);
+
+        inputs = new MouseInputs(bluetooth, this);
+
+        movement = new MovementHandler(this, inputs);
+    }
+
+    /**
+     * Updates the bluetooth status.
+     */
+    public void updateBluetoothStatus() {
+        if (instanceSaved || getCurrentFragment() == null) return;
+
+        if (getCurrentFragment() instanceof ConnectFragment || getCurrentFragment() instanceof MouseFragment) {
+            if (!bluetooth.isEnabled() || !bluetooth.isSupported()) navigate(R.id.drawer_home);
+            else if (!bluetooth.isConnected() && getCurrentFragment() instanceof MouseFragment)
+                navigate(R.id.drawer_connect);
         }
 
         this.runOnUiThread(() -> {
-            if (!bluetooth.isSupported() && (getCurrentFragment() instanceof MouseFragment || getCurrentFragment() instanceof ConnectFragment)) {
-                navigate(R.id.drawer_home);
-            }
-            else if (!bluetooth.isConnected() && getCurrentFragment() instanceof MouseFragment) navigate(R.id.drawer_connect);
-
-            checkNavItems();
+            if (getCurrentFragment() instanceof HomeFragment)
+                ((HomeFragment) getCurrentFragment()).update();
+            else if (getCurrentFragment() instanceof ConnectFragment)
+                ((ConnectFragment) getCurrentFragment()).update();
         });
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        instanceSaved = false;
+
+        bluetooth.reInit();
+        updateBluetoothStatus(); // Current status is unknown
     }
 
     @Override
@@ -252,44 +187,30 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         instanceSaved = false;
-        reRender();
+        updateBluetoothStatus(); // Current status is unknown
     }
 
-    private void checkNavItems(){
-        if (bluetooth.isSupported()) {
-            setNavItemEnable(R.id.drawer_connect, true);
-            setNavItemEnable(R.id.drawer_mouse, bluetooth.isConnected());
-        } else {
-            setNavItemEnable(R.id.drawer_connect, false);
-            setNavItemEnable(R.id.drawer_mouse, false);
-        }
 
-        drawer.getMenu().findItem(R.id.drawer_debug).setVisible(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("debugEnabled", false));
-    }
-
-    private void setNavItemEnable(int item, boolean enable){
-        drawer.getMenu().findItem(item).setEnabled(enable);
-    }
-
+    
     /**
-     * Navigates to the respective sites
+     * Navigates to the respective sites.
      *
      * @param entry entry to navigate to
      * @return whether that entry is navigated
      */
-    private boolean navigate(int entry) {
-        if (entry == R.id.drawer_mouse){
+    public boolean navigate(int entry) {
+        if (entry == R.id.drawer_mouse) {
 
-            if (!mainContext.getPreferences().getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
+            if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
 
-                MouseCalibrateDialog dialog = new MouseCalibrateDialog(this.mainContext);
+                MouseCalibrateDialog dialog = new MouseCalibrateDialog();
                 dialog.show(getSupportFragmentManager(), null);
 
                 return true;
             }
 
             bar.setVisibility(View.GONE);
-            switchFragment(new MouseFragment(mainContext, inputs, movement), false);
+            switchFragment(new MouseFragment(inputs, movement), false);
 
             mouseActive = true;
 
@@ -297,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             movement.register();
             inputs.start();
 
-        }else {
+        } else {
             bar.setVisibility(View.VISIBLE);
 
             if (mouseActive) {
@@ -309,34 +230,34 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             switch (entry) {
                 case R.id.drawer_connect:
 
-                    switchFragment(new ConnectFragment(mainContext, bluetooth), false);
+                    switchFragment(new ConnectFragment(bluetooth), false);
                     bar.setTitle(R.string.title_connect);
 
                     break;
 
                 case R.id.drawer_home:
 
-                    switchFragment(new HomeFragment(bluetooth, mainContext), false);
+                    switchFragment(new HomeFragment(bluetooth), false);
                     bar.setTitle(R.string.title_home);
 
                     break;
 
                 case R.id.drawer_settings:
 
-                    switchFragment(new SettingsFragment(mainContext), false);
+                    switchFragment(new SettingsFragment(), false);
                     bar.setTitle(R.string.title_settings);
 
                     break;
 
                 case R.id.drawer_about:
 
-                    switchFragment(new AboutFragment(mainContext), false);
+                    switchFragment(new AboutFragment(), false);
                     bar.setTitle(R.string.title_about);
 
                     break;
 
                 case R.id.drawer_debug:
-                    switchFragment(new DebugFragment(mainContext), false);
+                    switchFragment(new DebugFragment(), false);
                     bar.setTitle(R.string.title_debug);
                     bar.setVisibility(View.GONE);
                     break;
@@ -351,6 +272,47 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         return true;
     }
 
+    /**
+     * Switches the Fragment displayed on the app.
+     *
+     * @param fragment fragment that is displayed
+     * @param stack    whether that fragment should be added to the back stack
+     */
+    private void switchFragment(Fragment fragment, boolean stack) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        if (stack) transaction.addToBackStack(null);
+        transaction.setReorderingAllowed(true);
+        transaction.replace(R.id.container, fragment);
+
+        transaction.commit();
+
+    }
+
+    /**
+     * Returns the currently shown fragment.
+     *
+     * @return currently shown fragment
+     */
+    @Nullable
+    private Fragment getCurrentFragment() {
+        return getSupportFragmentManager().findFragmentById(R.id.container);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+            super.onBackPressed(); // If something is on the backstack proceed
+        else {
+
+            if (!(getCurrentFragment() instanceof HomeFragment)) { // Navigate to home if not in sub fragment and not in home
+                if (!(getCurrentFragment() instanceof MouseFragment))
+                    navigate(R.id.drawer_home); // Make exception for mouse fragment
+            } else super.onBackPressed();
+        }
+    }
+
+
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
         final Bundle args = pref.getExtras();
@@ -360,28 +322,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);
 
-        if (fragment instanceof CustomSettingsFragment) ((CustomSettingsFragment) fragment).setMain(mainContext);
-
         switchFragment(fragment, true);
 
         return true;
-    }
-
-    @Nullable
-    private Fragment getCurrentFragment(){
-        return getSupportFragmentManager().findFragmentById(R.id.container);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) super.onBackPressed(); // If something is on the backstack proceed
-        else {
-
-            if (!(getCurrentFragment() instanceof HomeFragment)) { // Navigate to home if not in sub fragment and not in home
-                if (!(getCurrentFragment() instanceof MouseFragment)) navigate(R.id.drawer_home); // Make exception for mouse fragment
-            }
-
-            else super.onBackPressed();
-        }
     }
 }

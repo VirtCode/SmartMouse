@@ -4,16 +4,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.InputType;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.res.TypedArrayUtils;
-import androidx.preference.DialogPreference;
 import androidx.preference.EditTextPreference;
-import androidx.preference.Preference;
 
 import ch.virt.smartphonemouse.R;
 
+/**
+ * This is a preference that opens a dialog for the user to set a integer value.
+ */
 public class EditIntegerPreference extends EditTextPreference {
 
     private boolean showValueAsDescription;
@@ -23,6 +21,14 @@ public class EditIntegerPreference extends EditTextPreference {
 
     private int value;
 
+    /**
+     * Creates a preference.
+     *
+     * @param context      context for the preference to be in
+     * @param attrs        attributes
+     * @param defStyleAttr style attributes
+     * @param defStyleRes  style resources
+     */
     public EditIntegerPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
@@ -35,48 +41,93 @@ public class EditIntegerPreference extends EditTextPreference {
         if (valueUnit == null) valueUnit = "";
         if (signed) minimumValue = -maximumValue;
 
-        if (showValueAsDescription) setSummaryProvider(preference -> EditIntegerPreference.this.getSummary());
+        if (showValueAsDescription)
+            setSummaryProvider(preference -> EditIntegerPreference.this.getSummary());
 
         setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER | (signed ? InputType.TYPE_NUMBER_FLAG_SIGNED : 0x00)));
     }
 
+    /**
+     * Creates a preference.
+     *
+     * @param context      context for the preference to be in
+     * @param attrs        attributes
+     * @param defStyleAttr style attributes
+     */
     public EditIntegerPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
+    /**
+     * Creates a preference.
+     *
+     * @param context context for the preference to be in
+     * @param attrs   attributes
+     */
     public EditIntegerPreference(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.editTextPreferenceStyle);
     }
 
+    /**
+     * Creates a preference.
+     *
+     * @param context context for the preference to be in
+     */
     public EditIntegerPreference(Context context) {
         this(context, null);
     }
 
+
+    /**
+     * Whether the value should be shown as description.
+     *
+     * @return is shown
+     */
     public boolean isShowValueAsDescription() {
         return showValueAsDescription;
     }
 
+    /**
+     * Sets whether the value should be shown as the description of the preference.
+     *
+     * @param showValueAsDescription sets whether it should be shown as a description
+     */
     public void setShowValueAsDescription(boolean showValueAsDescription) {
         this.showValueAsDescription = showValueAsDescription;
     }
 
-    @Override
-    public CharSequence getSummary() {
-        return showValueAsDescription ? value + " " + valueUnit : super.getSummary();
-    }
-
+    /**
+     * Returns the unit of the value of the preference.
+     *
+     * @return value unit
+     */
     public String getValueUnit() {
         return valueUnit;
     }
 
+    /**
+     * Sets the unit of the value of the preference.
+     *
+     * @param valueUnit unit of the value
+     */
     public void setValueUnit(String valueUnit) {
         this.valueUnit = valueUnit;
     }
 
+    /**
+     * Returns the value of the preference.
+     *
+     * @return value of the preference
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * Sets the value of the preference.
+     *
+     * @param value value of the preference
+     */
     public void setValue(int value) {
         final boolean wasBlocking = shouldDisableDependents();
 
@@ -90,6 +141,55 @@ public class EditIntegerPreference extends EditTextPreference {
         }
 
         notifyChanged();
+    }
+
+    /**
+     * Returns the minimum value of the preference.
+     *
+     * @return minimum value
+     */
+    public int getMinimumValue() {
+        return minimumValue;
+    }
+
+    /**
+     * Sets the minimum value that may be entered to the preference.
+     *
+     * @param minimumValue minimum value
+     */
+    public void setMinimumValue(int minimumValue) {
+        this.minimumValue = minimumValue;
+    }
+
+    /**
+     * Returns the maximum value of the preference.
+     *
+     * @return maximum value
+     */
+    public int getMaximumValue() {
+        return maximumValue;
+    }
+
+    /**
+     * Sets the maximum value that may be entered to the preference.
+     *
+     * @param maximumValue maximum value
+     */
+    public void setMaximumValue(int maximumValue) {
+        this.maximumValue = maximumValue;
+    }
+
+    /**
+     * Updates the preference to the current stored value.
+     */
+    public void update() {
+        setValue(getPersistedInt(minimumValue));
+    }
+
+
+    @Override
+    public CharSequence getSummary() {
+        return showValueAsDescription ? value + " " + valueUnit : super.getSummary();
     }
 
     @Override
@@ -110,25 +210,5 @@ public class EditIntegerPreference extends EditTextPreference {
     @Override
     protected void onSetInitialValue(Object defaultValue) {
         setValue(getPersistedInt(defaultValue == null ? 0 : (Integer) defaultValue));
-    }
-
-    public int getMinimumValue() {
-        return minimumValue;
-    }
-
-    public void setMinimumValue(int minimumValue) {
-        this.minimumValue = minimumValue;
-    }
-
-    public int getMaximumValue() {
-        return maximumValue;
-    }
-
-    public void setMaximumValue(int maximumValue) {
-        this.maximumValue = maximumValue;
-    }
-
-    public void update(){
-        setValue(getPersistedInt(minimumValue));
     }
 }

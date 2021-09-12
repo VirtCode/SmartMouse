@@ -10,23 +10,42 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * This class is used to export the content of the chart as a csv file.
+ */
 public class DebugCsvExporter {
 
-    DebugChartHandler chart;
-    Context context;
+    private final DebugChartHandler chart;
+    private final Context context;
 
+    /**
+     * Creates the exporter.
+     *
+     * @param chart   chart to export
+     * @param context context to share with
+     */
     public DebugCsvExporter(DebugChartHandler chart, Context context) {
         this.chart = chart;
         this.context = context;
     }
 
+    /**
+     * Exports the chart as a csv file.
+     *
+     * @throws IOException thrown if failed to write file to disk for cache
+     */
     public void exportCsv() throws IOException {
         String csv = createCsv();
         File file = cacheCsv(csv);
         shareCsv(file);
     }
 
-    public String createCsv(){
+    /**
+     * Creates a string with the diagram data in csv format.
+     *
+     * @return string with csv data
+     */
+    public String createCsv() {
         StringBuilder s = new StringBuilder();
 
         // Write Header
@@ -49,6 +68,13 @@ public class DebugCsvExporter {
         return s.toString();
     }
 
+    /**
+     * Writes the csv data to a cache file so it can be shared.
+     *
+     * @param s string with csv data
+     * @return file that it was written to
+     * @throws IOException thrown if failed to write file
+     */
     public File cacheCsv(String s) throws IOException {
         new File(context.getExternalFilesDir(null), "exports").mkdir();
         File file = new File(context.getExternalFilesDir(null), "exports/export.csv");
@@ -61,7 +87,12 @@ public class DebugCsvExporter {
         return file;
     }
 
-    public void shareCsv(File f){
+    /**
+     * Shares the csv file through the android share dialog.
+     *
+     * @param f cache file to share
+     */
+    public void shareCsv(File f) {
         Uri u = FileProvider.getUriForFile(context, "ch.virt.fileprovider", f);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
