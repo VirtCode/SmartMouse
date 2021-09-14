@@ -4,4 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To use this app as a mouse, you should connect to your target device first. You can do so on the connection page."/>
+
 </LinearLayout>

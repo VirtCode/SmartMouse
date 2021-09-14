@@ -124,11 +124,14 @@ public class Pipeline {
     }
 
     /**
-     * Resets the pipeline to its initial state
+     * Resets the pipeline to its initial state.
      */
     public void reset() {
-        velocityIntegration.reset();
-        distanceIntegration.reset();
         lowPass.reset();
+        freezer.reset();
+        noise.reset();
+        velocityIntegration.reset();
+        cache.reset();
+        distanceIntegration.reset();
     }
 }

@@ -57,4 +57,13 @@ public class Freezer {
 
         return subtract;
     }
+
+    /**
+     * Resets the current state of the freezer.
+     */
+    public void reset(){
+        frozen = false;
+        unfreezing = 0;
+        subtract = 0;
+    }
 }

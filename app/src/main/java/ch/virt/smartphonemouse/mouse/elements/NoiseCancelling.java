@@ -14,7 +14,7 @@ public class NoiseCancelling {
     private int noise;
 
     /**
-     * Creates a noise cancelling component
+     * Creates a noise cancelling component.
      *
      * @param cancellingThreshold    all signal below this threshold is regarded as noise
      * @param finalCancellingSamples how many samples in a row must be noise in order to reset the velocity
@@ -27,7 +27,7 @@ public class NoiseCancelling {
     }
 
     /**
-     * Process the values that may be cancelled, presumably the acceleration
+     * Process the values that may be cancelled, presumably the acceleration.
      *
      * @param value current acceleration value
      * @return possibly canceled value
@@ -43,7 +43,7 @@ public class NoiseCancelling {
     }
 
     /**
-     * Process the velocity to potentially reset it
+     * Process the velocity to potentially reset it.
      *
      * @param value current velocity value
      * @return possibly reset velocity
@@ -54,5 +54,12 @@ public class NoiseCancelling {
             return 0; // Cancel if much noise
         }
         return value;
+    }
+
+    /**
+     * Resets the noise cancelling.
+     */
+    public void reset(){
+        noise = 0;
     }
 }

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
         app:key="communicationTransmissionRate"
-        app:title="Bluetooth Transmission Rate"
-        app:summary="Set how many times per second data is sent to the host" />
+        app:summary="@string/settings_communication_transmission_description"
+        app:title="@string/settings_communications_transmission_title" />
 
     <Preference
         app:key="communicationRemoveDevices"
-        app:title="Remove All Known Devices"
-        app:summary="Removes all devices you have previously added to the app"/>
+        app:summary="@string/settings_communication_remove_description"
+        app:title="@string/settings_communication_remove_title" />
 
 </PreferenceScreen>

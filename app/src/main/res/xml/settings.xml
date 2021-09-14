@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
-        app:title="Interface"
-        app:summary="Control the way the mouse interface looks"
+        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsInterfaceSubfragment"
         app:icon="@drawable/settings_interface"
-        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsInterfaceSubfragment"/>
+        app:summary="@string/settings_main_interface_description"
+        app:title="@string/settings_main_interface_title" />
 
     <Preference
-        app:title="Communication"
-        app:summary="Control how the mouse communicates with the host"
+        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsCommunicationSubfragment"
         app:icon="@drawable/settings_communication"
-        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsCommunicationSubfragment"/>
+        app:summary="@string/settings_main_communication_description"
+        app:title="@string/settings_main_communication_title" />
 
     <Preference
-        app:title="Movement"
-        app:summary="Control how the movement of the mouse is calculated"
+        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsMovementSubfragment"
         app:icon="@drawable/settings_movement"
-        app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsMovementSubfragment"/>
+        app:summary="@string/settings_main_movement_description"
+        app:title="@string/settings_main_movement_title" />
 
     <SwitchPreference
         app:key="debugEnabled"
-        app:title="Enable Debugger"
-        android:summary="Enables the debugger page for advanced usage"/>
+        app:summary="@string/settings_main_debugger_description"
+        app:title="@string/settings_main_debugger_title" />
 
     <Preference
         app:key="reset"
-        app:title="Reset Settings"
-        app:summary="Resets all settings to their default"
-        android:key="reset"/>
+        app:summary="@string/settings_main_reset_description"
+        app:title="@string/settings_main_reset_title" />
 
 </PreferenceScreen>

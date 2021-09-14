@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
         app:entries="@array/themes"
         app:entryValues="@array/themeValues"
         app:key="interfaceTheme"
-        app:summary="Choose between light and dark theme"
-        app:title="Theme" />
+        app:summary="@string/settings_interface_theme_description"
+        app:title="@string/settings_interface_theme_title" />
 
     <PreferenceCategory app:title="Behaviour">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="interfaceBehaviourScrollStep"
-            app:summary="How much swipe distance equals one scroll step"
-            app:title="Scroll Step Size" />
+            app:summary="@string/settings_interface_behaviour_scroll_description"
+            app:title="@string/settings_interface_behaviour_scroll_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="interfaceBehaviourSpecialWait"
-            app:summary="Set how long the middle button has to be pressed for a click in milliseconds"
-            app:title="Middle Click Delay" />
+            app:summary="@string/settings_interface_behaviour_middle_description"
+            app:title="@string/settings_interface_behaviour_middle_title" />
 
     </PreferenceCategory>
 
@@ -29,17 +28,17 @@
 
         <SwitchPreference
             app:key="interfaceVisualsEnable"
-            app:title="Enable Visuals" />
+            app:title="@string/settings_interface_visuals_enable_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="interfaceVisualsStrokeWeight"
-            app:summary="Controls the weight of the button outline"
-            app:title="Stroke Weight" />
+            app:summary="@string/settings_interface_visuals_stroke_description"
+            app:title="@string/settings_interface_visuals_stroke_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
             app:key="interfaceVisualsIntensity"
-            app:summary="Set the intensity of the visuals"
-            app:title="Intensity" />
+            app:summary="@string/settings_interface_visuals_intensity_description"
+            app:title="@string/settings_interface_visuals_intensity_title" />
 
     </PreferenceCategory>
 
@@ -49,52 +48,51 @@
 
         <SwitchPreference
             app:key="interfaceVibrationsEnable"
-            app:title="Enable Vibrations" />
+            app:title="@string/settings_interface_vibrations_enable_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
             app:key="interfaceVibrationsButtonIntensity"
-            app:summary="Controls the vibration intensity of the buttons"
-            app:title="Button Intensity" />
+            app:summary="@string/settings_interface_vibrations_button_intensity_description"
+            app:title="@string/settings_interface_vibrations_button_intensity_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="interfaceVibrationsButtonLength"
-            app:summary="Sets the length of the vibration of the button in milliseconds"
-            app:title="Button Length" />
+            app:summary="@string/settings_interface_vibrations_button_length_description"
+            app:title="@string/settings_interface_vibrations_button_length_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
             app:key="interfaceVibrationsScrollIntensity"
-            app:summary="Controls the vibration intensity of the scroll wheel"
-            app:title="Scroll Intensity" />
+            app:summary="@string/settings_interface_vibrations_wheel_intensity_description"
+            app:title="@string/settings_interface_vibrations_wheel_intensity_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="interfaceVibrationsScrollLength"
-            app:summary="Sets the length of the vibration of one scroll wheel step in milliseconds"
-            app:title="Scroll Length" />
+            app:summary="@string/settings_interface_vibrations_wheel_length_description"
+            app:title="@string/settings_interface_vibrations_wheel_length_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
             app:key="interfaceVibrationsSpecialIntensity"
-            app:summary="Controls the vibration intensity of secondary events, like the middle button"
-            app:title="Secondary Intensity" />
+            app:summary="@string/settings_interface_vibrations_special_intensity_description"
+            app:title="@string/settings_interface_vibrations_special_intensity_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="interfaceVibrationsSpecialLength"
-            app:summary="Sets the length of the vibration of a secondary event"
-            app:title="Secondary Length" />
+            app:summary="@string/settings_interface_vibrations_special_length_description"
+            app:title="@string/settings_interface_vibrations_special_length_title" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="Layout">
+    <PreferenceCategory app:title="Layout">
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
-            android:key="interfaceLayoutHeight"
-            app:summary="Controls the Height of the Mouse Buttons"
-            app:title="Height" />
+            app:key="interfaceLayoutHeight"
+            app:summary="@string/settings_interface_layout_height_description"
+            app:title="@string/settings_interface_layout_height_title" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
-            android:key="interfaceLayoutMiddleWidth"
-            app:summary="Controls how wide the middle mouse button is"
-            app:title="Middle Button Width" />
+            app:key="interfaceLayoutMiddleWidth"
+            app:summary="@string/settings_interface_layout_middle_description"
+            app:title="@string/settings_interface_layout_middle_title" />
 
     </PreferenceCategory>
 

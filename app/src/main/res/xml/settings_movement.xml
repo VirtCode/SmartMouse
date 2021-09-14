@@ -1,127 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     app:initialExpandedChildrenCount="3">
 
     <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
         app:key="movementSensitivity"
-        app:title="Mouse Sensitivity"
-        app:summary="Control how fast the mouse moves"/>
+        app:summary="@string/settings_movement_sensitivity_description"
+        app:title="@string/settings_movement_sensitivity_title" />
 
     <SwitchPreference
         app:key="movementScaleEnable"
-        app:title="Scale Speed"
-        app:summary="Set whether the app should scale the mouse movement speed"/>
+        app:summary="@string/settings_movement_scale_description"
+        app:title="@string/settings_movement_scale_title" />
 
     <Preference
         app:key="movementSamplingCalibrate"
-        app:title="Calibrate Sampling Rate"
-        app:summary="Automatically evaluate the sampling rate of your sensor"/>
+        app:summary="@string/settings_movement_calibrate_description"
+        app:title="@string/settings_movement_calibrate_title" />
 
-    <PreferenceCategory
-        app:title="Sampling Rate">
+    <PreferenceCategory app:title="Sampling Rate">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementSamplingRealRate"
-            app:title="Real Sampling Rate"
-            app:summary="Set the real rate the sensor can deliver samples"
             app:showValueAsSummary="true"
-            app:valueUnit="Samples per Second"/>
+            app:summary="@string/settings_movement_sampling_rate_description"
+            app:title="@string/settings_movement_sampling_rate_title"
+            app:valueUnit="@string/settings_movement_unit_samplesecond" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="Low Pass Filter">
+    <PreferenceCategory app:title="Low Pass Filter">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementLowPassOrder"
-            app:title="Order"
-            app:showValueAsSummary="true"/>
+            app:showValueAsSummary="true"
+            app:title="@string/settings_movement_lowpass_order" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
             app:key="movementLowPassCutoff"
-            app:title="Cutoff Frequency"
             app:showValueAsSummary="true"
-            app:valueUnit="Hz"/>
+            app:title="@string/settings_movement_lowpass_frequency"
+            app:valueUnit="@string/settings_movement_unit_frequency" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="Acceleration Freezer">
+    <PreferenceCategory app:title="Acceleration Freezer">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
             app:key="movementFreezerFreezingThreshold"
-            app:title="Freezing Threshold"
             app:showValueAsSummary="true"
-            app:valueUnit="m/s²"/>
+            app:title="@string/settings_movement_freezer_freezingthreshold"
+            app:valueUnit="@string/settings_movement_unit_acceleration" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
-            app:key="movementFreezerUnfreezingThreshold"
-            app:title="Unfreezing Threshold"
+            app:key="@string/settings_movement_freezer_unfreezingthreshold"
             app:showValueAsSummary="true"
-            app:valueUnit="m/s²"/>
+            app:title="Unfreezing Threshold"
+            app:valueUnit="@string/settings_movement_unit_acceleration" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementFreezerUnfreezingSamples"
-            app:title="Unfreezing Samples"
             app:showValueAsSummary="true"
-            app:valueUnit="Samples in a Row"/>
+            app:title="@string/settings_movement_freezer_samples"
+            app:valueUnit="@string/settings_movement_unit_samplerow" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="Noise Cancelling">
+    <PreferenceCategory app:title="Noise Cancelling">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
             app:key="movementNoiseThreshold"
-            app:title="Threshold"
             app:showValueAsSummary="true"
-            app:valueUnit="m/s²"/>
+            app:title="@string/settings_movement_noise_threshold"
+            app:valueUnit="@string/settings_movement_unit_acceleration" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementNoiseResetSamples"
-            app:title="Reset Samples"
             app:showValueAsSummary="true"
-            app:valueUnit="Samples in a Row"/>
+            app:title="@string/settings_movement_noise_samples"
+            app:valueUnit="@string/settings_movement_unit_samplerow" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="Velocity Sign Cache">
+    <PreferenceCategory app:title="Velocity Sign Cache">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementCacheDurationMinimal"
-            app:title="Minimal Cache Duration"
             app:showValueAsSummary="true"
-            app:valueUnit="Samples"/>
+            app:title="@string/settings_movement_cache_minduration"
+            app:valueUnit="@string/settings_movement_unit_samples" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementCacheDurationMaximal"
-            app:title="Maximal Cache Duration"
             app:showValueAsSummary="true"
-            app:valueUnit="Samples"/>
+            app:title="@string/settings_movement_cache_maxduration"
+            app:valueUnit="@string/settings_movement_unit_samples" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
             app:key="movementCacheReleaseThreshold"
-            app:title="Threshold to Release"
             app:showValueAsSummary="true"
-            app:valueUnit="m/s²"/>
+            app:title="@string/settings_movement_cache_threshold"
+            app:valueUnit="@string/settings_movement_unit_acceleration" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="Scaler">
+    <PreferenceCategory app:title="Scaler">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementScalePower"
-            app:title="Power"
-            app:showValueAsSummary="true"/>
+            app:showValueAsSummary="true"
+            app:title="@string/settings_movement_scale_power" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
             app:key="movementScaleSplit"
-            app:title="Split Velocity"
             app:showValueAsSummary="true"
-            app:valueUnit="m/s"/>
+            app:title="@string/settings_movement_scale_split"
+            app:valueUnit="@string/settings_movement_unit_velocity" />
 
     </PreferenceCategory>
 

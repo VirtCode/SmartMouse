@@ -96,4 +96,15 @@ public class SignCache {
 
         } else return value;
     }
+
+    /**
+     * Resets the cache to its defaults.
+     */
+    public void reset() {
+        caching = false;
+        latelyChanged = false;
+        lastValue = 0;
+        duration = 0;
+        cachedDistance = 0;
+    }
 }
