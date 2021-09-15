@@ -8,7 +8,7 @@
         app:summary="@string/settings_interface_theme_description"
         app:title="@string/settings_interface_theme_title" />
 
-    <PreferenceCategory app:title="Behaviour">
+    <PreferenceCategory app:title="@string/settings_interface_behaviour">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="interfaceBehaviourScrollStep"
@@ -24,7 +24,7 @@
 
     <PreferenceCategory
         app:initialExpandedChildrenCount="1"
-        app:title="Visuals">
+        app:title="@string/settings_interface_visuals">
 
         <SwitchPreference
             app:key="interfaceVisualsEnable"
@@ -44,7 +44,7 @@
 
     <PreferenceCategory
         app:initialExpandedChildrenCount="1"
-        app:title="Vibrations">
+        app:title="@string/settings_interface_vibrations">
 
         <SwitchPreference
             app:key="interfaceVibrationsEnable"
@@ -82,7 +82,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Layout">
+    <PreferenceCategory app:title="@string/settings_interface_layout">
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
             app:key="interfaceLayoutHeight"

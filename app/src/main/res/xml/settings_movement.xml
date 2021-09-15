@@ -17,7 +17,7 @@
         app:summary="@string/settings_movement_calibrate_description"
         app:title="@string/settings_movement_calibrate_title" />
 
-    <PreferenceCategory app:title="Sampling Rate">
+    <PreferenceCategory app:title="@string/settings_movement_sampling_rate">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementSamplingRealRate"
@@ -28,7 +28,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Low Pass Filter">
+    <PreferenceCategory app:title="@string/settings_movement_lowpass">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementLowPassOrder"
@@ -43,7 +43,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Acceleration Freezer">
+    <PreferenceCategory app:title="@string/settings_movement_freezer">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
             app:key="movementFreezerFreezingThreshold"
@@ -52,9 +52,9 @@
             app:valueUnit="@string/settings_movement_unit_acceleration" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
-            app:key="@string/settings_movement_freezer_unfreezingthreshold"
+            app:key="movementFreezerUnfreezingThreshold"
             app:showValueAsSummary="true"
-            app:title="Unfreezing Threshold"
+            app:title="@string/settings_movement_freezer_unfreezingthreshold"
             app:valueUnit="@string/settings_movement_unit_acceleration" />
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
@@ -65,7 +65,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Noise Cancelling">
+    <PreferenceCategory app:title="@string/settings_movement_noise">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference
             app:key="movementNoiseThreshold"
@@ -81,7 +81,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Velocity Sign Cache">
+    <PreferenceCategory app:title="@string/settings_movement_cache">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementCacheDurationMinimal"
@@ -103,7 +103,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Scaler">
+    <PreferenceCategory app:title="@string/settings_movement_scale">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
             app:key="movementScalePower"

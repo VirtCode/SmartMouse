@@ -21,7 +21,6 @@
                     android:id="@+id/bar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:title="@string/bar_title"
                     app:navigationIcon="@drawable/bar_menu"
                     style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
