@@ -96,7 +96,6 @@ public class AddDialog extends DialogFragment {
 
             created();
         });
-        dialog.setOnDismissListener(dismissListener);
 
         return dialog;
     }
@@ -106,8 +105,9 @@ public class AddDialog extends DialogFragment {
         if (bluetoothHandler.getDiscoverer().isScanning()) bluetoothHandler.getDiscoverer().stopDiscovery();
 
         super.onDismiss(dialog);
-    }
 
+        dismissListener.onDismiss(dialog);
+    }
 
     /**
      * This method gets called when the dialog is shown.
@@ -281,6 +281,7 @@ public class AddDialog extends DialogFragment {
             case SUCCESS_STATE:
             case ALREADY_STATE:
                 dismiss();
+                onDismiss(getDialog());
         }
     }
 

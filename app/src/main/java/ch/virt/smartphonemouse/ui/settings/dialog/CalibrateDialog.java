@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -83,8 +84,13 @@ public class CalibrateDialog extends DialogFragment {
             created();
         });
 
-        dialog.setOnDismissListener(finishedListener);
-
         return dialog;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        finishedListener.onDismiss(dialog);
     }
 }

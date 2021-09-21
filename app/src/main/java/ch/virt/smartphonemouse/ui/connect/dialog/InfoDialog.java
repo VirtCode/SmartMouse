@@ -62,6 +62,13 @@ public class InfoDialog extends DialogFragment {
         this.dismissListener = dismissListener;
     }
 
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        dismissListener.onDismiss(dialog);
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -78,7 +85,6 @@ public class InfoDialog extends DialogFragment {
 
         Dialog dialog = builder.create();
         dialog.setTitle(R.string.dialog_info_title);
-        dialog.setOnDismissListener(dismissListener);
 
         return dialog;
     }
