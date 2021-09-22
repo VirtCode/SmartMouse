@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Smartphone Maus</string>
+    <string name="app_name">SmartMouse</string>
     <string name="drawer_home">Home</string>
     <string name="drawer_connect">Verbinden</string>
     <string name="drawer_mouse">Maus</string>
@@ -129,7 +129,7 @@
     <string name="about_feasibility">Diese App ist eine Machbarkeitststudie darüber, ob es möglich ist, ein Smartphone als normale Computer Maus zu verwenden. Deshalb sollte diese App nicht als ein fertiges Produkt behandelt werden.</string>
     <string name="about_matura">Diese App ist auch teil einer Maturaarbeit von Joshua Stalder.</string>
     <string name="about_author">Entwickelt von Joshua Stalder</string>
-    <string name="about_github">Der Quellcode für diese App ist öffentlich auf <a href="https://github.com/VirtCode">GitHub</a>.</string>
+    <string name="about_github">Der Quellcode für diese App ist öffentlich auf <a href="https://github.com/VirtCode/SmartMouse">GitHub</a>.</string>
     <string name="drawer_debug">Debugger</string>
     <string name="title_debug">Debugger</string>
     <string name="dialog_debug_sheet_done">Fertig</string>

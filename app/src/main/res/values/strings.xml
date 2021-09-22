@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smartphone Mouse</string>
+    <string name="app_name">SmartMouse</string>
     <string name="drawer_home">Home</string>
     <string name="drawer_connect">Connect</string>
     <string name="drawer_mouse">Mouse</string>
@@ -120,15 +120,15 @@
     <string name="dialog_add_request_setting_message">In order to see nearby devices, you must have location turn on. If you don\'t want to enable location, you can still add a device manually.</string>
     <string name="dialog_add_request_setting_title">Enable Location</string>
     <string name="title_about">About</string>
-    <string name="app_version" translatable="false">1.1.0</string>
+    <string name="app_version" translatable="false">1.3.0</string>
     <string name="about_title_version">Version:&#160;</string>
     <string name="about_title_date">Last Updated at:&#160;</string>
-    <string name="app_date" translatable="false">17.09.21</string>
+    <string name="app_date" translatable="false">21.09.21</string>
     <string name="about_feasibility">This app is a feasibility study about whether it is possible to use a smartphone as a normal computer mouse. As a result, the app should not be treated as a finished product.</string>
     <string name="about_matura">This app is also part of a Matura Paper by Joshua Stalder.</string>
     <string name="about_author">Developed by Joshua Stalder</string>
     <string name="about_copyright" translatable="false">© 2021</string>
-    <string name="about_github">The source code for this app is available on <a href="https://github.com/VirtCode">GitHub</a>.</string>
+    <string name="about_github">The source code for this app is available on <a href="https://github.com/VirtCode/SmartMouse">GitHub</a>.</string>
     <string name="drawer_debug">Debugger</string>
     <string name="title_debug">Debugger</string>
     <string name="dialog_debug_sheet_done">Done</string>
