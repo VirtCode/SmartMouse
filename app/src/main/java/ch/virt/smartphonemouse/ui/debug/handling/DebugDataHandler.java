@@ -5,7 +5,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.mouse.Pipeline;
 import ch.virt.smartphonemouse.mouse.PipelineConfig;
@@ -61,7 +60,7 @@ public class DebugDataHandler implements SensorEventListener {
      * Fetches the sensor from the sensor manager.
      */
     private void fetchSensor() {
-        sensor = manager.getDefaultSensor(MovementHandler.SENSOR_TYPE);
+        sensor = manager.getDefaultSensor(MovementHandler.SENSOR_TYPE_ACCELEROMETER);
     }
 
     /**

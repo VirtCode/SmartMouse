@@ -6,13 +6,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
 import androidx.preference.PreferenceManager;
+import ch.virt.smartphonemouse.mouse.MovementHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import ch.virt.smartphonemouse.mouse.MovementHandler;
 
 /**
  * This class is used to measure and save the sampling rate of the inbuilt accelerometer.
@@ -49,7 +47,7 @@ public class SamplingRateCalibrator implements SensorEventListener {
      */
     private void fetchSensor() {
         manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        sensor = manager.getDefaultSensor(MovementHandler.SENSOR_TYPE);
+        sensor = manager.getDefaultSensor(MovementHandler.SENSOR_TYPE_ACCELEROMETER);
     }
 
     /**

@@ -8,6 +8,3 @@ Please note that this app only supports Android version 9 or higher.
 
 ## Debug Environment
 To debug this app or to navigate its source code conveniently, you may clone this repository and open the Gradle project in Android Studio or another IDE.
-
-## Note
-This project is part of a matura paper.
