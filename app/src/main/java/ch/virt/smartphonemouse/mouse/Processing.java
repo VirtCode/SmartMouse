@@ -3,89 +3,164 @@ package ch.virt.smartphonemouse.mouse;
 import ch.virt.smartphonemouse.mouse.components.*;
 import ch.virt.smartphonemouse.mouse.math.Vec2f;
 import ch.virt.smartphonemouse.mouse.math.Vec3f;
+import ch.virt.smartphonemouse.transmission.DebugTransmitter;
 
 public class Processing {
 
-    public Processing() {
+    private Trapezoid3f rotationDeltaTrapezoid;
+
+    private WindowAverage activeGravityAverage;
+    private WindowAverage activeNoiseAverage;
+    private OrThreshold activeThreshold;
+    private boolean lastActive;
+
+    private WindowAverage3f gravityInactiveAverage;
+    private Vec3f gravityCurrent;
+
+    private Trapezoid2f distanceVelocityTrapezoid;
+    private Vec2f distanceVelocity;
+    private Trapezoid2f distanceDistanceTrapezoid;
+    private float sensitivity;
+
+
+    private final DebugTransmitter debug;
+
+    public Processing(DebugTransmitter debug, ProcessingParameters parameters) {
+
+        // Create and configure components
         rotationDeltaTrapezoid = new Trapezoid3f();
 
-        activeGravityAverage = new WindowAverage(10);
-        activeNoiseAverage = new WindowAverage(5);
-        activeThreshold = new MultiThreshold(50, 0.03f, 0.01f);
+        activeGravityAverage = new WindowAverage(parameters.getActiveGravityWidth());
+        activeNoiseAverage = new WindowAverage(parameters.getActiveNoiseWidth());
+        activeThreshold = new OrThreshold(parameters.getActiveThresholdDropoff(), parameters.getActiveAccelerationThreshold(), parameters.getActiveRotationThreshold());
 
-        gravityInactiveAverage = new WindowAverage3f(2000);
+        gravityInactiveAverage = new WindowAverage3f(parameters.getGravityInactiveWidth());
         gravityCurrent = new Vec3f();
 
         distanceVelocityTrapezoid = new Trapezoid2f();
         distanceDistanceTrapezoid = new Trapezoid2f();
         distanceVelocity = new Vec2f();
+        sensitivity = parameters.getSensitivity();
+
+        // Setup debugging
+        this.debug = debug;
+        if (debug.isEnabled()) {
+            // Register columns
+            debug.registerColumn("time", Float.class);
+            debug.registerColumn("acceleration", Vec3f.class);
+            debug.registerColumn("angular-velocity", Vec3f.class);
+            debug.registerColumn("active-acc-abs", Float.class);
+            debug.registerColumn("active-acc-grav", Float.class);
+            debug.registerColumn("active-acc", Float.class);
+            debug.registerColumn("active-rot", Float.class);
+            debug.registerColumn("active", Boolean.class);
+            debug.registerColumn("gravity", Vec3f.class);
+            debug.registerColumn("acceleration-linear", Vec2f.class);
+            debug.registerColumn("velocity", Vec2f.class);
+            debug.registerColumn("distance", Vec2f.class);
+        }
     }
 
-    Trapezoid3f rotationDeltaTrapezoid;
+    public Vec2f next(float time, float delta, Vec3f acceleration, Vec3f angularVelocity) {
+        // Stage debug values
+        debug.stageFloat(time);
+        debug.stageVec3f(acceleration);
+        debug.stageVec3f(angularVelocity);
 
-    public Vec2f next(float delta, Vec3f acceleration, Vec3f angularVelocity) {
+        // Integrate rotation to distance, since that is used more often
         Vec3f rotationDelta = rotationDeltaTrapezoid.trapezoid(delta, angularVelocity);
-        boolean active = this.active(acceleration, angularVelocity);
+
+        boolean active = active(acceleration, angularVelocity);
+        debug.stageBoolean(active);
 
         Vec2f linearAcceleration = gravity(active, acceleration, rotationDelta);
+        debug.stageVec2f(linearAcceleration);
 
-        return distance(delta, active, linearAcceleration, rotationDelta);
+        Vec2f distance = distance(delta, active, linearAcceleration, rotationDelta);
+        debug.stageVec2f(distanceVelocity); // Do this here because it did not fit into the method
+        debug.stageVec2f(distance);
 
+        // Handle active changes "globally" for optimization
+        lastActive = active;
+
+        debug.commit();
+        return distance;
     }
-
-    private WindowAverage activeGravityAverage;
-    private WindowAverage activeNoiseAverage;
-
-    private MultiThreshold activeThreshold;
 
     public boolean active(Vec3f acceleration, Vec3f angularVelocity) {
 
         // Calculate the acceleration activation
         float acc = acceleration.xy().abs();
-        acc -= activeGravityAverage.avg(acc); // Remove gravity or rather lower frequencies
+        debug.stageFloat(acc);
+
+        // Remove gravity or rather lower frequencies
+        float gravity = activeGravityAverage.avg(acc);
+        debug.stageFloat(gravity);
+        acc -= gravity;
         acc = Math.abs(acc);
 
-        acc = activeNoiseAverage.avg(acc); // Remove noise
+        // Remove noise
+        acc = activeNoiseAverage.avg(acc);
+        debug.stageFloat(acc);
 
         // Calculate the rotation activation
         float rot = Math.abs(angularVelocity.z);
+        debug.stageFloat(rot);
 
         // Do the threshold
         return activeThreshold.active(acc, rot);
     }
 
-    private WindowAverage3f gravityInactiveAverage;
-    private Vec3f gravityCurrent;
-
     public Vec2f gravity(boolean active, Vec3f acceleration, Vec3f rotationDelta) {
 
+        // Differentiate between the user being active or not
         if (active) {
-                gravityInactiveAverage.reset();
 
-                gravityCurrent.rotate(rotationDelta);
+            // Reset average for next phase
+            if (!lastActive) {
+                gravityInactiveAverage.reset();
+            }
+
+            // Rotate current gravity
+            //
+            // rvityCurrent.rotate(rotationDelta.copy().negative());
 
         } else {
+            // Just calculate the average of the samples
             gravityCurrent = gravityInactiveAverage.avg(acceleration);
         }
 
+        debug.stageVec3f(gravityCurrent);
+
+        // Subtract the gravity
         return acceleration.xy().subtract(gravityCurrent.xy());
     }
 
-    private Trapezoid2f distanceVelocityTrapezoid;
-    private Vec2f distanceVelocity;
-
-    private Trapezoid2f distanceDistanceTrapezoid;
-
     public Vec2f distance(float delta, boolean active, Vec2f linearAcceleration, Vec3f rotationDelta) {
 
-        if (!active) linearAcceleration = new Vec2f();
-        distanceVelocity.rotate(-rotationDelta.z);
+        // Only calculate if it is active for optimization
+        if (active){
 
-        distanceVelocity.add(distanceVelocityTrapezoid.trapezoid(delta, linearAcceleration));
+            // Counter-rotate the velocity
+            distanceVelocity.rotate(-rotationDelta.z);
 
-        if (!active) distanceVelocity = new Vec2f();
+            // Integrate to distance
+            distanceVelocity.add(distanceVelocityTrapezoid.trapezoid(delta, linearAcceleration));
+            return distanceDistanceTrapezoid.trapezoid(delta, distanceVelocity).multiply(sensitivity);
 
-        return distanceDistanceTrapezoid.trapezoid(delta, distanceVelocity).multiply(10000); // quick and dirty factor -> 10 pixel per mm?
+        } else {
+
+            // Reset stuff
+            if (lastActive) {
+                distanceVelocity = new Vec2f();
+
+                // Clean the trapezoids because they contain a last value
+                distanceVelocityTrapezoid.reset();
+                distanceDistanceTrapezoid.reset();
+            }
+
+            return new Vec2f();
+        }
     }
 
 }

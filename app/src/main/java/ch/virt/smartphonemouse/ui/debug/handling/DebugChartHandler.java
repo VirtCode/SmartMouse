@@ -2,14 +2,11 @@ package ch.virt.smartphonemouse.ui.debug.handling;
 
 import android.content.SharedPreferences;
 import android.view.View;
-
+import ch.virt.smartphonemouse.ui.debug.OnDoubleClickListener;
 import com.jjoe64.graphview.GraphView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import ch.virt.smartphonemouse.mouse.Pipeline;
-import ch.virt.smartphonemouse.ui.debug.OnDoubleClickListener;
 
 /**
  * This class handles the chart on the debug fragment.
@@ -96,7 +93,6 @@ public class DebugChartHandler {
      *
      * @param timestamp timestamp of the samples
      * @param data      debugging data from the pipeline
-     * @see Pipeline#getDebuggingValues()
      */
     public void newData(long timestamp, float[] data) {
         timeStamps.add(timestamp);

@@ -6,8 +6,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
-import ch.virt.smartphonemouse.mouse.Pipeline;
-import ch.virt.smartphonemouse.mouse.PipelineConfig;
+//import ch.virt.smartphonemouse.mouse.Pipeline;
+//import ch.virt.smartphonemouse.mouse.PipelineConfig;
 
 /**
  * This class does handle the data from the accelerometer and does provide it to the chart.
@@ -21,7 +21,7 @@ public class DebugDataHandler implements SensorEventListener {
 
     private long lastSample = 0;
     private boolean registered;
-    private Pipeline pipeline;
+//    private Pipeline pipeline;
 
     private final SensorManager manager;
     private Sensor sensor;
@@ -52,8 +52,8 @@ public class DebugDataHandler implements SensorEventListener {
      * @param preferences preferences to get pipeline config from
      */
     public void create(SharedPreferences preferences) {
-        pipeline = new Pipeline(preferences.getInt("communicationTransmissionRate", 200), new PipelineConfig(preferences));
-        pipeline.enableDebugging();
+//        pipeline = new Pipeline(preferences.getInt("communicationTransmissionRate", 200), new PipelineConfig(preferences));
+//        pipeline.enableDebugging();
     }
 
     /**
@@ -94,8 +94,8 @@ public class DebugDataHandler implements SensorEventListener {
 
         float delta = (event.timestamp - lastSample) * NANO_FULL_FACTOR; // Delta in Seconds
 
-        pipeline.nextForDistance(delta, event.values[axis]);
-        chart.newData(event.timestamp, pipeline.getDebuggingValues());
+//        pipeline.nextForDistance(delta, event.values[axis]);
+//        chart.newData(event.timestamp, pipeline.getDebuggingValues());
 
         lastSample = event.timestamp;
     }
@@ -138,6 +138,6 @@ public class DebugDataHandler implements SensorEventListener {
      * Resets the algorithm to its initial state.
      */
     public void renew() {
-        pipeline.reset();
+//        pipeline.reset();
     }
 }

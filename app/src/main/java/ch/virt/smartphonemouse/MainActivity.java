@@ -3,7 +3,6 @@ package ch.virt.smartphonemouse;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,21 +12,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.navigation.NavigationView;
-
 import ch.virt.smartphonemouse.customization.DefaultSettings;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
-import ch.virt.smartphonemouse.ui.AboutFragment;
-import ch.virt.smartphonemouse.ui.ConnectFragment;
-import ch.virt.smartphonemouse.ui.DebugFragment;
-import ch.virt.smartphonemouse.ui.HomeFragment;
-import ch.virt.smartphonemouse.ui.MouseFragment;
-import ch.virt.smartphonemouse.ui.SettingsFragment;
+import ch.virt.smartphonemouse.transmission.DebugTransmitter;
+import ch.virt.smartphonemouse.ui.*;
 import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 
 /**
  * This class is the main activity of this app.
@@ -42,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
     private MovementHandler movement;
     private MouseInputs inputs;
+
+    private DebugTransmitter debug;
 
     private boolean mouseActive;
 
@@ -214,7 +209,11 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             mouseActive = true;
 
-            movement.create();
+            debug = new DebugTransmitter(true, "192.168.1.226", 8003);
+            movement.create(debug);
+            debug.connect();
+
+            debug.startTransmission();
             movement.register();
             inputs.start();
 
@@ -223,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             if (mouseActive) {
                 movement.unregister();
+                debug.endTransmission();
                 inputs.stop();
                 mouseActive = false;
             }

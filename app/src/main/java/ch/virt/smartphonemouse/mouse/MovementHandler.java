@@ -5,9 +5,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import androidx.preference.PreferenceManager;
 import ch.virt.smartphonemouse.mouse.math.Vec2f;
 import ch.virt.smartphonemouse.mouse.math.Vec3f;
+import ch.virt.smartphonemouse.transmission.DebugTransmitter;
 
 /**
  * This class handles and calculates the movement of the mouse
@@ -29,6 +29,7 @@ public class MovementHandler implements SensorEventListener {
 
     private Vec3f gyroSample = new Vec3f(); // TODO: Make this a buffer to accommodate for vastly different sampling rates
     private long lastTime = 0;
+    private long firstTime = 0;
     private Processing processing;
 
     private final Context context;
@@ -45,16 +46,13 @@ public class MovementHandler implements SensorEventListener {
         this.inputs = inputs;
 
         fetchSensor();
-        create();
     }
 
     /**
      * Creates the signal processing pipelines.
      */
-    public void create() {
-        int sampleRate = PreferenceManager.getDefaultSharedPreferences(context).getInt("communicationTransmissionRate", 200);
-
-        processing = new Processing();
+    public void create(DebugTransmitter debug) {
+        processing = new Processing(debug, new ProcessingParameters());
     }
 
     /**
@@ -75,6 +73,7 @@ public class MovementHandler implements SensorEventListener {
         manager.registerListener(this, gyroscope, SAMPLING_RATE);
 
         lastTime = 0;
+        firstTime = 0;
         registered = true;
     }
 
@@ -95,15 +94,17 @@ public class MovementHandler implements SensorEventListener {
 
         if (event.sensor.getType() == SENSOR_TYPE_ACCELEROMETER) {
 
-            if (lastTime == 0) { // Ignore First sample, because there is no delta
+            if (firstTime == 0) { // Ignore First sample, because there is no delta
                 lastTime = event.timestamp;
+                firstTime = event.timestamp;
                 return;
             }
 
             float delta = (event.timestamp - lastTime) * NANO_FULL_FACTOR;
+            float time = (event.timestamp - firstTime) * NANO_FULL_FACTOR;
             Vec3f acceleration = new Vec3f(event.values[0], event.values[1], event.values[2]);
 
-            Vec2f distance = processing.next(delta, acceleration, gyroSample);
+            Vec2f distance = processing.next(time, delta, acceleration, gyroSample);
             inputs.changeXPosition(distance.x);
             inputs.changeYPosition(-distance.y);
 
