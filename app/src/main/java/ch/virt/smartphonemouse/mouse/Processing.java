@@ -23,24 +23,30 @@ public class Processing {
     private float sensitivity;
 
 
+    // Gravity Rotation is disabled by default because it currently does not work as expected
+    private boolean enableGravityRotation;
+
+
     private final DebugTransmitter debug;
 
-    public Processing(DebugTransmitter debug, ProcessingParameters parameters) {
+    public Processing(DebugTransmitter debug, Parameters parameters) {
 
         // Create and configure components
         rotationDeltaTrapezoid = new Trapezoid3f();
 
-        activeGravityAverage = new WindowAverage(parameters.getActiveGravityWidth());
-        activeNoiseAverage = new WindowAverage(parameters.getActiveNoiseWidth());
-        activeThreshold = new OrThreshold(parameters.getActiveThresholdDropoff(), parameters.getActiveAccelerationThreshold(), parameters.getActiveRotationThreshold());
+        activeGravityAverage = new WindowAverage(parameters.getLengthWindowGravity());
+        activeNoiseAverage = new WindowAverage(parameters.getLengthWindowNoise());
+        activeThreshold = new OrThreshold(parameters.getLengthThreshold(), parameters.getThresholdAcceleration(), parameters.getThresholdRotation());
 
-        gravityInactiveAverage = new WindowAverage3f(parameters.getGravityInactiveWidth());
+        gravityInactiveAverage = new WindowAverage3f(parameters.getLengthGravity());
         gravityCurrent = new Vec3f();
 
         distanceVelocityTrapezoid = new Trapezoid2f();
         distanceDistanceTrapezoid = new Trapezoid2f();
         distanceVelocity = new Vec2f();
         sensitivity = parameters.getSensitivity();
+
+        enableGravityRotation = parameters.getEnableGravityRotation();
 
         // Setup debugging
         this.debug = debug;
@@ -122,8 +128,7 @@ public class Processing {
             }
 
             // Rotate current gravity
-            //
-            // rvityCurrent.rotate(rotationDelta.copy().negative());
+            if (enableGravityRotation) gravityCurrent.rotate(rotationDelta.copy().negative());
 
         } else {
             // Just calculate the average of the samples

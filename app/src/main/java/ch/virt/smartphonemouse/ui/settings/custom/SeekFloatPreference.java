@@ -2,9 +2,7 @@ package ch.virt.smartphonemouse.ui.settings.custom;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
 import androidx.preference.SeekBarPreference;
-
 import ch.virt.smartphonemouse.R;
 
 /**
@@ -27,9 +25,11 @@ public class SeekFloatPreference extends SeekBarPreference {
     public SeekFloatPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        setSteps(20000);
-        setMaximum(100);
-        setMinimum(-100);
+        // Set a ludicrous min, max and amount of steps, because all data will be fitted to it for some reason
+        // FIXME: Investigate this and fix it
+        setSteps(100000);
+        setMaximum(50000);
+        setMinimum(-50000);
 
     }
 
@@ -53,6 +53,8 @@ public class SeekFloatPreference extends SeekBarPreference {
     public SeekFloatPreference(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.seekBarPreferenceStyle);
     }
+
+
 
     /**
      * Creates a preference.

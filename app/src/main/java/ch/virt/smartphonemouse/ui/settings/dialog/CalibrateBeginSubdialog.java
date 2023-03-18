@@ -10,14 +10,14 @@ import ch.virt.smartphonemouse.R;
 /**
  * This class is a sub fragment for the calibrate dialog, that is shown when the calibration process has finished.
  */
-public class CalibrateFinishedSubdialog extends Fragment {
+public class CalibrateBeginSubdialog extends Fragment {
 
 
     /**
      * Creates the sub dialog.
      */
-    public CalibrateFinishedSubdialog() {
-        super(R.layout.subdialog_calibrate_finished);
+    public CalibrateBeginSubdialog() {
+        super(R.layout.subdialog_calibrate_begin);
     }
 
     @Override

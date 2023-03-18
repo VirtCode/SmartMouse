@@ -6,14 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.ui.settings.dialog.SamplingRateSubdialog;
 
 /**
  * This class is the dialog that is shown upon mouse calibration
@@ -55,7 +52,7 @@ public class MouseCalibrateDialog extends DialogFragment {
 
             introduction = false;
 
-            setFragment(new SamplingRateSubdialog((r) -> positiveButton.post(this::finished)));
+//            setFragment(new CalibrationHappeningSubdialog((r) -> positiveButton.post(this::finished)));
         } else dismiss();
 
     }

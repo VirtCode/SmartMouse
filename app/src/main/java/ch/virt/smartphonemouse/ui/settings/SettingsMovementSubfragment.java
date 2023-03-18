@@ -1,12 +1,10 @@
 package ch.virt.smartphonemouse.ui.settings;
 
 import android.os.Bundle;
-
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-
 import ch.virt.smartphonemouse.R;
-import ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference;
+import ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference;
 import ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference;
 import ch.virt.smartphonemouse.ui.settings.dialog.CalibrateDialog;
 
@@ -20,18 +18,24 @@ public class SettingsMovementSubfragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.settings_movement, null);
 
         SeekFloatPreference movementSensitivity = findPreference("movementSensitivity");
-        movementSensitivity.setMaximum(16f);
-        movementSensitivity.setMinimum(-2.0f);
-        movementSensitivity.setSteps(180);
+        movementSensitivity.setMaximum(20000f);
+        movementSensitivity.setMinimum(10000f);
+        movementSensitivity.setSteps(200);
         movementSensitivity.update();
 
-        EditIntegerPreference movementSamplingRealRate = findPreference("movementSamplingRealRate");
+        EditFloatPreference rotThreshold = findPreference("movementThresholdRotation");
+        EditFloatPreference accThreshold = findPreference("movementThresholdAcceleration");
 
-        Preference movementSamplingCalibrate = findPreference("movementSamplingCalibrate");
+        Preference movementSamplingCalibrate = findPreference("movementRecalibrate");
         movementSamplingCalibrate.setOnPreferenceClickListener(preference -> {
 
             CalibrateDialog dialog = new CalibrateDialog();
-            dialog.setFinishedListener((v) -> movementSamplingRealRate.update());
+            dialog.setFinishedListener(dialog1 -> {
+                // Update changed values after calibration
+                rotThreshold.update();
+                accThreshold.update();
+            });
+
             dialog.show(SettingsMovementSubfragment.this.getParentFragmentManager(), null);
 
             return true;

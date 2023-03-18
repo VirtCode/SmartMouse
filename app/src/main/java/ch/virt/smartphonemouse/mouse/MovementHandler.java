@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import androidx.preference.PreferenceManager;
 import ch.virt.smartphonemouse.mouse.math.Vec2f;
 import ch.virt.smartphonemouse.mouse.math.Vec3f;
 import ch.virt.smartphonemouse.transmission.DebugTransmitter;
@@ -52,7 +53,7 @@ public class MovementHandler implements SensorEventListener {
      * Creates the signal processing pipelines.
      */
     public void create(DebugTransmitter debug) {
-        processing = new Processing(debug, new ProcessingParameters());
+        processing = new Processing(debug, new Parameters(PreferenceManager.getDefaultSharedPreferences(context)));
     }
 
     /**

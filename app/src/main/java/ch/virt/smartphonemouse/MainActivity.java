@@ -15,10 +15,11 @@ import androidx.preference.PreferenceManager;
 import ch.virt.smartphonemouse.customization.DefaultSettings;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
+import ch.virt.smartphonemouse.mouse.Parameters;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
 import ch.virt.smartphonemouse.transmission.DebugTransmitter;
 import ch.virt.smartphonemouse.ui.*;
-import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
+import ch.virt.smartphonemouse.ui.settings.dialog.CalibrateDialog;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -196,9 +197,9 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     public boolean navigate(int entry) {
         if (entry == R.id.drawer_mouse) {
 
-            if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
+            if (!new Parameters(PreferenceManager.getDefaultSharedPreferences(this)).isCalibrated()) { // Make sure that the sampling rate is calibrated
 
-                MouseCalibrateDialog dialog = new MouseCalibrateDialog();
+                CalibrateDialog dialog = new CalibrateDialog();
                 dialog.show(getSupportFragmentManager(), null);
 
                 return true;

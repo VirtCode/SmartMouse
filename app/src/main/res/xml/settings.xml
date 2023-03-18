@@ -19,11 +19,6 @@
         app:summary="@string/settings_main_movement_description"
         app:title="@string/settings_main_movement_title" />
 
-    <SwitchPreference
-        app:key="debugEnabled"
-        app:summary="@string/settings_main_debugger_description"
-        app:title="@string/settings_main_debugger_title" />
-
     <Preference
         app:key="reset"
         app:summary="@string/settings_main_reset_description"

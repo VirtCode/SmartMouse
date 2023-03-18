@@ -86,10 +86,10 @@
     <string name="connect_failed_back">Zurück</string>
     <string name="connect_failed_remove">Dieses Gerät entfernen</string>
     <string name="title_settings">Einstellungen</string>
-    <string name="dialog_calibrate_samplingrate_message">Bitte warten sie, während die App die Sampling Rate ihres Beschleunigungssensors analysiert.</string>
+    <string name="dialog_calibrate_happening_message">Bitte warten sie, während die App die Sampling Rate ihres Beschleunigungssensors analysiert.</string>
     <string name="dialog_calibrate_samplingrate_title">Sampling Rate wird analysiert</string>
     <string name="dialog_calibrate_done">Fertig</string>
-    <string name="dialog_calibrate_samplingrate_time">Dieser Prozess wird ca. %s Sekunden dauern.</string>
+    <string name="dialog_calibrate_happening_init">Dieser Prozess wird ca. %s Sekunden dauern.</string>
     <string name="dialog_calibrate_finished_message">"Die Sampling Rate ihres gerätes wurde erfolgreich analysiert. Ihre Beschleunigungssensor Sampling Rate beträgt: "</string>
     <string name="dialog_calibrate_finished_rate">%d Samples pro Sekunde</string>
     <string name="dialog_calibrate_finished_title">Analyse abgeschlossen</string>

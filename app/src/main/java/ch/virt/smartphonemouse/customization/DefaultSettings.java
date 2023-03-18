@@ -1,6 +1,7 @@
 package ch.virt.smartphonemouse.customization;
 
 import android.content.SharedPreferences;
+import ch.virt.smartphonemouse.mouse.Parameters;
 
 /**
  * This class is used for restoring the settings to their factory defaults.
@@ -73,33 +74,7 @@ public class DefaultSettings {
      * @param preferences preferences to write in
      */
     private static void defaultMovement(SharedPreferences preferences) {
-        SharedPreferences.Editor edit = preferences.edit();
-
-        edit.putFloat("movementSensitivity", 13);
-
-        edit.putBoolean("movementScaleEnable", true);
-
-        edit.putBoolean("movementSamplingCalibrated", false);
-        edit.putInt("movementSamplingRealRate", 200);
-
-        edit.putInt("movementLowPassOrder", 1);
-        edit.putFloat("movementLowPassCutoff", 0.05f);
-
-        edit.putFloat("movementFreezerFreezingThreshold", 0.1f);
-        edit.putFloat("movementFreezerUnfreezingThreshold", 0.04f);
-        edit.putInt("movementFreezerUnfreezingSamples", 10);
-
-        edit.putFloat("movementNoiseThreshold", 0.04f);
-        edit.putInt("movementNoiseResetSamples", 20);
-
-        edit.putInt("movementCacheDurationMinimal", 5);
-        edit.putInt("movementCacheDurationMaximal", 10);
-        edit.putFloat("movementCacheReleaseThreshold", 0.05f);
-
-        edit.putInt("movementScalePower", 2);
-        edit.putFloat("movementScaleSplit", 0.1f);
-
-        edit.apply();
+        new Parameters(preferences).reset();
     }
 
     /**
