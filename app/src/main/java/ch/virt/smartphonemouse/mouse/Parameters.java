@@ -14,8 +14,8 @@ public class Parameters {
 
     private static final float NOISE_RATIO_ACCELERATION = 1f;
     private static final float NOISE_RATIO_ROTATION = 1f;
-    private static final float NOISE_FACTOR_ACCELERATION = 1.5f;
-    private static final float NOISE_FACTOR_ROTATION = 1.5f;
+    private static final float NOISE_FACTOR_ACCELERATION = 1f;
+    private static final float NOISE_FACTOR_ROTATION = 1f;
 
     private static final float DURATION_THRESHOLD = 0.1f;
     private static final float DURATION_WINDOW_GRAVITY = 0.02f;
@@ -77,12 +77,7 @@ public class Parameters {
     public void calibrateSamplingRate(float samplingRate) {
         SharedPreferences.Editor edit = prefs.edit();
 
-        Log.d(TAG, "calibrateSamplingRate: " + getSensitivity());
-
-        edit.putInt("movementLengthWindowGravity", Math.round(samplingRate * prefs.getFloat("movementDurationWindowGravity", DURATION_WINDOW_GRAVITY)));
-        edit.putInt("movementLengthWindowNoise", Math.round(samplingRate * prefs.getFloat("movementDurationWindowNoise", DURATION_WINDOW_NOISE)));
-        edit.putInt("movementLengthThreshold", Math.round(samplingRate * prefs.getFloat("movementDurationThreshold", DURATION_THRESHOLD)));
-        edit.putInt("movementLengthGravity", Math.round(samplingRate * prefs.getFloat("movementDurationGravity", DURATION_GRAVITY)));
+        edit.putFloat("movementSampling", samplingRate);
 
         edit.apply();
     }
@@ -103,8 +98,6 @@ public class Parameters {
         // Persist
         SharedPreferences.Editor edit = prefs.edit();
 
-        Log.i(TAG, "Calibration finished - acc: " + accelerationSample + " rot: " + rotationSample);
-
         edit.putFloat("movementThresholdAcceleration", accelerationSample);
         edit.putFloat("movementThresholdRotation", rotationSample);
         
@@ -112,19 +105,23 @@ public class Parameters {
     }
 
     public int getLengthWindowGravity() {
-        return prefs.getInt("movementLengthWindowGravity", 10);
+        return Math.round(prefs.getFloat("movementDurationWindowGravity", DURATION_WINDOW_GRAVITY)
+                            * prefs.getFloat("movementSampling", 500));
     }
 
     public int getLengthWindowNoise() {
-        return prefs.getInt("movementLengthWindowNoise", 5);
+        return Math.round(prefs.getFloat("movementDurationWindowNoise", DURATION_WINDOW_NOISE)
+                            * prefs.getFloat("movementSampling", 500));
     }
 
     public int getLengthThreshold() {
-        return prefs.getInt("movementLengthThreshold", 50);
+        return Math.round(prefs.getFloat("movementDurationThreshold", DURATION_THRESHOLD)
+                            * prefs.getFloat("movementSampling", 500));
     }
 
     public int getLengthGravity() {
-        return prefs.getInt("movementLengthGravity", 1000);
+        return Math.round(prefs.getFloat("movementDurationGravity", DURATION_GRAVITY)
+                            * prefs.getFloat("movementSampling", 500));
     }
 
     public float getSensitivity() {

@@ -55,8 +55,15 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
         loadContent();
 
+        startDebugging();
+
         navigate(R.id.drawer_home);
         drawer.setCheckedItem(R.id.drawer_home);
+    }
+
+    private void startDebugging() {
+        debug = new DebugTransmitter(PreferenceManager.getDefaultSharedPreferences(this));
+        debug.connect();
     }
 
 
@@ -115,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             setNavItemEnable(R.id.drawer_connect, false);
             setNavItemEnable(R.id.drawer_mouse, false);
         }
-
-        drawer.getMenu().findItem(R.id.drawer_debug).setVisible(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("debugEnabled", false));
     }
 
     /**
@@ -210,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             mouseActive = true;
 
-            debug = new DebugTransmitter(true, "192.168.1.226", 8003);
             movement.create(debug);
             debug.connect();
 
@@ -238,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
                 case R.id.drawer_home:
 
-                    switchFragment(new HomeFragment(bluetooth), false);
+                    switchFragment(new HomeFragment(bluetooth, debug), false);
                     bar.setTitle(R.string.title_home);
 
                     break;
@@ -255,12 +259,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
                     switchFragment(new AboutFragment(), false);
                     bar.setTitle(R.string.title_about);
 
-                    break;
-
-                case R.id.drawer_debug:
-                    switchFragment(new DebugFragment(), false);
-                    bar.setTitle(R.string.title_debug);
-                    bar.setVisibility(View.GONE);
                     break;
 
                 default:

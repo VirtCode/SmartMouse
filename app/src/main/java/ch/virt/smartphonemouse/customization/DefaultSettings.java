@@ -28,13 +28,21 @@ public class DefaultSettings {
 
         edit.putBoolean("populated", true);
         edit.putBoolean("showUsage", true);
-        edit.putBoolean("debugEnabled", false);
 
         edit.apply();
 
+        defaultDebug(preferences);
         defaultInterface(preferences);
         defaultMovement(preferences);
         defaultCommunication(preferences);
+    }
+
+    private static void defaultDebug(SharedPreferences preferences) {
+        preferences.edit()
+                .putBoolean("debugEnabled", false)
+                .putString("debugHost", "undefined")
+                .putInt("debugPort", 55555)
+        .apply();
     }
 
     /**

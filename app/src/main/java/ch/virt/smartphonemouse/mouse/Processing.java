@@ -30,6 +30,7 @@ public class Processing {
     private final DebugTransmitter debug;
 
     public Processing(DebugTransmitter debug, Parameters parameters) {
+        this.debug = debug;
 
         // Create and configure components
         rotationDeltaTrapezoid = new Trapezoid3f();
@@ -47,24 +48,21 @@ public class Processing {
         sensitivity = parameters.getSensitivity();
 
         enableGravityRotation = parameters.getEnableGravityRotation();
+    }
 
-        // Setup debugging
-        this.debug = debug;
-        if (debug.isEnabled()) {
-            // Register columns
-            debug.registerColumn("time", Float.class);
-            debug.registerColumn("acceleration", Vec3f.class);
-            debug.registerColumn("angular-velocity", Vec3f.class);
-            debug.registerColumn("active-acc-abs", Float.class);
-            debug.registerColumn("active-acc-grav", Float.class);
-            debug.registerColumn("active-acc", Float.class);
-            debug.registerColumn("active-rot", Float.class);
-            debug.registerColumn("active", Boolean.class);
-            debug.registerColumn("gravity", Vec3f.class);
-            debug.registerColumn("acceleration-linear", Vec2f.class);
-            debug.registerColumn("velocity", Vec2f.class);
-            debug.registerColumn("distance", Vec2f.class);
-        }
+    public static void registerDebugColumns(DebugTransmitter debug) {
+        debug.registerColumn("time", Float.class);
+        debug.registerColumn("acceleration", Vec3f.class);
+        debug.registerColumn("angular-velocity", Vec3f.class);
+        debug.registerColumn("active-acc-abs", Float.class);
+        debug.registerColumn("active-acc-grav", Float.class);
+        debug.registerColumn("active-acc", Float.class);
+        debug.registerColumn("active-rot", Float.class);
+        debug.registerColumn("active", Boolean.class);
+        debug.registerColumn("gravity", Vec3f.class);
+        debug.registerColumn("acceleration-linear", Vec2f.class);
+        debug.registerColumn("velocity", Vec2f.class);
+        debug.registerColumn("distance", Vec2f.class);
     }
 
     public Vec2f next(float time, float delta, Vec3f acceleration, Vec3f angularVelocity) {

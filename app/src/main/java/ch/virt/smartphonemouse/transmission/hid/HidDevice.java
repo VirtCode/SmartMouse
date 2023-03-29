@@ -155,12 +155,12 @@ public class HidDevice extends BluetoothHidDevice.Callback {
 
         byte[] report = new byte[4];
 
-        report[0] = (byte) ((left ? 1 : 0) | (middle ? 4 : 0) | (right ? 2 : 0)); // First bit left, second middle, third right and the rest padding
+        report[0] = (byte) ((left ? 1 : 0) | (middle ? 4 : 0) | (right ? 2 : 0)); // First bit left, second right, third middle and the rest padding
         report[1] = (byte) x;
         report[2] = (byte) y;
         report[3] = (byte) wheel;
 
-        service.sendReport(device, 1, report); // Id 1 because of the descriptor
+        service.sendReport(device, 1, report); // id 1 because of the descriptor
     }
 
     /**

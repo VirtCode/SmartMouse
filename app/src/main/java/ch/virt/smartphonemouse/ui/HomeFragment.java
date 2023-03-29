@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import ch.virt.smartphonemouse.MainActivity;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
+import ch.virt.smartphonemouse.transmission.DebugTransmitter;
 import ch.virt.smartphonemouse.ui.home.HomeConnectedSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeDisabledSubfragment;
 import ch.virt.smartphonemouse.ui.home.HomeDisconnectedSubfragment;
@@ -25,9 +26,11 @@ import ch.virt.smartphonemouse.ui.home.HomeUnsupportedSubfragment;
 public class HomeFragment extends Fragment {
 
     private BluetoothHandler bluetooth;
+    private DebugTransmitter debug;
 
     private ImageView status;
     private TextView statusText;
+    private TextView debugStatus;
 
     private Button button;
 
@@ -36,10 +39,11 @@ public class HomeFragment extends Fragment {
      *
      * @param bluetooth bluetooth handler to use
      */
-    public HomeFragment(BluetoothHandler bluetooth) {
+    public HomeFragment(BluetoothHandler bluetooth, DebugTransmitter debug) {
         super(R.layout.fragment_home);
 
         this.bluetooth = bluetooth;
+        this.debug = debug;
     }
 
     @Override
@@ -49,6 +53,8 @@ public class HomeFragment extends Fragment {
         status = view.findViewById(R.id.home_status);
         statusText = view.findViewById(R.id.home_status_text);
         button = view.findViewById(R.id.home_button);
+
+        debugStatus = view.findViewById(R.id.home_debug_status);
 
         update();
     }
@@ -70,6 +76,13 @@ public class HomeFragment extends Fragment {
 
             else
                 setStatus(R.color.status_disconnected, R.string.home_status_disconnected, R.string.home_button_disconnected, v -> ((MainActivity) getActivity()).navigate(R.id.drawer_connect), new HomeDisconnectedSubfragment());
+
+        if (debug.isEnabled()) {
+            debugStatus.setVisibility(View.VISIBLE);
+
+            if (debug.isConnected()) debugStatus.setText(String.format(getContext().getText(R.string.home_debug_connected).toString(), debug.getServerString()));
+            else debugStatus.setText(String.format(getContext().getText(R.string.home_debug_disconnected).toString(), debug.getServerString()));
+        }
     }
 
     /**

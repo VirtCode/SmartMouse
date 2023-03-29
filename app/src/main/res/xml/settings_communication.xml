@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:initialExpandedChildrenCount="2">
 
     <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
         app:key="communicationTransmissionRate"
@@ -10,5 +11,22 @@
         app:key="communicationRemoveDevices"
         app:summary="@string/settings_communication_remove_description"
         app:title="@string/settings_communication_remove_title" />
+
+    <PreferenceCategory app:title="@string/settings_communication_debug" app:summary="@string/settings_communication_debug_description">
+
+        <SwitchPreference
+                app:key="debugEnabled"
+                app:summary="@string/settings_communication_debug_enable_description"
+                app:title="@string/settings_communication_debug_enabled" />
+
+        <EditTextPreference
+                app:key="debugHost"
+                app:title="@string/settings_communication_debug_host" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+                app:key="debugPort"
+                app:title="@string/settings_communication_debug_port" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

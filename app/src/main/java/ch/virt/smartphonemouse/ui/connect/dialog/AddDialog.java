@@ -276,7 +276,7 @@ public class AddDialog extends DialogFragment {
                 if (((AddManualSubdialog) currentFragment).check()) selected(((AddManualSubdialog) currentFragment).createDevice());
                 break;
             case BONDED_STATE:
-                if (((AddBondedSubdialog) currentFragment).check()) finished();
+                    finished();
                 break;
             case SUCCESS_STATE:
             case ALREADY_STATE:

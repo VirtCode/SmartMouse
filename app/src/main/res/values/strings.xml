@@ -39,8 +39,8 @@
     <string name="dialog_add_manual_mac">Device MAC Address</string>
     <string name="dialog_add_manual_name_error">Please enter a Name for your device.</string>
     <string name="dialog_add_manual_mac_error">Please enter a valid MAC address.</string>
-    <string name="dialog_add_bonded_instruction">Please make sure to remove the target device from your phone AND your phone from the target device in the respective bluetooth settings.</string>
-    <string name="dialog_add_bonded_future">Being paired with the target device will lead to connection problems in the future.</string>
+    <string name="dialog_add_bonded_future">Your device is currently already paired to the target device. On some devices, this might lead to connection issues in the future.</string>
+    <string name="dialog_add_bonded_instruction">So if you experience connection issues with this target device, try to remove the target device from this device AND this device from the target device in the respective bluetooth settings.</string>
     <string name="dialog_add_bonded_title">Unpair the target device.</string>
     <string name="dialog_add_bonded_error">Your device is still paired to the target device.</string>
     <string name="dialog_add_success_message">You have successfully added:</string>
@@ -216,7 +216,7 @@
     <string name="dialog_add_bonded_message">The target device should be paired with this smartphone so that this app can connect to it.</string>
     <string name="settings_movement_freezer">Acceleration Freezer</string>
     <string name="settings_movement_lowpass">Low Pass Filter</string>
-    <string name="settings_movement_sampling_rate">Sampling Rate</string>
+    <string name="settings_movement_sampling_rate">Measured Sampling Rate</string>
     <string name="settings_movement_noise">Threshold Calibration</string>
     <string name="settings_movement_cache">Velocity Sign Cache</string>
     <string name="settings_movement_scale">Scaler</string>
@@ -249,4 +249,15 @@
     <string name="settings_movement_unit_angularvelocity">rad/s</string>
     <string name="settings_movement_functionality">Algorithm Functionality</string>
     <string name="settings_movement_functionality_gravity">Do Gravity Rotation</string>
+    <string name="settings_communication_debug">Debug Transmisison</string>
+    <string name="settings_communication_debug_host">SensorServer Hostname</string>
+    <string name="settings_communication_debug_enabled">Enable Debug Transmission</string>
+    <string name="settings_communication_debug_enable_description">Enable debug transmission to transmit sensor and movement data to a SensorServer on your network.</string>
+    <string name="settings_communication_debug_port">SensorServer Port</string>
+    <string name="settings_communication_debug_description">Changes take effect after a restart of the app.</string>
+    <string name="home_debug_disabled">Debugging is disabled</string>
+    <string name="home_debug_connected">Connected to %s</string>
+    <string name="home_debug_disconnected">Attempting connection to %s</string>
+    <string name="settings_movement_functionality_gravity_description">Rotating the gravity value is experimental and might not work correctly.</string>
+    <string name="settings_movement_sampling">Sampling Rate</string>
 </resources>

@@ -25,6 +25,7 @@ public class SettingsMovementSubfragment extends PreferenceFragmentCompat {
 
         EditFloatPreference rotThreshold = findPreference("movementThresholdRotation");
         EditFloatPreference accThreshold = findPreference("movementThresholdAcceleration");
+        EditFloatPreference samplingRate = findPreference("movementSampling");
 
         Preference movementSamplingCalibrate = findPreference("movementRecalibrate");
         movementSamplingCalibrate.setOnPreferenceClickListener(preference -> {
@@ -34,6 +35,7 @@ public class SettingsMovementSubfragment extends PreferenceFragmentCompat {
                 // Update changed values after calibration
                 rotThreshold.update();
                 accThreshold.update();
+                samplingRate.update();
             });
 
             dialog.show(SettingsMovementSubfragment.this.getParentFragmentManager(), null);
