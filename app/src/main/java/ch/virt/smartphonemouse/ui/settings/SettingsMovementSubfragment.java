@@ -3,6 +3,7 @@ package ch.virt.smartphonemouse.ui.settings;
 import android.os.Bundle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.ui.settings.custom.EditFloatPreference;
 import ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference;
@@ -42,5 +43,25 @@ public class SettingsMovementSubfragment extends PreferenceFragmentCompat {
 
             return true;
         });
+
+        checkAdvanced();
+    }
+
+    public void checkAdvanced() {
+        boolean advanced = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("advanced", false);
+        findPreference("movementEnableGravityRotation").setVisible(advanced);
+        findPreference("movementCalibrationSampling").setVisible(advanced);
+        findPreference("movementCalibrationNoise").setVisible(advanced);
+        findPreference("movementNoiseRatioAcceleration").setVisible(advanced);
+        findPreference("movementNoiseFactorAcceleration").setVisible(advanced);
+        findPreference("movementNoiseRatioRotation").setVisible(advanced);
+        findPreference("movementNoiseFactorRotation").setVisible(advanced);
+        findPreference("movementThresholdAcceleration").setVisible(advanced);
+        findPreference("movementThresholdRotation").setVisible(advanced);
+        findPreference("movementSampling").setVisible(advanced);
+        findPreference("movementDurationWindowGravity").setVisible(advanced);
+        findPreference("movementDurationWindowNoise").setVisible(advanced);
+        findPreference("movementDurationThreshold").setVisible(advanced);
+        findPreference("movementDurationGravity").setVisible(advanced);
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
 
+import androidx.preference.PreferenceManager;
 import ch.virt.smartphonemouse.R;
 import ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference;
 import ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference;
@@ -52,5 +53,21 @@ public class SettingsInterfaceSubfragment extends PreferenceFragmentCompat {
         interfaceVisualsIntensity.setMinimum(0.0f);
         interfaceVisualsIntensity.setSteps(100);
         interfaceVisualsIntensity.update();
+
+        checkAdvanced();
+    }
+
+    public void checkAdvanced() {
+        boolean advanced = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("advanced", false);
+        findPreference("interfaceBehaviour").setVisible(advanced);
+        findPreference("interfaceVisualsStrokeWeight").setVisible(advanced);
+        findPreference("interfaceVisualsIntensity").setVisible(advanced);
+        findPreference("interfaceVibrationsButtonIntensity").setVisible(advanced);
+        findPreference("interfaceVibrationsButtonLength").setVisible(advanced);
+        findPreference("interfaceVibrationsScrollIntensity").setVisible(advanced);
+        findPreference("interfaceVibrationsScrollLength").setVisible(advanced);
+        findPreference("interfaceVibrationsSpecialIntensity").setVisible(advanced);
+        findPreference("interfaceVibrationsSpecialLength").setVisible(advanced);
+        findPreference("interfaceLayout").setVisible(advanced);
     }
 }

@@ -20,7 +20,22 @@
         app:title="@string/settings_main_movement_title" />
 
     <Preference
+            app:key="debugging"
+            app:isPreferenceVisible="false"
+            app:fragment="ch.virt.smartphonemouse.ui.settings.SettingsDebuggingSubfragment"
+            app:icon="@drawable/drawer_debug"
+            app:summary="@string/settings_main_debugger_description"
+            app:title="@string/settings_main_debugger_title"
+            app:dependency="advanced"/>
+
+    <SwitchPreference
+            app:key="advanced"
+            app:summary="@string/settings_main_advanced_description"
+            app:title="@string/settings_main_advanced" />
+
+    <Preference
         app:key="reset"
+        app:isPreferenceVisible="false"
         app:summary="@string/settings_main_reset_description"
         app:title="@string/settings_main_reset_title" />
 

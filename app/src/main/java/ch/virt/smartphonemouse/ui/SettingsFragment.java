@@ -8,6 +8,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import androidx.preference.SwitchPreference;
 import com.google.android.material.snackbar.Snackbar;
 
 import ch.virt.smartphonemouse.R;
@@ -27,6 +28,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             resetSettings();
             return true;
         });
+
+        checkAdvanced(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("advanced", false));
+        findPreference("advanced").setOnPreferenceChangeListener((preference, newValue) -> {
+            checkAdvanced((Boolean) newValue);
+            return true;
+        });
+    }
+
+    public void checkAdvanced(boolean advanced) {
+        findPreference("reset").setVisible(advanced);
+        findPreference("debugging").setVisible(advanced);
     }
 
     /**

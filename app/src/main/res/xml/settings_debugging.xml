@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:summary="Changes only take effect after a restart of the app">
+
+    <Preference
+            app:selectable="false"
+            app:icon="@drawable/drawer_about"
+            app:summary="@string/settings_debug_restart" />
+
+    <SwitchPreference
+            app:key="debugEnabled"
+            app:summary="@string/settings_debug_enable_description"
+            app:title="@string/settings_debug_enabled" />
+
+    <PreferenceCategory app:title="@string/settings_debug_server" app:summary="@string/settings_debug_server_description">
+        <Preference
+                app:key="debugDownload"
+                app:summary="@string/settings_debug_server_download_description"
+                app:title="@string/settings_debug_server_download" />
+
+        <EditTextPreference
+                app:key="debugHost"
+                app:title="@string/settings_debug_server_host" />
+
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+                app:key="debugPort"
+                app:title="@string/settings_debug_server_port" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
