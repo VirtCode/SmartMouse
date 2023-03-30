@@ -49,13 +49,7 @@
         android:layout_marginTop="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/about_feasibility"/>
-
-    <TextView
-        android:layout_marginTop="12dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/about_matura"/>
+        android:text="@string/about_explanation"/>
 
     <TextView
         android:id="@+id/about_github"
@@ -65,25 +59,19 @@
         android:text="@string/about_github"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="bottom">
-
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="bottom">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/about_author"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/about_copyright"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/about_copyright"/>
 
     </LinearLayout>
+
 </LinearLayout>
