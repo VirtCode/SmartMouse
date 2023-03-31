@@ -14,8 +14,8 @@ public class Parameters {
 
     private static final float NOISE_RATIO_ACCELERATION = 1f;
     private static final float NOISE_RATIO_ROTATION = 1f;
-    private static final float NOISE_FACTOR_ACCELERATION = 1f;
-    private static final float NOISE_FACTOR_ROTATION = 1f;
+    private static final float NOISE_FACTOR_ACCELERATION = 1.2f;
+    private static final float NOISE_FACTOR_ROTATION = 1.2f;
 
     private static final float DURATION_THRESHOLD = 0.1f;
     private static final float DURATION_WINDOW_GRAVITY = 0.02f;

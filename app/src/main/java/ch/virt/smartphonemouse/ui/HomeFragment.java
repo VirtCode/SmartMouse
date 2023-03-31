@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment {
         button = view.findViewById(R.id.home_button);
 
         debugStatus = view.findViewById(R.id.home_debug_status);
+        debugStatus.setOnClickListener(v -> update());
 
         update();
     }

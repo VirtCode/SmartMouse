@@ -28,6 +28,7 @@ public class DefaultSettings {
 
         edit.putBoolean("populated", true);
         edit.putBoolean("showUsage", true);
+        edit.putBoolean("advanced", false);
 
         edit.apply();
 
@@ -63,11 +64,11 @@ public class DefaultSettings {
         edit.putFloat("interfaceVisualsIntensity", 0.5f);
 
         edit.putBoolean("interfaceVibrationsEnable", true);
-        edit.putInt("interfaceVibrationsButtonIntensity", 100);
+        edit.putInt("interfaceVibrationsButtonIntensity", 50);
         edit.putInt("interfaceVibrationsButtonLength", 30);
-        edit.putInt("interfaceVibrationsScrollIntensity", 50);
+        edit.putInt("interfaceVibrationsScrollIntensity", 25);
         edit.putInt("interfaceVibrationsScrollLength", 20);
-        edit.putInt("interfaceVibrationsSpecialIntensity", 100);
+        edit.putInt("interfaceVibrationsSpecialIntensity", 50);
         edit.putInt("interfaceVibrationsSpecialLength", 50);
 
         edit.putFloat("interfaceLayoutHeight", 0.3f);

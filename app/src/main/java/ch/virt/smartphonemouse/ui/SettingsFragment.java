@@ -54,6 +54,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                     Snackbar.make(getView(), getResources().getString(R.string.settings_reset_confirmation), Snackbar.LENGTH_SHORT).show();
 
+                    boolean advanced = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("advanced", false);
+                    checkAdvanced(advanced);
+                    ((SwitchPreference)findPreference("advanced")).setChecked(advanced);
                 })
                 .setNegativeButton(R.string.settings_reset_dialog_cancel, (dialog, id) -> { });
 

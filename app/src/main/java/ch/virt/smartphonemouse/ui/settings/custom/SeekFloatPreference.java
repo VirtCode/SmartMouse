@@ -27,7 +27,7 @@ public class SeekFloatPreference extends SeekBarPreference {
 
         // Set a ludicrous min, max and amount of steps, because all data will be fitted to it for some reason
         // FIXME: Investigate this and fix it
-        setSteps(100000);
+        setSteps(10000000);
         setMaximum(50000);
         setMinimum(-50000);
 
