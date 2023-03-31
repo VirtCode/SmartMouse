@@ -1,16 +1,16 @@
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="brand/title-dark.png">
+    <source media="(prefers-color-scheme: dark)" srcset="brand/title-dark.svg">
     <img alt="SmartMouse logo and text" src="brand/title-light.svg">
   </picture>
 
-  <p>SmartMouse is an app that aims to make a smartphone usable as a normal computer mouse. It does estimate its position by processing data from the integrated accelerometer and gyroscope with a custom sensor-fusion algorithm. This data is then transmitted to a host computer over the Bluetooth HID Profile. The Mouse buttons are recreated using the Touchscreen.</p>
+  <p>SmartMouse is an app that aims to make a smartphone usable as a normal computer mouse. It does estimate its position by processing data from the integrated accelerometer and gyroscope with a custom sensor-fusion algorithm. This data is then transmitted to a host computer over the Bluetooth HID Profile. The mouse buttons are recreated using the Touchscreen.</p>
 </div>
 
 ---
 
 ## State
-Currently, this app is still in early development. The position estimation is currently not always correct, which leads to different artifacts and wrong movements of the cursor. Because of that, this App is not yet ready for practical use. 
+Currently, this app is still in early development. The position estimation is currently not always correct, which leads to different artifacts and wrong movements of the cursor. Because of that, this app is not yet ready for practical use. 
 
 ## Features
 This app is defined by the following three core features:
