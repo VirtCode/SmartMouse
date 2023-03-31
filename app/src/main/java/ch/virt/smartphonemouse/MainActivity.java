@@ -3,7 +3,6 @@ package ch.virt.smartphonemouse;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,21 +12,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.navigation.NavigationView;
-
 import ch.virt.smartphonemouse.customization.DefaultSettings;
 import ch.virt.smartphonemouse.mouse.MouseInputs;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
+import ch.virt.smartphonemouse.mouse.Parameters;
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
-import ch.virt.smartphonemouse.ui.AboutFragment;
-import ch.virt.smartphonemouse.ui.ConnectFragment;
-import ch.virt.smartphonemouse.ui.DebugFragment;
-import ch.virt.smartphonemouse.ui.HomeFragment;
-import ch.virt.smartphonemouse.ui.MouseFragment;
-import ch.virt.smartphonemouse.ui.SettingsFragment;
-import ch.virt.smartphonemouse.ui.mouse.MouseCalibrateDialog;
+import ch.virt.smartphonemouse.transmission.DebugTransmitter;
+import ch.virt.smartphonemouse.ui.*;
+import ch.virt.smartphonemouse.ui.settings.dialog.CalibrateDialog;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 
 /**
  * This class is the main activity of this app.
@@ -42,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
     private MovementHandler movement;
     private MouseInputs inputs;
+
+    private DebugTransmitter debug;
 
     private boolean mouseActive;
 
@@ -59,8 +55,15 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
         loadContent();
 
+        startDebugging();
+
         navigate(R.id.drawer_home);
         drawer.setCheckedItem(R.id.drawer_home);
+    }
+
+    private void startDebugging() {
+        debug = new DebugTransmitter(PreferenceManager.getDefaultSharedPreferences(this));
+        debug.connect();
     }
 
 
@@ -119,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             setNavItemEnable(R.id.drawer_connect, false);
             setNavItemEnable(R.id.drawer_mouse, false);
         }
-
-        drawer.getMenu().findItem(R.id.drawer_debug).setVisible(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("debugEnabled", false));
     }
 
     /**
@@ -201,9 +202,9 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     public boolean navigate(int entry) {
         if (entry == R.id.drawer_mouse) {
 
-            if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("movementSamplingCalibrated", false)) { // Make sure that the sampling rate is calibrated
+            if (!new Parameters(PreferenceManager.getDefaultSharedPreferences(this)).isCalibrated()) { // Make sure that the sampling rate is calibrated
 
-                MouseCalibrateDialog dialog = new MouseCalibrateDialog();
+                CalibrateDialog dialog = new CalibrateDialog();
                 dialog.show(getSupportFragmentManager(), null);
 
                 return true;
@@ -214,7 +215,10 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             mouseActive = true;
 
-            movement.create();
+            movement.create(debug);
+            debug.connect();
+
+            debug.startTransmission();
             movement.register();
             inputs.start();
 
@@ -223,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             if (mouseActive) {
                 movement.unregister();
+                debug.endTransmission();
                 inputs.stop();
                 mouseActive = false;
             }
@@ -237,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
                 case R.id.drawer_home:
 
-                    switchFragment(new HomeFragment(bluetooth), false);
+                    switchFragment(new HomeFragment(bluetooth, debug), false);
                     bar.setTitle(R.string.title_home);
 
                     break;
@@ -254,12 +259,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
                     switchFragment(new AboutFragment(), false);
                     bar.setTitle(R.string.title_about);
 
-                    break;
-
-                case R.id.drawer_debug:
-                    switchFragment(new DebugFragment(), false);
-                    bar.setTitle(R.string.title_debug);
-                    bar.setVisibility(View.GONE);
                     break;
 
                 default:

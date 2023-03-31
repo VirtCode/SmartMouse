@@ -5,8 +5,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
 import androidx.preference.PreferenceManager;
+import ch.virt.smartphonemouse.mouse.math.Vec2f;
+import ch.virt.smartphonemouse.mouse.math.Vec3f;
+import ch.virt.smartphonemouse.transmission.DebugTransmitter;
 
 /**
  * This class handles and calculates the movement of the mouse
@@ -15,19 +17,24 @@ public class MovementHandler implements SensorEventListener {
 
     private static final float NANO_FULL_FACTOR = 1e-9f;
 
-    public static final int SENSOR_TYPE = Sensor.TYPE_ACCELEROMETER;
+    public static final int SENSOR_TYPE_ACCELEROMETER = Sensor.TYPE_ACCELEROMETER;
+    public static final int SENSOR_TYPE_GYROSCOPE = Sensor.TYPE_GYROSCOPE;
     public static final int SAMPLING_RATE = SensorManager.SENSOR_DELAY_FASTEST;
 
     private SensorManager manager;
-    private Sensor sensor;
-
-    private Context context;
-    private MouseInputs inputs;
+    private Sensor accelerometer;
+    private Sensor gyroscope;
 
     private boolean registered;
 
-    private long lastSample = 0;
-    private Pipeline xLine, yLine;
+
+    private Vec3f gyroSample = new Vec3f(); // TODO: Make this a buffer to accommodate for vastly different sampling rates
+    private long lastTime = 0;
+    private long firstTime = 0;
+    private Processing processing;
+
+    private final Context context;
+    private final MouseInputs inputs;
 
     /**
      * Creates a movement handler.
@@ -40,17 +47,13 @@ public class MovementHandler implements SensorEventListener {
         this.inputs = inputs;
 
         fetchSensor();
-        create();
     }
 
     /**
      * Creates the signal processing pipelines.
      */
-    public void create() {
-        int sampleRate = PreferenceManager.getDefaultSharedPreferences(context).getInt("communicationTransmissionRate", 200);
-
-        xLine = new Pipeline(sampleRate, new PipelineConfig(PreferenceManager.getDefaultSharedPreferences(context)));
-        yLine = new Pipeline(sampleRate, new PipelineConfig(PreferenceManager.getDefaultSharedPreferences(context)));
+    public void create(DebugTransmitter debug) {
+        processing = new Processing(debug, new Parameters(PreferenceManager.getDefaultSharedPreferences(context)));
     }
 
     /**
@@ -58,7 +61,8 @@ public class MovementHandler implements SensorEventListener {
      */
     private void fetchSensor() {
         manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        sensor = manager.getDefaultSensor(SENSOR_TYPE);
+        accelerometer = manager.getDefaultSensor(SENSOR_TYPE_ACCELEROMETER);
+        gyroscope = manager.getDefaultSensor(SENSOR_TYPE_GYROSCOPE);
     }
 
     /**
@@ -66,9 +70,11 @@ public class MovementHandler implements SensorEventListener {
      */
     public void register() {
         if (registered) return;
-        manager.registerListener(this, sensor, SAMPLING_RATE);
+        manager.registerListener(this, accelerometer, SAMPLING_RATE);
+        manager.registerListener(this, gyroscope, SAMPLING_RATE);
 
-        lastSample = 0;
+        lastTime = 0;
+        firstTime = 0;
         registered = true;
     }
 
@@ -77,7 +83,8 @@ public class MovementHandler implements SensorEventListener {
      */
     public void unregister() {
         if (!registered) return;
-        manager.unregisterListener(this, sensor);
+        manager.unregisterListener(this, accelerometer);
+        manager.unregisterListener(this, gyroscope);
 
         registered = false;
     }
@@ -85,18 +92,29 @@ public class MovementHandler implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (!registered) return; // Ignore Samples when the listener is not registered
-        if (lastSample == 0) { // Ignore First sample, because there is no delta
-            lastSample = event.timestamp;
-            return;
+
+        if (event.sensor.getType() == SENSOR_TYPE_ACCELEROMETER) {
+
+            if (firstTime == 0) { // Ignore First sample, because there is no delta
+                lastTime = event.timestamp;
+                firstTime = event.timestamp;
+                return;
+            }
+
+            float delta = (event.timestamp - lastTime) * NANO_FULL_FACTOR;
+            float time = (event.timestamp - firstTime) * NANO_FULL_FACTOR;
+            Vec3f acceleration = new Vec3f(event.values[0], event.values[1], event.values[2]);
+
+            Vec2f distance = processing.next(time, delta, acceleration, gyroSample);
+            inputs.changeXPosition(distance.x);
+            inputs.changeYPosition(-distance.y);
+
+            lastTime = event.timestamp;
+
+        } else if (event.sensor.getType() == SENSOR_TYPE_GYROSCOPE) {
+            // Here we assume that the samples arrive in chronological order (which is crucial anyway), so we will always have the latest sample in this variable
+            this.gyroSample = new Vec3f(event.values[0], event.values[1], event.values[2]);
         }
-
-        float delta = (event.timestamp - lastSample) * NANO_FULL_FACTOR; // Delta in Seconds
-
-        // Calculate and Submit values
-        inputs.changeXPosition(xLine.nextForDistance(delta, event.values[0]));
-        inputs.changeYPosition(-yLine.nextForDistance(delta, event.values[1]));
-
-        lastSample = event.timestamp;
     }
 
     @Override

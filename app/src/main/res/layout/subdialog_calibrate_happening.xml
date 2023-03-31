@@ -9,7 +9,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_calibrate_samplingrate_message"/>
+        android:text="@string/dialog_calibrate_happening_message"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_calibrate_happening_warning"
+            android:textStyle="bold"/>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:layout_width="match_parent"

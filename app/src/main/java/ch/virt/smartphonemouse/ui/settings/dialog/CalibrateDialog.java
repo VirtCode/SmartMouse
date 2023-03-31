@@ -6,12 +6,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.Button;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
 import ch.virt.smartphonemouse.R;
 
 /**
@@ -22,6 +20,8 @@ public class CalibrateDialog extends DialogFragment {
     AlertDialog dialog;
 
     Button positiveButton;
+
+    boolean calibrating = false;
 
     private DialogInterface.OnDismissListener finishedListener;
 
@@ -38,12 +38,20 @@ public class CalibrateDialog extends DialogFragment {
      * Is called when the dialog is created.
      */
     private void created() {
-        dialog.setTitle(R.string.dialog_calibrate_samplingrate_title);
+        dialog.setTitle(R.string.dialog_calibrate_title);
 
-        positiveButton.setEnabled(false);
         dialog.setCanceledOnTouchOutside(false);
 
-        setFragment(new SamplingRateSubdialog((r) -> positiveButton.post(this::finished)));
+        setFragment(new CalibrateBeginSubdialog());
+    }
+
+    private void calibrate() {
+        calibrating = true;
+
+        positiveButton.setEnabled(false);
+        positiveButton.setText(R.string.dialog_calibrate_done);
+
+        setFragment(new CalibrationHappeningSubdialog(() -> positiveButton.post(this::finished)));
     }
 
     /**
@@ -73,13 +81,18 @@ public class CalibrateDialog extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         builder.setView(inflater.inflate(R.layout.dialog_calibrate, null))
-                .setPositiveButton(R.string.dialog_calibrate_done, null);
+                .setPositiveButton(R.string.dialog_calibrate_next, null);
 
 
         dialog = builder.create();
         dialog.setTitle("-"); // Add default title so it is shown
         dialog.setOnShowListener(dialogInterface -> {
             positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+            positiveButton.setOnClickListener((b) -> {
+                if  (!calibrating) calibrate();
+                else dismiss();
+            });
 
             created();
         });
@@ -91,6 +104,6 @@ public class CalibrateDialog extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        finishedListener.onDismiss(dialog);
+        if (finishedListener != null) finishedListener.onDismiss(dialog);
     }
 }

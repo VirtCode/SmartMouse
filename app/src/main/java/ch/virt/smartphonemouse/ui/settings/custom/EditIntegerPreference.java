@@ -17,7 +17,7 @@ public class EditIntegerPreference extends EditTextPreference {
     private boolean showValueAsDescription;
     private String valueUnit;
     private int minimumValue = 0;
-    private int maximumValue = 1000;
+    private int maximumValue = 100000;
 
     private int value;
 

@@ -25,10 +25,7 @@
             android:id="@+id/drawer_settings"
             android:icon="@drawable/drawer_settings"
             android:title="@string/drawer_settings" />
-        <item
-            android:id="@+id/drawer_debug"
-            android:icon="@drawable/drawer_debug"
-            android:title="@string/drawer_debug" />
+
         <item
             android:id="@+id/drawer_about"
             android:icon="@drawable/drawer_about"

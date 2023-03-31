@@ -2,97 +2,117 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
-        app:entries="@array/themes"
-        app:entryValues="@array/themeValues"
-        app:key="interfaceTheme"
-        app:summary="@string/settings_interface_theme_description"
-        app:title="@string/settings_interface_theme_title" />
+            app:entries="@array/themes"
+            app:entryValues="@array/themeValues"
+            app:key="interfaceTheme"
+            app:summary="@string/settings_interface_theme_description"
+            app:title="@string/settings_interface_theme_title"/>
 
-    <PreferenceCategory app:title="@string/settings_interface_behaviour">
-
-        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
-            app:key="interfaceBehaviourScrollStep"
-            app:summary="@string/settings_interface_behaviour_scroll_description"
-            app:title="@string/settings_interface_behaviour_scroll_title" />
+    <PreferenceCategory app:title="@string/settings_interface_behaviour"
+            app:isPreferenceVisible="false"
+            app:key="interfaceBehaviour">
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
-            app:key="interfaceBehaviourSpecialWait"
-            app:summary="@string/settings_interface_behaviour_middle_description"
-            app:title="@string/settings_interface_behaviour_middle_title" />
+                app:key="interfaceBehaviourScrollStep"
+                app:summary="@string/settings_interface_behaviour_scroll_description"
+                app:title="@string/settings_interface_behaviour_scroll_title"/>
+
+        <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
+                app:key="interfaceBehaviourSpecialWait"
+                app:summary="@string/settings_interface_behaviour_middle_description"
+                app:title="@string/settings_interface_behaviour_middle_title"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:initialExpandedChildrenCount="1"
-        app:title="@string/settings_interface_visuals">
+            app:initialExpandedChildrenCount="1"
+            app:title="@string/settings_interface_visuals">
 
         <SwitchPreference
-            app:key="interfaceVisualsEnable"
-            app:title="@string/settings_interface_visuals_enable_title" />
+                app:key="interfaceVisualsEnable"
+                app:title="@string/settings_interface_visuals_enable_title"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
-            app:key="interfaceVisualsStrokeWeight"
-            app:summary="@string/settings_interface_visuals_stroke_description"
-            app:title="@string/settings_interface_visuals_stroke_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVisualsStrokeWeight"
+                app:summary="@string/settings_interface_visuals_stroke_description"
+                app:title="@string/settings_interface_visuals_stroke_title"
+                app:dependency="interfaceVisualsEnable"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
-            app:key="interfaceVisualsIntensity"
-            app:summary="@string/settings_interface_visuals_intensity_description"
-            app:title="@string/settings_interface_visuals_intensity_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVisualsIntensity"
+                app:summary="@string/settings_interface_visuals_intensity_description"
+                app:title="@string/settings_interface_visuals_intensity_title"
+                app:dependency="interfaceVisualsEnable"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:initialExpandedChildrenCount="1"
-        app:title="@string/settings_interface_vibrations">
+            app:initialExpandedChildrenCount="1"
+            app:title="@string/settings_interface_vibrations">
 
         <SwitchPreference
-            app:key="interfaceVibrationsEnable"
-            app:title="@string/settings_interface_vibrations_enable_title" />
+                app:key="interfaceVibrationsEnable"
+                app:title="@string/settings_interface_vibrations_enable_title"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
-            app:key="interfaceVibrationsButtonIntensity"
-            app:summary="@string/settings_interface_vibrations_button_intensity_description"
-            app:title="@string/settings_interface_vibrations_button_intensity_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVibrationsButtonIntensity"
+                app:summary="@string/settings_interface_vibrations_button_intensity_description"
+                app:title="@string/settings_interface_vibrations_button_intensity_title"
+                app:dependency="interfaceVibrationsEnable"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
-            app:key="interfaceVibrationsButtonLength"
-            app:summary="@string/settings_interface_vibrations_button_length_description"
-            app:title="@string/settings_interface_vibrations_button_length_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVibrationsButtonLength"
+                app:summary="@string/settings_interface_vibrations_button_length_description"
+                app:title="@string/settings_interface_vibrations_button_length_title"
+                app:dependency="interfaceVibrationsEnable"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
-            app:key="interfaceVibrationsScrollIntensity"
-            app:summary="@string/settings_interface_vibrations_wheel_intensity_description"
-            app:title="@string/settings_interface_vibrations_wheel_intensity_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVibrationsScrollIntensity"
+                app:summary="@string/settings_interface_vibrations_wheel_intensity_description"
+                app:title="@string/settings_interface_vibrations_wheel_intensity_title"
+                app:dependency="interfaceVibrationsEnable"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
-            app:key="interfaceVibrationsScrollLength"
-            app:summary="@string/settings_interface_vibrations_wheel_length_description"
-            app:title="@string/settings_interface_vibrations_wheel_length_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVibrationsScrollLength"
+                app:summary="@string/settings_interface_vibrations_wheel_length_description"
+                app:title="@string/settings_interface_vibrations_wheel_length_title"
+                app:dependency="interfaceVibrationsEnable"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekIntegerPreference
-            app:key="interfaceVibrationsSpecialIntensity"
-            app:summary="@string/settings_interface_vibrations_special_intensity_description"
-            app:title="@string/settings_interface_vibrations_special_intensity_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVibrationsSpecialIntensity"
+                app:summary="@string/settings_interface_vibrations_special_intensity_description"
+                app:title="@string/settings_interface_vibrations_special_intensity_title"
+                app:dependency="interfaceVibrationsEnable"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.EditIntegerPreference
-            app:key="interfaceVibrationsSpecialLength"
-            app:summary="@string/settings_interface_vibrations_special_length_description"
-            app:title="@string/settings_interface_vibrations_special_length_title" />
+                app:isPreferenceVisible="false"
+                app:key="interfaceVibrationsSpecialLength"
+                app:summary="@string/settings_interface_vibrations_special_length_description"
+                app:title="@string/settings_interface_vibrations_special_length_title"
+                app:dependency="interfaceVibrationsEnable"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_interface_layout">
+    <PreferenceCategory app:title="@string/settings_interface_layout"
+            app:isPreferenceVisible="false"
+            app:key="interfaceLayout">
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
-            app:key="interfaceLayoutHeight"
-            app:summary="@string/settings_interface_layout_height_description"
-            app:title="@string/settings_interface_layout_height_title" />
+                app:key="interfaceLayoutHeight"
+                app:summary="@string/settings_interface_layout_height_description"
+                app:title="@string/settings_interface_layout_height_title"/>
 
         <ch.virt.smartphonemouse.ui.settings.custom.SeekFloatPreference
-            app:key="interfaceLayoutMiddleWidth"
-            app:summary="@string/settings_interface_layout_middle_description"
-            app:title="@string/settings_interface_layout_middle_title" />
+                app:key="interfaceLayoutMiddleWidth"
+                app:summary="@string/settings_interface_layout_middle_description"
+                app:title="@string/settings_interface_layout_middle_title"/>
 
     </PreferenceCategory>
 
