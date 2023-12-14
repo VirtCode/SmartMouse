@@ -61,7 +61,10 @@ public class AddManualSubdialog extends Fragment {
      * @return discovered device
      */
     public BluetoothDiscoverer.DiscoveredDevice createDevice() {
-        return new BluetoothDiscoverer.DiscoveredDevice(nameLayout.getEditText().getText().toString(), macLayout.getEditText().getText().toString(), BluetoothClass.Device.Major.UNCATEGORIZED);
+        return new BluetoothDiscoverer.DiscoveredDevice(
+                nameLayout.getEditText().getText().toString(),
+                macLayout.getEditText().getText().toString().toUpperCase().replace('-', ':'), // format address as expected in BluetoothAdapter#getRemoteDevice(String)
+                BluetoothClass.Device.Major.UNCATEGORIZED);
     }
 
     @Override
