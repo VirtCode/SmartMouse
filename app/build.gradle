@@ -4,27 +4,37 @@ plugins {
 
 android {
     namespace 'ch.virt.smartphonemouse'
-    compileSdkVersion 30
 
     defaultConfig {
         applicationId "ch.virt.smartphonemouse"
-        minSdkVersion 28
-        targetSdkVersion 30
+
+        // TODO: Upgrade targetSdk version to 32 (turns out to be a ton of work)
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk 29
+        compileSdk 30
+        minSdk 28
+
         versionCode 4
         versionName "1.4.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_FILE") ?: "keystore.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
