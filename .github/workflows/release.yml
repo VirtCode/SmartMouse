@@ -47,10 +47,15 @@ jobs:
           name: release-${{ github.ref_name }}
           path: app/build/outputs/apk/release/app-release.apk
 
+      - name: Rename Build
+        shell: bash
+        run: |
+          mv app/build/outputs/apk/release/app-release.apk SmartMouse-${{ github.ref_name }}.apk    
+
       - name: Upload to Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.ref_name }} app/build/outputs/apk/release/app-release.apk#SmartMouse-${{ github.ref_name }}.apk
+          gh release upload ${{ github.ref_name }} SmartMouse-${{ github.ref_name }}.apk
 
 
