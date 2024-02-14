@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "Smartphone Mouse"
+rootProject.name = "SmartMouse"

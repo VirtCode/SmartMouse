@@ -20,9 +20,23 @@ This app is defined by the following three core features:
 - **Powerful Interface**: The UI of this app is designed to make it usable for everyone. However, powerful customization of the algorithm and interface is still possible over the advanced settings.
 
 ## Installation
-To install this app, you can download a built debug APK from the [release section](https://github.com/VirtCode/SmartMouse/releases). This APK can easily be installed on your Android device by just opening it. In some cases, sideloading must be enabled in the device settings in to install it.
+The app can currently be installed via two methods:
+- Download a built APK from the [release section](https://github.com/VirtCode/SmartMouse/releases) and open it on your device. 
+- The app is available in the [IzzyOnDroid F-Droid Repository](https://apt.izzysoft.de/fdroid/index/apk/ch.virt.smartphonemouse/). See the [webpage](https://apt.izzysoft.de/fdroid/index/info) for how to add this repository to your F-Droid App.
 
 After installation, the app should be self-explanatory. First, add your computer to the devices on the "Connect" page. Then connect to it and open the "Mouse" page. Now you can use your device just like a normal mouse, by moving it on a surface and using the touchscreen to click and scroll.
+
+## Screenshots
+<details>
+<summary>Expand to view some screenshots!</summary>
+
+<p float="left">
+<img alt="Use the mouse buttons on the touch screen" src="brand/screenshots/mouse.jpg" width="30%">
+<img alt="Connect to different devices" src="brand/screenshots/device-selection.jpg" width="30%">
+<img alt="Configure the algorithm extensively" src="brand/screenshots/movement-settings.jpg" width="30%">
+</p>
+
+</details>
 
 ## Processing Algorithm
 This app uses a custom sensor-fusion algorithm to estimate the position of the device that is developed specifically for mouse-like movements.

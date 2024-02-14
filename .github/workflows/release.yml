@@ -1,0 +1,54 @@
+name: Build and Sign Release
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build-and-sign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Create Keystore File
+        shell: bash
+        env:
+          KEYSTORE_DATA: ${{ secrets.KEYSTORE_DATA }}
+        run: |
+          echo "$KEYSTORE_DATA" | base64 -d > app/keystore.jks
+
+      - name: Build and Sign Release
+        env:
+          KEYSTORE_FILE: keystore.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease
+
+      - name: Store build Artifact
+        uses: action/upload-artifact@v4
+        with:
+          name: release-${{ github.ref_name }}
+          path: app/build/outputs/apk/release/app-release.apk
+
+      - name: Upload to Release
+        run: |
+          gh release upload ${{ github.ref_name }} app/build/outputs/apk/release/app-release.apk%#%SmartMouse-${{ github.ref_name }}.apk
+
+

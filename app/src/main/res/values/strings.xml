@@ -119,10 +119,10 @@
     <string name="dialog_add_request_setting_message">In order to see nearby devices, you must have location turn on. If you don\'t want to enable location, you can still add a device manually.</string>
     <string name="dialog_add_request_setting_title">Enable Location</string>
     <string name="title_about">About</string>
-    <string name="app_version" translatable="false">1.4.0</string>
+    <string name="app_version" translatable="false">1.4.1</string>
     <string name="about_title_version">Version:&#160;</string>
     <string name="about_title_date">Last updated at:&#160;</string>
-    <string name="app_date" translatable="false">31.03.23</string>
+    <string name="app_date" translatable="false">14.02.24</string>
     <string name="about_explanation">This app tries to make your smartphone usable as a normal computer mouse. It estimates its the position of the Smartphone by processing accelerometer and gyroscope data in its custom sensor-fusion algorithm. However, this estimation is not always correct, which leads to different artifacts and wrong movements of the cursor. Because of that, this app is far from finished and should not be treated as a finished product.</string>
     <string name="about_github">This app is open source and may be found on <a href="https://github.com/VirtCode/SmartMouse">GitHub</a>.</string>
     <string name="connect_connecting_disclaimer">If this process is taking too long, you may restart the app and select another device.</string>
