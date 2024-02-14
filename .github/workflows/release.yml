@@ -1,5 +1,8 @@
 name: Build and Sign Release
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   release:
@@ -26,9 +29,9 @@ jobs:
       - name: Create Keystore File
         shell: bash
         env:
-          KEYSTORE_DATA: ${{ secrets.KEYSTORE_FILE }}
+          KEYSTORE_DATA: ${{ secrets.KEYSTORE_DATA }}
         run: |
-          echo "$KEYSTORE_FILE" | base64 -d > app/keystore.jks
+          echo "$KEYSTORE_DATA" | base64 -d > app/keystore.jks
 
       - name: Build and Sign Release
         env:
