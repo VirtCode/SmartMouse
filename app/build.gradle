@@ -36,6 +36,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    dependenciesInfo {
+        // not useful when not distributing via google play
+        includeInApk = false
+        includeInBundle = false
+    }
 }
 
 repositories {

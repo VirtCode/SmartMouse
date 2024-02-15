@@ -11,3 +11,4 @@ local.properties
 /app/release
 /secret
 app/keystore.jks
+.env
