@@ -1,8 +1,8 @@
 package ch.virt.smartphonemouse.mouse;
 
 import android.util.Log;
-import ch.virt.smartphonemouse.mouse.components.WindowAverage;
-import ch.virt.smartphonemouse.mouse.math.Vec3f;
+import ch.virt.smartphonemouse.mouse.processing.components.WindowAverage;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec3f;
 
 import java.util.ArrayList;
 import java.util.List;

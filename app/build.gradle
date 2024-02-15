@@ -50,6 +50,8 @@ repositories {
 
 dependencies {
 
+    implementation project(":core")
+
     // Json Serialization
     implementation 'com.google.code.gson:gson:2.8.7'
 

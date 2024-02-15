@@ -6,8 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import androidx.preference.PreferenceManager;
-import ch.virt.smartphonemouse.mouse.math.Vec2f;
-import ch.virt.smartphonemouse.mouse.math.Vec3f;
+import ch.virt.smartphonemouse.mouse.processing.Processing;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec2f;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec3f;
 import ch.virt.smartphonemouse.transmission.DebugTransmitter;
 
 /**

@@ -9,7 +9,7 @@ import androidx.preference.PreferenceManager;
 import ch.virt.smartphonemouse.mouse.Calibration;
 import ch.virt.smartphonemouse.mouse.MovementHandler;
 import ch.virt.smartphonemouse.mouse.Parameters;
-import ch.virt.smartphonemouse.mouse.math.Vec3f;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec3f;
 
 /**
  * This class is used to measure and save the sampling rate of the inbuilt accelerometer.

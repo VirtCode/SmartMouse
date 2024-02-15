@@ -3,9 +3,10 @@ package ch.virt.smartphonemouse.transmission;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
-import ch.virt.smartphonemouse.mouse.Processing;
-import ch.virt.smartphonemouse.mouse.math.Vec2f;
-import ch.virt.smartphonemouse.mouse.math.Vec3f;
+import ch.virt.smartphonemouse.mouse.processing.implement.DebugInterface;
+import ch.virt.smartphonemouse.mouse.processing.Processing;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec2f;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec3f;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,7 +25,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * <p>If a transmission is open, the transmitter can operate. To transmit data, a client has to stage data in the order, he has registered the columns earlier. If all data for a data row is staged, data has to be committed (see DebugTransmitter#commmit()).</p>
  * <p>After a transmission, the transmission can be ended (see DebugTransmitter#endTransmission()), and the connection closed if required (see DebugTransmitter#disconnect())</p>
  */
-public class DebugTransmitter {
+public class DebugTransmitter implements DebugInterface {
 
     private static final String TAG = "DebugTransmitter";
 
@@ -176,6 +177,7 @@ public class DebugTransmitter {
      * @param name column name
      * @param type data type of column
      */
+    @Override
     public void registerColumn(String name, Class<?> type) {
         if (!enabled) return;
 
@@ -245,6 +247,7 @@ public class DebugTransmitter {
     /**
      * Stages a 3d float vector
      */
+    @Override
     public void stageVec3f(Vec3f data) {
         if (!enabled || !connected || !transmitting) return;
         if (currentData.remaining() < 3 * 4) return;
@@ -257,6 +260,7 @@ public class DebugTransmitter {
     /**
      * Stages a 2d float vector
      */
+    @Override
     public void stageVec2f(Vec2f data) {
         if (!enabled || !connected || !transmitting) return;
         if (currentData.remaining() < 2 * 4) return;
@@ -268,6 +272,7 @@ public class DebugTransmitter {
     /**
      * Stages a float
      */
+    @Override
     public void stageFloat(float data) {
         if (!enabled || !connected || !transmitting) return;
         if (currentData.remaining() < 4) return;
@@ -278,6 +283,7 @@ public class DebugTransmitter {
     /**
      * Stages a double
      */
+    @Override
     public void stageDouble(double data) {
         if (!enabled || !connected || !transmitting) return;
         if (currentData.remaining() < 8) return;
@@ -288,6 +294,7 @@ public class DebugTransmitter {
     /**
      * Stages an integer
      */
+    @Override
     public void stageInteger(int data) {
         if (!enabled || !connected || !transmitting) return;
         if (currentData.remaining() < 4) return;
@@ -298,6 +305,7 @@ public class DebugTransmitter {
     /**
      * Stages a long
      */
+    @Override
     public void stageLong(long data) {
         if (!enabled || !connected || !transmitting) return;
         if (currentData.remaining() < 8) return;
@@ -308,6 +316,7 @@ public class DebugTransmitter {
     /**
      * Stages a boolean
      */
+    @Override
     public void stageBoolean(boolean data) {
         if (!enabled || !connected || !transmitting) return;
         if (currentData.remaining() < 1) return;
@@ -318,6 +327,7 @@ public class DebugTransmitter {
     /**
      * Commits current staged data and transmits it to the server
      */
+    @Override
     public void commit() {
         if (!enabled || !connected || !transmitting) return;
 

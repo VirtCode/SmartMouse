@@ -1,4 +1,4 @@
-package ch.virt.smartphonemouse.mouse.math;
+package ch.virt.smartphonemouse.mouse.processing.math;
 
 /**
  * This class represents a vector consisting of two floats.

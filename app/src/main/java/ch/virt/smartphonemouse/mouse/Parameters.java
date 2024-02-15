@@ -2,10 +2,11 @@ package ch.virt.smartphonemouse.mouse;
 
 import android.content.SharedPreferences;
 import android.util.Log;
+import ch.virt.smartphonemouse.mouse.processing.implement.ProcessingParameters;
 
 import java.util.List;
 
-public class Parameters {
+public class Parameters implements ProcessingParameters {
 
     private static final String TAG = "Parameters";
 
@@ -104,38 +105,46 @@ public class Parameters {
         edit.apply();
     }
 
+    @Override
     public int getLengthWindowGravity() {
         return Math.round(prefs.getFloat("movementDurationWindowGravity", DURATION_WINDOW_GRAVITY)
                             * prefs.getFloat("movementSampling", 500));
     }
 
+    @Override
     public int getLengthWindowNoise() {
         return Math.round(prefs.getFloat("movementDurationWindowNoise", DURATION_WINDOW_NOISE)
                             * prefs.getFloat("movementSampling", 500));
     }
 
+    @Override
     public int getLengthThreshold() {
         return Math.round(prefs.getFloat("movementDurationThreshold", DURATION_THRESHOLD)
                             * prefs.getFloat("movementSampling", 500));
     }
 
+    @Override
     public int getLengthGravity() {
         return Math.round(prefs.getFloat("movementDurationGravity", DURATION_GRAVITY)
                             * prefs.getFloat("movementSampling", 500));
     }
 
+    @Override
     public float getSensitivity() {
         return prefs.getFloat("movementSensitivity", SENSITIVITY);
     }
 
+    @Override
     public float getThresholdAcceleration() {
         return prefs.getFloat("movementThresholdAcceleration", 0.03f);
     }
 
+    @Override
     public float getThresholdRotation() {
         return prefs.getFloat("movementThresholdRotation", 0.01f);
     }
 
+    @Override
     public boolean getEnableGravityRotation() {
         return prefs.getBoolean("movementEnableGravityRotation", ENABLE_GRAVITY_ROTATION);
     }

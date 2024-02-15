@@ -1,9 +1,10 @@
-package ch.virt.smartphonemouse.mouse;
+package ch.virt.smartphonemouse.mouse.processing;
 
-import ch.virt.smartphonemouse.mouse.components.*;
-import ch.virt.smartphonemouse.mouse.math.Vec2f;
-import ch.virt.smartphonemouse.mouse.math.Vec3f;
-import ch.virt.smartphonemouse.transmission.DebugTransmitter;
+import ch.virt.smartphonemouse.mouse.processing.components.*;
+import ch.virt.smartphonemouse.mouse.processing.implement.DebugInterface;
+import ch.virt.smartphonemouse.mouse.processing.implement.ProcessingParameters;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec2f;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec3f;
 
 public class Processing {
 
@@ -27,9 +28,9 @@ public class Processing {
     private boolean enableGravityRotation;
 
 
-    private final DebugTransmitter debug;
+    private final DebugInterface debug;
 
-    public Processing(DebugTransmitter debug, Parameters parameters) {
+    public Processing(DebugInterface debug, ProcessingParameters parameters) {
         this.debug = debug;
 
         // Create and configure components
@@ -50,7 +51,7 @@ public class Processing {
         enableGravityRotation = parameters.getEnableGravityRotation();
     }
 
-    public static void registerDebugColumns(DebugTransmitter debug) {
+    public static void registerDebugColumns(DebugInterface debug) {
         debug.registerColumn("time", Float.class);
         debug.registerColumn("acceleration", Vec3f.class);
         debug.registerColumn("angular-velocity", Vec3f.class);

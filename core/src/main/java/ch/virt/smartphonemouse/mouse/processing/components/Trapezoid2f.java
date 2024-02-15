@@ -1,6 +1,6 @@
-package ch.virt.smartphonemouse.mouse.components;
+package ch.virt.smartphonemouse.mouse.processing.components;
 
-import ch.virt.smartphonemouse.mouse.math.Vec2f;
+import ch.virt.smartphonemouse.mouse.processing.math.Vec2f;
 
 /**
  * This class is used to calculate a number of following trapezoids. Here with a Vec2 as a value

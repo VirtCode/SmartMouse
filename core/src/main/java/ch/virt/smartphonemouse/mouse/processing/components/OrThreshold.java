@@ -1,4 +1,4 @@
-package ch.virt.smartphonemouse.mouse.components;
+package ch.virt.smartphonemouse.mouse.processing.components;
 
 /**
  * This class represents a threshold which operates based on two values.
