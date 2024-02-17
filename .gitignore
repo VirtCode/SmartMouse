@@ -12,3 +12,4 @@ local.properties
 /secret
 app/keystore.jks
 .env
+/test

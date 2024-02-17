@@ -1,21 +1,57 @@
 package ch.virt.smartphonemouse.mouse.processing.implement;
 
-public interface ProcessingParameters {
+import com.google.gson.annotations.Expose;
 
-    int getLengthWindowGravity();
+public class ProcessingParameters {
 
-    int getLengthWindowNoise();
+    public ProcessingParameters(int lengthWindowGravity, int lengthWindowNoise, int lengthThreshold, int lengthGravity, float sensitivity, float thresholdAcceleration, float thresholdRotation, boolean gravityRotation) {
+        this.lengthWindowGravity = lengthWindowGravity;
+        this.lengthWindowNoise = lengthWindowNoise;
+        this.lengthThreshold = lengthThreshold;
+        this.lengthGravity = lengthGravity;
+        this.sensitivity = sensitivity;
+        this.thresholdAcceleration = thresholdAcceleration;
+        this.thresholdRotation = thresholdRotation;
+        this.gravityRotation = gravityRotation;
+    }
 
-    int getLengthThreshold();
+    /**
+     * Length in samples of the average window used for eliminating gravity in the activation detection
+     */
+    public final int lengthWindowGravity;
 
-    int getLengthGravity();
+    /**
+     * Length in samples of the average window used to remove noise in the activation detection
+     */
+    public final int lengthWindowNoise;
 
-    float getSensitivity();
+    /**
+     * Number of samples to be under the threshold to declare the device as inactive
+     */
+    public final int lengthThreshold;
 
-    float getThresholdAcceleration();
+    /**
+     * Length in samples of the window used to determine the gravity vector when the device is inactive
+     */
+    public final int lengthGravity;
 
-    float getThresholdRotation();
+    /**
+     * Factor to multiply the resulting distance (in m/s) by before to sending to the computer
+     */
+    public final float sensitivity;
 
-    boolean getEnableGravityRotation();
+    /**
+     * Threshold for the acceleration to surpass for the device to be active
+     */
+    public final float thresholdAcceleration;
 
+    /**
+     * Threshold for the angular velocity to surpass for the device to be active
+     */
+    public final float thresholdRotation;
+
+    /**
+     * Whether to perform experimental gravity rotation
+     */
+    public final boolean gravityRotation;
 }

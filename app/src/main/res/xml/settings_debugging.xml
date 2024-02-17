@@ -7,6 +7,11 @@
             app:icon="@drawable/drawer_about"
             app:summary="@string/settings_debug_restart" />
 
+    <Preference
+            app:key="exportParameters"
+            app:summary="@string/settings_debug_export_parameters_description"
+            app:title="@string/settings_debug_export_parameters" />
+
     <SwitchPreference
             app:key="debugEnabled"
             app:summary="@string/settings_debug_enable_description"

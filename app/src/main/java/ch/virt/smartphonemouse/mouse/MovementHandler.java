@@ -54,7 +54,7 @@ public class MovementHandler implements SensorEventListener {
      * Creates the signal processing pipelines.
      */
     public void create(DebugTransmitter debug) {
-        processing = new Processing(debug, new Parameters(PreferenceManager.getDefaultSharedPreferences(context)));
+        processing = new Processing(debug, new Parameters(PreferenceManager.getDefaultSharedPreferences(context)).get());
     }
 
     /**

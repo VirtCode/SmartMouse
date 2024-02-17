@@ -36,19 +36,19 @@ public class Processing {
         // Create and configure components
         rotationDeltaTrapezoid = new Trapezoid3f();
 
-        activeGravityAverage = new WindowAverage(parameters.getLengthWindowGravity());
-        activeNoiseAverage = new WindowAverage(parameters.getLengthWindowNoise());
-        activeThreshold = new OrThreshold(parameters.getLengthThreshold(), parameters.getThresholdAcceleration(), parameters.getThresholdRotation());
+        activeGravityAverage = new WindowAverage(parameters.lengthWindowGravity);
+        activeNoiseAverage = new WindowAverage(parameters.lengthWindowNoise);
+        activeThreshold = new OrThreshold(parameters.lengthThreshold, parameters.thresholdAcceleration, parameters.thresholdRotation);
 
-        gravityInactiveAverage = new WindowAverage3f(parameters.getLengthGravity());
+        gravityInactiveAverage = new WindowAverage3f(parameters.lengthGravity);
         gravityCurrent = new Vec3f();
 
         distanceVelocityTrapezoid = new Trapezoid2f();
         distanceDistanceTrapezoid = new Trapezoid2f();
         distanceVelocity = new Vec2f();
-        sensitivity = parameters.getSensitivity();
+        sensitivity = parameters.sensitivity;
 
-        enableGravityRotation = parameters.getEnableGravityRotation();
+        enableGravityRotation = parameters.gravityRotation;
     }
 
     public static void registerDebugColumns(DebugInterface debug) {

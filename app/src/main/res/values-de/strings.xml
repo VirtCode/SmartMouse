@@ -218,4 +218,6 @@
     <string name="settings_debug_server">Server Konfiguration</string>
     <string name="settings_debug_server_description">Übertrage daten an einen SensorServer</string>
     <string name="settings_debug_restart">Damit diese Einstellungen angewandt werden, muss die App neugestartet werden.</string>
+    <string name="settings_debug_export_parameters">Bewegungsparameter Exportieren</string>
+    <string name="settings_debug_export_parameters_description">Als JSON in die Zwischenablage kopieren</string>
 </resources>

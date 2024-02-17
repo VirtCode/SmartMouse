@@ -224,4 +224,6 @@
     <string name="about_copyright" translatable="false">"© 2023 VirtCode"</string>
     <string name="dialog_add_bonded_title">Already Paired</string>
     <string name="settings_interface_visuals_intensity_description">Intensity of the visual elements</string>
+    <string name="settings_debug_export_parameters">Export Movement Parameters</string>
+    <string name="settings_debug_export_parameters_description">Copy to Clipboard as JSON</string>
 </resources>
