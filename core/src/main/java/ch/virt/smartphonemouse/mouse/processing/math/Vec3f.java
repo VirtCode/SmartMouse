@@ -1,5 +1,8 @@
 package ch.virt.smartphonemouse.mouse.processing.math;
 
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
 /**
  * This class represents a three-dimensional vector, based on floats
  */
@@ -100,6 +103,19 @@ public class Vec3f {
     }
 
     /**
+     * Normalizes this vector
+     */
+    public Vec3f normalize() {
+        float magnitude = this.abs();
+
+        this.x /= magnitude;
+        this.y /= magnitude;
+        this.z /= magnitude;
+
+        return this;
+    }
+
+    /**
      * Calculates the average between this and a given other vector. Not affecting this instance.
      */
     public Vec3f mean(Vec3f second) {
@@ -112,22 +128,29 @@ public class Vec3f {
      */
     public Vec3f rotate(Vec3f rotation) {
 
-        // Calculate sines and cosines that are used (for optimization)
-        float sa = (float) Math.sin(rotation.x);
-        float ca = (float) Math.cos(rotation.x);
-        float sb = (float) Math.sin(rotation.y);
-        float cb = (float) Math.cos(rotation.y);
-        float sc = (float) Math.sin(rotation.z);
-        float cc = (float) Math.cos(rotation.z);
+        // construct quaternion
+        // see https://developer.android.com/reference/android/hardware/SensorEvent.html#sensor.type_gyroscope:
+        float magnitude = rotation.abs();
+        rotation.normalize();
 
-        // Apply the rotation (matrix used: xyz)
-        float newX = cb * cc * x + cb * (-sc) * y + sb * z;
-        float newY = ((-sa) * (-sb) * cb + ca * sc) * x + ((-sa) * (-sb) * (-sc) + ca * cc) * y + (-sa) * cb * z;
-        float newZ = (ca * (-sb) * cc + sa * sc) * x + (ca * (-sb) * (-sc) + sa * cc) * y + ca * cb * z;
+        float theta = magnitude / 2;
+        float sinTheta = (float) Math.sin(theta);
+        float cosTheta = (float) Math.cos(theta);
 
-        this.x = newX;
-        this.y = newY;
-        this.z = newZ;
+        // we use joml now
+        Quaternionf q = new Quaternionf(
+                sinTheta * rotation.x,
+                sinTheta * rotation.y,
+                sinTheta * rotation.z,
+                cosTheta
+        );
+
+        Vector3f vector = new Vector3f(this.x , this.y, this.z);
+        q.transform(vector);
+
+        this.x = vector.x;
+        this.y = vector.y;
+        this.z = vector.z;
 
         return this;
     }
