@@ -18,7 +18,7 @@ public class DataCsv implements Iterable<DataCsv.Data> {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         data = new ArrayList<>();
 
-        int time = 0, accX = 0, accY = 0, accZ = 0, rotX = 0, rotY = 0, rotZ = 0;
+        int time = 0, accX = 0, accY = 0, accZ = 0, rotX = 0, rotY = 0, rotZ = 0, active = -1;
         String[] header = reader.readLine().split(String.valueOf(DebugCsv.DELIMITER));
 
         for (int i = 0; i < header.length; i++) {
@@ -30,6 +30,7 @@ public class DataCsv implements Iterable<DataCsv.Data> {
                 case "angular-velocity-x": rotX = i; break;
                 case "angular-velocity-y": rotY = i; break;
                 case "angular-velocity-z": rotZ = i; break;
+                case "active": active = i; break;
             }
         }
 
@@ -49,7 +50,8 @@ public class DataCsv implements Iterable<DataCsv.Data> {
                             Float.parseFloat(values[rotX]),
                             Float.parseFloat(values[rotY]),
                             Float.parseFloat(values[rotZ])
-                    )
+                    ),
+                    active != -1 && Boolean.parseBoolean(values[active])
             ));
         }
     }
@@ -60,14 +62,16 @@ public class DataCsv implements Iterable<DataCsv.Data> {
     }
 
     public static class Data {
-        public Data(float time, Vec3f acceleration, Vec3f angularVelocity) {
+        public Data(float time, Vec3f acceleration, Vec3f angularVelocity, boolean active) {
             this.time = time;
             this.acceleration = acceleration;
             this.angularVelocity = angularVelocity;
+            this.active = active;
         }
 
         public float time;
         public Vec3f acceleration;
         public Vec3f angularVelocity;
+        public boolean active;
     }
 }

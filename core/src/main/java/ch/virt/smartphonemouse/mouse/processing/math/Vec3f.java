@@ -1,7 +1,8 @@
 package ch.virt.smartphonemouse.mouse.processing.math;
 
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import org.joml.*;
+
+import java.lang.Math;
 
 /**
  * This class represents a three-dimensional vector, based on floats
@@ -123,35 +124,29 @@ public class Vec3f {
     }
 
     /**
-     * Rotates this vector by all three axis by using euler angles in a xyz fashion
+     * Counter rotate the vector to the given rotation using quaternions.
      * @param rotation vector containing the rotation for each axis as radians
      */
-    public Vec3f rotate(Vec3f rotation) {
-
+    public Vec3f counterRotate(Vec3f rotation) {
         // construct quaternion
         // see https://developer.android.com/reference/android/hardware/SensorEvent.html#sensor.type_gyroscope:
-        float magnitude = rotation.abs();
-        rotation.normalize();
 
-        float theta = magnitude / 2;
-        float sinTheta = (float) Math.sin(theta);
-        float cosTheta = (float) Math.cos(theta);
+        Quaterniond q2 = new Quaterniond();
+        q2.rotateXYZ(rotation.x, rotation.y, rotation.z);
+        q2.conjugate();
 
-        // we use joml now
-        Quaternionf q = new Quaternionf(
-                sinTheta * rotation.x,
-                sinTheta * rotation.y,
-                sinTheta * rotation.z,
-                cosTheta
-        );
+        Vector3d my = new Vector3d(this.x, this.y, this.z);
 
-        Vector3f vector = new Vector3f(this.x , this.y, this.z);
-        q.transform(vector);
+        my.rotate(q2);
 
-        this.x = vector.x;
-        this.y = vector.y;
-        this.z = vector.z;
+        this.x = (float) my.x;
+        this.y = (float) my.y;
+        this.z = (float) my.z;
 
         return this;
+    }
+
+    public Vector3f toJOML() {
+        return new Vector3f(this.x, this.y, this.z);
     }
 }

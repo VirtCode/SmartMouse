@@ -127,7 +127,7 @@ public class Processing {
             }
 
             // Rotate current gravity
-            if (enableGravityRotation) gravityCurrent.rotate(rotationDelta.copy().negative());
+            if (enableGravityRotation) gravityCurrent.counterRotate(rotationDelta.copy());
 
         } else {
             // Just calculate the average of the samples
@@ -146,7 +146,10 @@ public class Processing {
         if (active){
 
             // Counter-rotate the velocity
-            distanceVelocity.rotate(-rotationDelta.z);
+            Vec3f next = new Vec3f(distanceVelocity.x, distanceVelocity.y, 0);
+            next.counterRotate(rotationDelta);
+            distanceVelocity.x = next.x;
+            distanceVelocity.y = next.y;
 
             // Integrate to distance
             distanceVelocity.add(distanceVelocityTrapezoid.trapezoid(delta, linearAcceleration));
