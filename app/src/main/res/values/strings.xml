@@ -226,4 +226,5 @@
     <string name="settings_interface_visuals_intensity_description">Intensity of the visual elements</string>
     <string name="settings_debug_export_parameters">Export Movement Parameters</string>
     <string name="settings_debug_export_parameters_description">Copy to Clipboard as JSON</string>
+    <string name="drawer_touchpad">Touchpad</string>
 </resources>

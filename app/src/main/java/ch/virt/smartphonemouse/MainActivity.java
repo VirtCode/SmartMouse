@@ -118,9 +118,11 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         if (bluetooth.isSupported()) {
             setNavItemEnable(R.id.drawer_connect, true);
             setNavItemEnable(R.id.drawer_mouse, bluetooth.isConnected());
+            setNavItemEnable(R.id.drawer_touchpad, bluetooth.isConnected());
         } else {
             setNavItemEnable(R.id.drawer_connect, false);
             setNavItemEnable(R.id.drawer_mouse, false);
+            setNavItemEnable(R.id.drawer_touchpad, false);
         }
     }
 
@@ -153,9 +155,9 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     public void updateBluetoothStatus() {
         if (instanceSaved || getCurrentFragment() == null) return;
 
-        if (getCurrentFragment() instanceof ConnectFragment || getCurrentFragment() instanceof MouseFragment) {
+        if (getCurrentFragment() instanceof ConnectFragment || getCurrentFragment() instanceof MouseFragment || getCurrentFragment() instanceof TouchpadFragment) {
             if (!bluetooth.isEnabled() || !bluetooth.isSupported()) navigate(R.id.drawer_home);
-            else if (!bluetooth.isConnected() && getCurrentFragment() instanceof MouseFragment)
+            else if (!bluetooth.isConnected() && getCurrentFragment() instanceof MouseFragment || getCurrentFragment() instanceof TouchpadFragment)
                 navigate(R.id.drawer_connect);
         }
 
@@ -233,6 +235,12 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             }
 
             switch (entry) {
+                case R.id.drawer_touchpad:
+                    bar.setVisibility(View.GONE);
+                    switchFragment(new TouchpadFragment(inputs), false);
+
+                    break;
+
                 case R.id.drawer_connect:
 
                     switchFragment(new ConnectFragment(bluetooth), false);

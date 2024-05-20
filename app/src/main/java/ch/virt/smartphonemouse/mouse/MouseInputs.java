@@ -2,6 +2,7 @@ package ch.virt.smartphonemouse.mouse;
 
 import android.content.Context;
 
+import android.util.Log;
 import androidx.preference.PreferenceManager;
 
 import ch.virt.smartphonemouse.transmission.BluetoothHandler;
@@ -82,12 +83,17 @@ public class MouseInputs {
         int y = (int) yPosition;
 
         if (bluetoothHandler.getHost().isConnected())
-            bluetoothHandler.getHost().sendReport(leftButton, middleButton, rightButton, wheelPosition, x, y);
+            bluetoothHandler.getHost().sendMouseReport(leftButton, middleButton, rightButton, wheelPosition, x, y);
 
         // Reset Deltas
         xPosition -= x;
         yPosition -= y;
         wheelPosition = 0;
+    }
+
+    public void touchpad(boolean[] down, int[] x, int[] y) {
+        if (bluetoothHandler.getHost().isConnected())
+            bluetoothHandler.getHost().sendTouchpadReport(down[0], x[0], y[0], down[1], x[1], y[1], down[1], x[1], y[1]); // FIXME: the ids here are wrong
     }
 
 

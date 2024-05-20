@@ -16,6 +16,10 @@
             android:id="@+id/drawer_mouse"
             android:icon="@drawable/drawer_mouse"
             android:title="@string/drawer_mouse" />
+        <item
+                android:id="@+id/drawer_touchpad"
+                android:icon="@drawable/drawer_touchpad"
+                android:title="@string/drawer_touchpad" />
     </group>
     <group
         android:id="@+id/drawer_bottom"

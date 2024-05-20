@@ -147,7 +147,7 @@ public class HidDevice extends BluetoothHidDevice.Callback {
      * @param x      change of x position
      * @param y      change of y position
      */
-    public void sendReport(boolean left, boolean middle, boolean right, int wheel, int x, int y) {
+    public void sendMouseReport(boolean left, boolean middle, boolean right, int wheel, int x, int y) {
         if (!registered || !connected || connecting) {
             Log.d(TAG, "Cannot send a report to the host when no device is connected successfully!");
             return;
@@ -161,6 +161,34 @@ public class HidDevice extends BluetoothHidDevice.Callback {
         report[3] = (byte) wheel;
 
         service.sendReport(device, 1, report); // id 1 because of the descriptor
+    }
+
+    public void sendTouchpadReport(boolean down, int x, int y, boolean down2, int x2, int y2, boolean down3, int x3, int y3) {
+        if (!registered || !connected || connecting) {
+            Log.d(TAG, "Cannot send a report to the host when no device is connected successfully!");
+        }
+
+        byte[] report = new byte[10];
+        report[0] = (byte) ((down ? 3 : 0) | 0x01 << 2);
+        report[1] = (byte) (x);
+        report[2] = (byte) (x >> 8);
+        report[3] = (byte) (y);
+        report[4] = (byte) (y >> 8);
+        report[5 + 0] = (byte) ((down2 ? 3 : 0) | 0x10 << 2);
+        report[5 + 1] = (byte) (x2);
+        report[5 + 2] = (byte) (x2 >> 8);
+        report[5 + 3] = (byte) (y2);
+        report[5 + 4] = (byte) (y2 >> 8);
+        /*
+        report[10 + 0] = (byte) ((down3 ? 3 : 0) | 0x11 << 2);
+        report[10 + 1] = (byte) (x3);
+        report[10 + 2] = (byte) (x3 >> 8);
+        report[10 + 3] = (byte) (y3);
+        report[10 + 4] = (byte) (y3 >> 8);
+
+         */
+
+        service.sendReport(device, 2, report); // id 2, see descriptor
     }
 
     /**
