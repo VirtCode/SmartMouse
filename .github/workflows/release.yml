@@ -20,7 +20,8 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          # if you change this - remember to announce that the build sdk has changed. see #20
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Setup Gradle
