@@ -93,7 +93,7 @@ public class MouseInputs {
 
     public void touchpad(boolean[] down, int[] x, int[] y) {
         if (bluetoothHandler.getHost().isConnected())
-            bluetoothHandler.getHost().sendTouchpadReport(down[0], x[0], y[0], down[1], x[1], y[1], down[1], x[1], y[1]); // FIXME: the ids here are wrong
+            bluetoothHandler.getHost().sendTouchpadReport(down, x, y);
     }
 
 

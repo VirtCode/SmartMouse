@@ -72,10 +72,12 @@ public class TouchpadFragment extends Fragment {
         super.onDestroyView();
     }
 
-    int[] id = {-1, -1};
-    final boolean[] down = new boolean[2];
-    final int[] x = new int[2];
-    final int[] y = new int[2];
+    // our descriptor supports five fingers
+    // be careful, as the report length will depend on this array's length lol
+    int[] id = {-1, -1, -1, -1, -1};
+    final boolean[] down = new boolean[5];
+    final int[] x = new int[5];
+    final int[] y = new int[5];
 
     public boolean viewTouched(MotionEvent event) {
 
@@ -97,7 +99,7 @@ public class TouchpadFragment extends Fragment {
             id[number] = event.getPointerId(index);
 
             // remove removed pointer
-            if (event.getActionIndex() == index && ((event.getActionMasked() == MotionEvent.ACTION_UP) || (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP))) {
+            if (event.getActionIndex() == index && ((event.getActionMasked() == MotionEvent.ACTION_UP) || (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP) || (event.getActionMasked() == MotionEvent.ACTION_CANCEL))) {
                 //Log.i("ARRAYS", "Removing");
                 id[number] = -1;
             }

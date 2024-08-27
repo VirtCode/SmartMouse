@@ -17,8 +17,8 @@ import ch.virt.smartphonemouse.transmission.HostDevice;
 public class HidDevice extends BluetoothHidDevice.Callback {
     private static final String TAG = "HidDevice";
 
-    private static final String NAME = "Smartphone Mouse";
-    private static final String DESCRIPTION = "Acceleration based Smartphone Mouse";
+    private static final String NAME = "SmartMouse";
+    private static final String DESCRIPTION = "Acceleration-based Mouse and Touchpad";
     private static final String PROVIDER = "Virt";
 
     private BluetoothHidDevice service;
@@ -54,7 +54,7 @@ public class HidDevice extends BluetoothHidDevice.Callback {
      * @return Service Discovery Protocol records
      */
     private BluetoothHidDeviceAppSdpSettings createSDP() {
-        return new BluetoothHidDeviceAppSdpSettings(NAME, DESCRIPTION, PROVIDER, BluetoothHidDevice.SUBCLASS1_MOUSE, HidDescriptor.DESCRIPTOR);
+        return new BluetoothHidDeviceAppSdpSettings(NAME, DESCRIPTION, PROVIDER, BluetoothHidDevice.SUBCLASS1_NONE, HidDescriptor.DESCRIPTOR);
     }
 
     /**
@@ -163,30 +163,21 @@ public class HidDevice extends BluetoothHidDevice.Callback {
         service.sendReport(device, 1, report); // id 1 because of the descriptor
     }
 
-    public void sendTouchpadReport(boolean down, int x, int y, boolean down2, int x2, int y2, boolean down3, int x3, int y3) {
+    public void sendTouchpadReport(boolean[] down, int[] x, int[] y) {
         if (!registered || !connected || connecting) {
             Log.d(TAG, "Cannot send a report to the host when no device is connected successfully!");
         }
 
-        byte[] report = new byte[10];
-        report[0] = (byte) ((down ? 3 : 0) | 0x01 << 2);
-        report[1] = (byte) (x);
-        report[2] = (byte) (x >> 8);
-        report[3] = (byte) (y);
-        report[4] = (byte) (y >> 8);
-        report[5 + 0] = (byte) ((down2 ? 3 : 0) | 0x10 << 2);
-        report[5 + 1] = (byte) (x2);
-        report[5 + 2] = (byte) (x2 >> 8);
-        report[5 + 3] = (byte) (y2);
-        report[5 + 4] = (byte) (y2 >> 8);
-        /*
-        report[10 + 0] = (byte) ((down3 ? 3 : 0) | 0x11 << 2);
-        report[10 + 1] = (byte) (x3);
-        report[10 + 2] = (byte) (x3 >> 8);
-        report[10 + 3] = (byte) (y3);
-        report[10 + 4] = (byte) (y3 >> 8);
+        byte[] report = new byte[down.length * 5];
 
-         */
+        for (int i = 0; i < down.length; i++) {
+            int offset = i * 5;
+            report[offset] = (byte) ((down[i] ? 0b11 : 0b00) | (i + 1) << 2);
+            report[offset + 1] = (byte) (x[i]);
+            report[offset + 2] = (byte) (x[i] >> 8);
+            report[offset + 3] = (byte) (y[i]);
+            report[offset + 4] = (byte) (y[i] >> 8);
+        }
 
         service.sendReport(device, 2, report); // id 2, see descriptor
     }
